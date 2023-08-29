@@ -1,6 +1,6 @@
 
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-import { PrimaryGeneratedColumnType } from "typeorm/driver/types/ColumnTypes";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Users } from "./users";
 
 @Entity()
 export class Chores {
@@ -24,4 +24,9 @@ export class Chores {
 
   @Column()
   completed: boolean
+
+@ManyToOne(() => Users, (users) => users.id)
+@JoinColumn()
+user: Users
+
 }
