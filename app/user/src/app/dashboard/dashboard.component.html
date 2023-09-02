@@ -1,0 +1,16 @@
+<div class="flex h-screen">
+  <div class="bg-gray-800 text-white w-16 min-h-screen" [class.w-64]="isSidebarOpen">
+    <button class="w-full py-2 px-3 text-center" (click)="toggleSidebar()">
+toggle    </button>
+    <ul class="mt-6">
+   <li>user</li>
+    </ul>
+  </div>
+
+  <div class="flex-grow p-4">
+    <ul class="flex">
+      <app-module-tab [title]="'Your Title'" [links]="[{linkName:'Chores', routerLink: 'chores'}]"></app-module-tab>
+    </ul>
+    <router-outlet></router-outlet>
+  </div>
+</div>
