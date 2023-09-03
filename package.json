@@ -4,9 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint-src": "eslint src",
+    "lint-api": "eslint api",
+    "lint-server": "eslint app/server",
+    "lint": "npm-run-all --parallel lint-src lint-api lint-server"
   },
   "keywords": [],
   "author": "JoshIbbotson",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "@typescript-eslint/parser": "^6.5.0",
+    "eslint": "^8.48.0"
+  }
 }

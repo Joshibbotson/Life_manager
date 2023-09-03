@@ -6,13 +6,15 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ModuleTabComponent } from './ui/module-tab/module-tab.component';
 import { ChoresComponent } from './modules/chores/chores.component';
+import { CommonInputComponent } from './ui/common-input/common-input.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     ModuleTabComponent,
-    ChoresComponent
+    ChoresComponent,
+    CommonInputComponent
   ],
   imports: [
     BrowserModule,

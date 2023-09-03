@@ -1,13 +1,14 @@
-import "reflect-metadata"
-import { DataSource } from "typeorm"
-import { Users } from "./entities/users"
+import "reflect-metadata";
+import { DataSource } from "typeorm";
+import { Users } from "./entities/users";
 import { Chores } from "./entities/chores";
-require('dotenv').config();
+// import {Pool} from "pg"
+require("dotenv").config();
 
 export const AppDataSource = new DataSource({
-    type: "postgres", 
+    type: "postgres",
     host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT, 10), 
+    port: parseInt(process.env.DB_PORT, 10),
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
@@ -17,4 +18,3 @@ export const AppDataSource = new DataSource({
     migrations: [], // migrations are going to update your tables correctly
     subscribers: [],
 });
-

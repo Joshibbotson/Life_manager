@@ -1,30 +1,33 @@
-import { error } from "console";
-import { AppDataSource } from "./data-source"
-import { Chores } from "./entities/chores"
-import { Users } from "./entities/users";
+import { AppDataSource } from "./data-source";
+import { Chores } from "./entities/chores";
+import * as restify from "restify";
 
+AppDataSource.initialize();
 
-AppDataSource.initialize().then(() => {
-    const user = new Users()
+const server = restify.createServer();
+server.pre(restify.plugins.pre.userAgentConnection());
+server.use(restify.plugins.bodyParser());
 
-    user.age = 27
-    user.name = "Josh Ibbotson"
+async function getChoreById(req, res, next) {
+    try {
+        const id: number = req.params.id;
+        const choreRepository = AppDataSource.manager.getRepository(Chores);
+        const chores = await choreRepository.find({
+            where: {
+                id: id,
+            },
+        });
 
-    AppDataSource.manager.save(user)
+        res.send(chores);
+        next();
+    } catch (error) {
+        console.error("Error fetching chores", error);
+        res.status(500).send("Internal Server Error");
+    }
+}
 
-    const chore = new Chores()
+server.get("/chores/:id", getChoreById);
 
-    chore.createdBy = "Saki Fujimoto";
-    chore.assignedTo = "Josh Ibbotson";
-    chore.description = "Clean the bathroom on a regular basis"
-    chore.name = "Bathroom clean"
-    chore.completed = false
-    chore.user = user
-
-    AppDataSource.manager.save(chore)
-
-
-
-}).catch((error) => console.log(error))
-
-
+server.listen(8080, function () {
+    console.log(`listening at ${server.name}, ${server.url}`);
+});
