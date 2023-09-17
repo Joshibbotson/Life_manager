@@ -1,10 +1,15 @@
-<div class="w-96 h-32 flex-col align-middle justify-center p-4 shadow-md border-black ">
-  <h1 class="mb-1 font-bold">{{title}}</h1>
+<div
+  class="w-96 h-32 flex-col align-middle justify-center p-4 shadow-md bg-white rounded-md"
+>
+  <h1 class="mb-1 font-bold">{{ title }}</h1>
 
   <section class="flex gap-5">
-    <ng-container *ngFor="let link of links" >
-      <a [routerLink]="[link.routerLink]" routerLinkActive="router-link-active" >{{link.linkName}}</a>
+    <ng-container *ngFor="let link of links">
+      <a
+        [routerLink]="[link.routerLink]"
+        routerLinkActive="router-link-active"
+        >{{ link.linkName }}</a
+      >
     </ng-container>
   </section>
-
 </div>

@@ -7,6 +7,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ModuleTabComponent } from './ui/module-tab/module-tab.component';
 import { ChoresComponent } from './modules/chores/chores.component';
 import { CommonInputComponent } from './ui/common-input/common-input.component';
+import { DashboardModulesComponent } from './modules/dashboard-modules/dashboard-modules.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonCheckboxComponent } from './ui/common-checkbox/common-checkbox.component';
 
 @NgModule({
   declarations: [
@@ -14,13 +17,12 @@ import { CommonInputComponent } from './ui/common-input/common-input.component';
     DashboardComponent,
     ModuleTabComponent,
     ChoresComponent,
-    CommonInputComponent
+    CommonInputComponent,
+    DashboardModulesComponent,
+    CommonCheckboxComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, ReactiveFormsModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

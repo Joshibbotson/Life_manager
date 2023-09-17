@@ -1,1 +1,37 @@
-<common-input (inputValue)="log($event)"></common-input>
+<div class="container">
+  <div
+    class="shadow-lg flex flex-col w-96 p-4 rounded-md justify-center bg-white"
+    [formGroup]="choreFormGroup"
+  >
+    <common-input
+      formControlName="name"
+      ngDefaultControl
+      type="string"
+      label="Name"
+    ></common-input>
+    <common-input
+      formControlName="description"
+      ngDefaultControl
+      type="string"
+      label="Description"
+    ></common-input>
+    <common-input
+      formControlName="createdBy"
+      ngDefaultControl
+      type="string"
+      label="Created by"
+    ></common-input>
+    <common-input
+      formControlName="assignedTo"
+      ngDefaultControl
+      type="string"
+      label="Assigned to"
+    ></common-input>
+    <common-checkbox
+      formControlName="completed"
+      ngDefaultControl
+      label="Completed"
+    ></common-checkbox>
+    <button (click)="handleSubmit()">Submit</button>
+  </div>
+</div>

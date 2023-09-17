@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { Users } from "./entities/users";
+import { Users } from "./entities/common/users";
 import { Chores } from "./entities/chores";
 // import {Pool} from "pg"
 require("dotenv").config();
