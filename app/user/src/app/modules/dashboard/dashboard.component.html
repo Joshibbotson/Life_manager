@@ -1,4 +1,4 @@
-<div class="flex h-screen bg-gray-100">
+<div class="flex h-screen bg-gray-100 overflow-hidden">
   <div
     class="bg-gray-800 text-white w-16 min-h-screen"
     [class.w-64]="isSidebarOpen"
@@ -10,7 +10,9 @@
       </button>
     </div>
     <ul class="mt-6">
-      <li>user</li>
+      <ng-container *ngFor="let link of sideBarLinks$ | async">
+        <a href="{{ link.url }}">{{ link.name }}</a>
+      </ng-container>
     </ul>
   </div>
 

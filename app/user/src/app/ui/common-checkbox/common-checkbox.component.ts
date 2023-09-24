@@ -1,9 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'common-checkbox',
   templateUrl: './common-checkbox.component.html',
-  styleUrls: ['./common-checkbox.component.css'],
 })
 export class CommonCheckboxComponent {
   @Input() label: string = '';
@@ -13,9 +12,8 @@ export class CommonCheckboxComponent {
   @Input() placeholder: string = '';
   @Input() required: boolean = false;
 
-  @Output() inputValue = new EventEmitter<any>();
-
-  public onInputChange(value: Event) {
-    this.inputValue.emit(value);
+  public booleanSwitch: boolean = false;
+  public onInputChange() {
+    this.booleanSwitch = !this.booleanSwitch;
   }
 }

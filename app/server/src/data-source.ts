@@ -3,8 +3,10 @@ import { DataSource } from "typeorm";
 import { Users } from "./entities/common/users";
 import { Chores } from "./entities/chores";
 // import {Pool} from "pg"
-require("dotenv").config();
+// require("dotenv").config();
+import { config } from "dotenv";
 
+config();
 export const AppDataSource = new DataSource({
     type: "postgres",
     host: process.env.DB_HOST,
@@ -18,3 +20,5 @@ export const AppDataSource = new DataSource({
     migrations: [], // migrations are going to update your tables correctly
     subscribers: [],
 });
+
+AppDataSource.initialize();

@@ -1,33 +1,26 @@
-import { AppDataSource } from "./data-source";
-import { Chores } from "./entities/chores";
-import * as restify from "restify";
+import express from "express";
 
-AppDataSource.initialize();
+import cors from "cors";
+import {
+    getChores,
+    getChoreById,
+    postChore,
+} from "./modules/chores/routes/chores.module";
 
-const server = restify.createServer();
-server.pre(restify.plugins.pre.userAgentConnection());
-server.use(restify.plugins.bodyParser());
+export const port = 8080;
+export const server = express();
 
-async function getChoreById(req, res, next) {
-    try {
-        const id: number = req.params.id;
-        const choreRepository = AppDataSource.manager.getRepository(Chores);
-        const chores = await choreRepository.find({
-            where: {
-                id: id,
-            },
-        });
+server.use(express.json());
+server.use(
+    cors({
+        origin: "*",
+    })
+);
 
-        res.send(chores);
-        next();
-    } catch (error) {
-        console.error("Error fetching chores", error);
-        res.status(500).send("Internal Server Error");
-    }
-}
-
-server.get("/chores/:id", getChoreById);
-
-server.listen(8080, function () {
-    console.log(`listening at ${server.name}, ${server.url}`);
+server.listen(port, function () {
+    console.log(`listening at ${port}`);
 });
+
+server.get("/chores/read", getChores);
+server.get("/chores/read/:id", getChoreById);
+server.post("/chores/create", postChore);

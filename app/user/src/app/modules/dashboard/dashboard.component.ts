@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LinksService } from 'src/app/services/links/links.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,11 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
   isSidebarOpen = true;
+  public sideBarLinks$;
 
-  constructor() {}
+  constructor(private links: LinksService) {
+    this.sideBarLinks$ = this.links.getLinks();
+  }
 
-  ngOnInit(): void {}
-
+  ngOnInit(): void {
+    this.sideBarLinks$ = this.links.getLinks();
+  }
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
   }

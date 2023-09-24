@@ -6,9 +6,10 @@ import {
     PrimaryGeneratedColumn,
 } from "typeorm";
 import { Users } from "./common/users";
+import { CommonEntity } from "./common/common-entity";
 
 @Entity()
-export class Chores {
+export class Chores extends CommonEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
