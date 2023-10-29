@@ -67,7 +67,8 @@
           <tbody class="">
             <ng-container *ngFor="let chore of chores$ | async">
               <tr
-                class="border-b transition duration-300 ease-in-out hover:text-white hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600"
+                class="z-10 border-b transition duration-300 ease-in-out hover:text-white hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600 cursor-pointer"
+                (click)="navigate(chore.id)"
               >
                 <td class="whitespace-nowrap px-6 py-4 font-medium">
                   {{ chore.id }}
@@ -78,12 +79,6 @@
                 </td>
                 <td class="whitespace-nowrap px-6 py-4">
                   {{ chore.completed ? "Yes" : "No" }}
-                </td>
-                <td class="absolute w-full h-13 z-0">
-                  <a
-                    href="chores/{{ chore.id }}"
-                    class="block w-full h-full"
-                  ></a>
                 </td>
               </tr>
             </ng-container>

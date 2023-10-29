@@ -19,4 +19,15 @@ export class ChoreComponent {
     this.chore$ = this.rest.readById(this.activatedRoute.snapshot.params['id']);
     this.links.updateLinks(this.homeLinks);
   }
+
+  async deleteChore(id:number){
+    console.log("called delete")
+    try {
+      (await this.rest.delete(id)).subscribe((x) =>
+        console.log(x)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }

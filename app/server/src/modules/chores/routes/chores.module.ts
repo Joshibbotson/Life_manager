@@ -1,75 +1,83 @@
-import { AppDataSource } from "../../../data-source";
-import { Chores } from "../../../entities/chores";
-import { Users } from "../../../entities/common/users";
-import { Request, Response } from "express";
+import {Validate} from '../../../../../api/dist/validation/validate'
+import { server } from "../../..";
+import { ChoresController } from "../controller/chores.module";
 
-// export class ChoresRoutes {
-//     public static readonly moduleName: string = "ChoresRoutes";
 
-//     protected readonly readRoute = this.readHandler();
+export class ChoresRoutes {
+    public static readonly moduleName: string = "ChoresRoutes";
 
-//     protected readHandler() {
-//         return;
-//     }
+    private choresController: ChoresController
 
-// }
+    constructor(choresController:ChoresController){
+        this.choresController = choresController
+    }
+
+    private readonly createRoute = this.createHandler(server)
+    private readonly readRoute = this.readHandler(server);
+    private readonly updateRoute = this.updateHandler(server);
+    private readonly deleteRoute = this.deleteHandler(server)
+
+    
+    protected createHandler(server: any){
+        console.log("createHandler")
+        server.post("/chores/create", async (req, res, next) => {
+            try {
+                const post = await this.choresController.createRequest(req, res)
+                res.json(post)
+            } catch(error){
+                console .log( error)
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        })
+    }
+
+    protected readHandler(server: any) {
+        console.log("chores readHandler")
+         server.get("/chores/read", async (req, res, next) => {
+            try {
+                const read = await this.choresController.readRequest(req)
+                res.json(read)
+            } catch(error){
+                console .log( error)
+                res.status(500).json({ error: 'Internal Server Error' });
+
+            }
+        });
+
+         server.get("/chores/read/:id", async (req, res, next) => {
+            try {
+                const read = await this.choresController.readRequest(req)
+                res.json(read)
+            } catch(error){
+                console .log( error)
+                res.status(500).json({ error: 'Internal Server Error' });
+
+            }
+        });
+
+    }
+
+    protected updateHandler(server: any) {
+
+    }
+
+    protected deleteHandler(server: any){
+        console.log("deleteHandler")
+        server.put("/chores/delete/:id", async (req, res, next) => {
+            try {
+                const deleteRequest = await this.choresController.deleteRequest(req, res)
+                res.json(deleteRequest)
+
+            } catch(error) {
+                console.log(error)
+                res.status(500).json({ error: 'Delete Server Error'})
+            }
+        })
+    }
+
+}
 
 // this needs to seperated into MVC architecture
-export async function getChoreById(req, res, next) {
-    try {
-        const id: number = req.params.id;
-        const choreRepository = AppDataSource.manager.getRepository(Chores);
-        const chores = await choreRepository.find({
-            where: {
-                id: id,
-            },
-        });
 
-        res.send(chores);
-        next();
-    } catch (error) {
-        console.error("Error fetching chores", error);
-        res.status(500).send("Internal Server Error");
-    }
-}
-export async function getChores(req, res, next) {
-    console.log("get request");
-    try {
-        const choreRepository = AppDataSource.manager.getRepository(Chores);
-        const chores = await choreRepository.find();
-        console.log("chores: ", chores);
+const validate = new Validate()
 
-        res.send(chores);
-        next();
-    } catch (error) {
-        console.error("Error fetching chores", error);
-        res.status(500).send("Internal Server Error");
-    }
-}
-
-// TODO:
-// Add schema validation for req/res
-export async function postChore(req: Request, res: Response) {
-    console.log("post");
-    try {
-        const chore = new Chores();
-        const user = await AppDataSource.getRepository(Users).findOneBy({
-            id: 1,
-        });
-        const payload = req.body;
-        chore.name = payload.name;
-        chore.description = payload.description;
-        chore.assignedTo = payload.assignedTo;
-        chore.createdBy = payload.createdBy;
-        chore.completed = payload.completed;
-        chore.user = user;
-        chore.deleted = false;
-        chore.createdDate = new Date();
-        chore.editedDate = new Date();
-        await AppDataSource.getRepository(Chores).save(chore);
-        res.status(201).send({ message: "Chore created successfully" });
-    } catch (error) {
-        console.error("Error posting chores", error);
-        res.status(500).send("Internal Server Error");
-    }
-}

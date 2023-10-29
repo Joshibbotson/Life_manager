@@ -17,7 +17,7 @@
       "typeorm": "0.3.17"
    },
    "scripts": {
-      "start": "ts-node src/index.ts",
+      "server": "ts-node src/index.ts",
       "dist-server": "tsc",
       "typeorm": "typeorm-ts-node-commonjs",
       "migration": "ts-node ./node-scripts/custom-migration.ts"

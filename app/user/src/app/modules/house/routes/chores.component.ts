@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Ilinks, LinksService } from 'src/app/services/links/links.service';
 import { ChoresRestService } from 'src/app/services/rest/chores-rest.service';
 
@@ -25,7 +26,12 @@ export class ChoresComponent {
   });
   public showForm: boolean = false;
   public readonly chores$;
-  constructor(private rest: ChoresRestService, private links: LinksService) {
+
+  constructor(
+    private rest: ChoresRestService,
+    private links: LinksService,
+    private router: Router
+  ) {
     this.chores$ = this.rest.read();
     this.links.updateLinks(this.homeLinks);
   }
@@ -34,6 +40,10 @@ export class ChoresComponent {
     this.showForm = !this.showForm;
     console.log(this.showForm);
   }
+  navigate(id: number) {
+    this.router.navigate([`chores/${id}`]);
+  }
+
   async handleSubmit() {
     this.choreFormGroup.patchValue({
       completed: this.choreFormGroup.value.completed === 'true' ? true : false,

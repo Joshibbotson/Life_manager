@@ -13,7 +13,9 @@ export class ChoresRestService {
     return this.http.post(`${this.url}/chores/create`, request);
   }
 
-  public update() {}
+  public update(id: number) {
+    return this.http.put(`${this.url}/chores/update`, id);
+  }
 
   public read() {
     return this.http
@@ -26,4 +28,10 @@ export class ChoresRestService {
       .get(`${this.url}/chores/read/${id}`)
       .pipe(map((response: any) => response));
   }
+
+  public delete(id:number){
+    console.log(id)
+    return this.http
+    .put(`${this.url}/chores/delete/${id}`, id)
+      .pipe(map((response: any) => response));  }
 }

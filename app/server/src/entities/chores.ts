@@ -9,7 +9,7 @@ import { Users } from "./common/users";
 import { CommonEntity } from "./common/common-entity";
 
 @Entity()
-export class Chores extends CommonEntity {
+export class ChoresEntity extends CommonEntity {
     @PrimaryGeneratedColumn()
     id: number;
 

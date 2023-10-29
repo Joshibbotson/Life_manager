@@ -36,6 +36,8 @@
                     {{ chore.completed ? "Yes" : "No" }}
                   </td>
                 </tr>
+                <button (click)="deleteChore(chore.id)"
+                 class="border-2 bg-slate-900 text-white p-1 hover:bg-white hover:text-slate-900 active:scale-95 transition-all w-full">delete chore</button>
               </ng-container>
             </tbody>
           </table>

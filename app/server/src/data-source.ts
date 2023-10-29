@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { Users } from "./entities/common/users";
-import { Chores } from "./entities/chores";
+import { ChoresEntity } from "./entities/chores";
 // import {Pool} from "pg"
 // require("dotenv").config();
 import { config } from "dotenv";
@@ -16,7 +16,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_DATABASE,
     synchronize: true, // this is unsafe in production, as it could wipe clean production tables if an entity is changed.
     logging: false,
-    entities: [Users, Chores],
+    entities: [Users, ChoresEntity],
     migrations: [], // migrations are going to update your tables correctly
     subscribers: [],
 });
