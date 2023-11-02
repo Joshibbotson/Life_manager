@@ -77,7 +77,6 @@ export class ChoresModel {
 
   private async  getChoreById(request) {
     try {
-      console.log("chore by id req:", request)
         const id: number = request.params.id;
         const choreRepository = AppDataSource.manager.getRepository(ChoresEntity);
         const chore = await choreRepository.find({
@@ -85,7 +84,6 @@ export class ChoresModel {
                 id: id,
             },
         });
-        console.log(chore)
       return chore
     } catch (error) {
         console.error("Error fetching chores", error);
@@ -101,13 +99,11 @@ export class ChoresModel {
         });
         chore.deleted = true;
         await AppDataSource.getRepository(ChoresEntity).save(chore);
-        res.status(201).send({ message: "Chore deleted successfully" });
         return chore
     } catch (error) {
         console.error("Error fetching chores", error);
         res.status(500).send("Internal Server Error");
     }
-}
-
+  }
 }
 

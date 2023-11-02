@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { map } from 'rxjs';
 import { Ilinks, LinksService } from 'src/app/services/links/links.service';
 import { ChoresRestService } from 'src/app/services/rest/chores-rest.service';
 
@@ -14,18 +15,20 @@ export class ChoreComponent {
   constructor(
     private rest: ChoresRestService,
     private activatedRoute: ActivatedRoute,
-    private links: LinksService
+    private links: LinksService,
+    private router: Router
   ) {
     this.chore$ = this.rest.readById(this.activatedRoute.snapshot.params['id']);
     this.links.updateLinks(this.homeLinks);
   }
 
   async deleteChore(id:number){
-    console.log("called delete")
     try {
-      (await this.rest.delete(id)).subscribe((x) =>
+      (await this.rest.delete(id)).subscribe((x) => {
         console.log(x)
-      );
+        this.router.navigate(['/chores']);
+      })
+;
     } catch (error) {
       console.log(error);
     }

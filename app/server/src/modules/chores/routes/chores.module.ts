@@ -20,7 +20,7 @@ export class ChoresRoutes {
     
     protected createHandler(server: any){
         console.log("createHandler")
-        server.post("/chores/create", async (req, res, next) => {
+        return server.post("/chores/create", async (req, res, next) => {
             try {
                 const post = await this.choresController.createRequest(req, res)
                 res.json(post)
@@ -33,7 +33,7 @@ export class ChoresRoutes {
 
     protected readHandler(server: any) {
         console.log("chores readHandler")
-         server.get("/chores/read", async (req, res, next) => {
+        server.get("/chores/read", async (req, res, next) => {
             try {
                 const read = await this.choresController.readRequest(req)
                 res.json(read)
@@ -62,8 +62,7 @@ export class ChoresRoutes {
     }
 
     protected deleteHandler(server: any){
-        console.log("deleteHandler")
-        server.put("/chores/delete/:id", async (req, res, next) => {
+        return server.put("/chores/delete/:id", async (req, res, next) => {
             try {
                 const deleteRequest = await this.choresController.deleteRequest(req, res)
                 res.json(deleteRequest)
@@ -77,7 +76,6 @@ export class ChoresRoutes {
 
 }
 
-// this needs to seperated into MVC architecture
 
 const validate = new Validate()
 

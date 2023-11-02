@@ -13,6 +13,7 @@
   Cancel
 </button>
 
+<!-- componentalise this into a modal. -->
 <div class="container" *ngIf="showForm">
   <div
     class="shadow-lg flex flex-col w-96 p-4 rounded-md justify-center bg-white"
@@ -66,21 +67,25 @@
           </thead>
           <tbody class="">
             <ng-container *ngFor="let chore of chores$ | async">
-              <tr
-                class="z-10 border-b transition duration-300 ease-in-out hover:text-white hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600 cursor-pointer"
-                (click)="navigate(chore.id)"
+              <ng-container
+              *ngIf="!chore.deleted"
               >
-                <td class="whitespace-nowrap px-6 py-4 font-medium">
-                  {{ chore.id }}
-                </td>
-                <td class="whitespace-nowrap px-6 py-4">{{ chore.name }}</td>
-                <td class="whitespace-nowrap px-6 py-4">
-                  {{ chore.description }}
-                </td>
-                <td class="whitespace-nowrap px-6 py-4">
-                  {{ chore.completed ? "Yes" : "No" }}
-                </td>
-              </tr>
+              <tr
+              class="z-10 border-b transition duration-300 ease-in-out hover:text-white hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600 cursor-pointer"
+              (click)="navigate(chore.id)"
+              >
+              <td class="whitespace-nowrap px-6 py-4 font-medium">
+                {{ chore.id }}
+              </td>
+              <td class="whitespace-nowrap px-6 py-4">{{ chore.name }}</td>
+              <td class="whitespace-nowrap px-6 py-4">
+                {{ chore.description }}
+              </td>
+              <td class="whitespace-nowrap px-6 py-4">
+                {{ chore.completed ? "Yes" : "No" }}
+              </td>
+            </tr>
+          </ng-container>
             </ng-container>
           </tbody>
         </table>

@@ -13,7 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModalComponent } from './ui/common-modal/common-modal.component';
 import { StoreModule } from '@ngrx/store';
 import { ChoreComponent } from './modules/house/routes/chore/chore.component';
-import { ChoresComponent } from './modules/house/routes/chores.component';
+import { ChoresComponent } from './modules/house/routes/chores/chores.component';
 
 @NgModule({
   declarations: [

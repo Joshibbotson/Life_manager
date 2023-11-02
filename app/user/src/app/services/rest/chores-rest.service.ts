@@ -29,9 +29,11 @@ export class ChoresRestService {
       .pipe(map((response: any) => response));
   }
 
-  public delete(id:number){
-    console.log(id)
+  public delete(id: number) {
+    const payload = { id }; // we need to change the ID to json by placing it in an object.
+    //this allow's angular's HTTP library to serialize the id.
     return this.http
-    .put(`${this.url}/chores/delete/${id}`, id)
-      .pipe(map((response: any) => response));  }
+        .put(`${this.url}/chores/delete/${id}`, payload)
+        .pipe(map((response: any) => response));
+}
 }
