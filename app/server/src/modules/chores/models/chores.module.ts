@@ -14,6 +14,7 @@ export class ChoresModel {
 
   public async create(request: any, response: any) {
     const post = await this.postChore(request, response)
+    return post
   }
 
   public async read(request: any) {
@@ -51,9 +52,9 @@ export class ChoresModel {
         const readOrError = await this.validate.validateSchema(chore, choresSchema)
         if (readOrError){
             console.log(readOrError)
-            await AppDataSource.getRepository(ChoresEntity).save(chore);
-            res.status(201).send({ message: "Chore created successfully" });
-        } else {
+            const read = await AppDataSource.getRepository(ChoresEntity).save(chore);
+            return read
+          } else {
             console.log("failed schema validation")
         }
     } catch (error) {
@@ -62,7 +63,7 @@ export class ChoresModel {
     }
 }
 
-  private async  getChores(req?, res?, next?) {
+  private async getChores(req?, res?, next?) {
     console.log("get request");
     try {
         const choreRepository = AppDataSource.manager.getRepository(ChoresEntity);
@@ -75,7 +76,7 @@ export class ChoresModel {
     }
   }
 
-  private async  getChoreById(request) {
+  private async getChoreById(request) {
     try {
         const id: number = request.params.id;
         const choreRepository = AppDataSource.manager.getRepository(ChoresEntity);

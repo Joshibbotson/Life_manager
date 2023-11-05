@@ -14,6 +14,9 @@ import { CommonModalComponent } from './ui/common-modal/common-modal.component';
 import { StoreModule } from '@ngrx/store';
 import { ChoreComponent } from './modules/house/routes/chore/chore.component';
 import { ChoresComponent } from './modules/house/routes/chores/chores.component';
+import { EffectsModule } from '@ngrx/effects';
+import { choresReducer } from './store/reducers/chores.reducer';
+import { ChoresEffects } from './store/effects/chores.effects';
 
 @NgModule({
   declarations: [
@@ -33,7 +36,12 @@ import { ChoresComponent } from './modules/house/routes/chores/chores.component'
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    StoreModule.forRoot({}),
+    StoreModule.forRoot({
+      chores: choresReducer
+    }),
+    EffectsModule.forRoot([
+      ChoresEffects
+    ]),
   ],
   providers: [],
   bootstrap: [AppComponent],
