@@ -1,0 +1,5 @@
+<div *ngFor="let page of pageCountArr$ | async">
+  <button> {{page}}</button>
+</div>
+<div>Current Page: {{currentPage$ | async}}</div>
+<div>Items Per Page: {{take$ | async}}</div>

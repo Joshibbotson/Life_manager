@@ -79,13 +79,20 @@ export class ChoresModel {
   private async getChores(page, pageSize) {
     try {
       const choreRepository = AppDataSource.manager.getRepository(ChoresEntity);
-      const skip = (page - 1) * pageSize; // Calculate how many items to skip
-      const chores = await choreRepository.find({
+      const skip = (page - 1) * pageSize;
+      const chores = await choreRepository.findAndCount({
         skip: skip,
         take: pageSize,
       });
-      console.log("chores: ", chores);
-      return chores;
+     const choresData = {
+        skip: skip,
+        take: pageSize,
+        count: chores[1],
+        data: chores[0]
+      }
+
+      // console.log("chores: ", choresData);
+      return choresData; 
     } catch (error) {
       console.error("Error fetching chores", error);
       throw new Error("Internal Server Error");

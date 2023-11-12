@@ -14,7 +14,7 @@ constructor(private actions$: Actions, private choresService: ChoresRestService)
     mergeMap(() => 
     this.choresService.read().pipe(
       map((chores) => ChoresActions.loadChoresSuccess({ chores })),
-      tap(x => console.log(x.chores.data)),
+      tap(x => console.log(x.chores)),
       catchError((error) => of(error))
     )))
   )

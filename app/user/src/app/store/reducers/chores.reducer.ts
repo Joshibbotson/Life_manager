@@ -7,7 +7,7 @@ export interface ChoresState {
 }
 
 const initialState: ChoresState = {
-  chores:{ page: 1, take: 10, data: []}
+  chores:{ page: 1, take: 10, count: 0,  data: []}
 }
 
 export const choresReducer = createReducer(

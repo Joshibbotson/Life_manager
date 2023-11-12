@@ -1,6 +1,7 @@
 import {Validate} from '../../../../../api/dist/validation/validate'
 import { server } from "../../..";
 import { ChoresController } from "../controller/chores.module";
+import { count } from 'console';
 
 
 export class ChoresRoutes {
@@ -38,13 +39,8 @@ export class ChoresRoutes {
             const pageSize = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
             try {
                 const read = await this.choresController.readRequest(req, page, pageSize)
-                const returnData = {
-                    page: page,
-                    take: pageSize,
-                    data: read
-                }
-                console.log('returned read pre json: ', returnData)
-                res.json(returnData)
+                console.log('returned read pre json: ', read)
+                res.json(read)
             } catch(error){
                 console .log( error)
                 res.status(500).json({ error: 'Internal Server Error' });

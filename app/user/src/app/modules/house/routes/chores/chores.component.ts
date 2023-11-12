@@ -33,6 +33,7 @@ export class ChoresComponent {
   public showForm: boolean = false;
   public chores$: Observable<IChore[]>;
 
+
   constructor(
     private rest: ChoresRestService,
     private links: LinksService,
@@ -40,9 +41,9 @@ export class ChoresComponent {
     private store: Store
   ) {
     const choreRead$ = this.store.select(selectChores)
+
     this.chores$ = choreRead$.pipe(map(x => x.data))
     this.chores$.subscribe(x => console.log('Chores$ data:', x));
-
   }
 
   ngOnInit(){

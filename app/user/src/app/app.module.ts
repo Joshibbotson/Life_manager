@@ -17,6 +17,7 @@ import { ChoresComponent } from './modules/house/routes/chores/chores.component'
 import { EffectsModule } from '@ngrx/effects';
 import { choresReducer } from './store/reducers/chores.reducer';
 import { ChoresEffects } from './store/effects/chores.effects';
+import { PaginationComponent } from './components/pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ChoresEffects } from './store/effects/chores.effects';
     DashboardModulesComponent,
     CommonCheckboxComponent,
     CommonModalComponent,
+    PaginationComponent,
     ChoreComponent,
   ],
   imports: [

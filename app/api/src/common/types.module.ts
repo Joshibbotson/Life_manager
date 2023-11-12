@@ -8,5 +8,6 @@ export interface IMetaProperties {
 export interface IMetaReadRequest<T> {
   page: number,
   take: number,
+  count: number,
   data: T[],
 }
