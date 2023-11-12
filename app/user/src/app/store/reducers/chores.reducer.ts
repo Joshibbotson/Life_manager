@@ -1,26 +1,28 @@
 import { createReducer, on } from "@ngrx/store";
-import {IChore} from '../../../../../api/dist/chores/index'
+import {IChore, IChoreReadRequest} from '../../../../../api/dist/chores/index'
 import * as ChoresActions from '../actions/chores.actions'
 
 export interface ChoresState {
-  chores: IChore[]
+  chores: IChoreReadRequest
 }
 
 const initialState: ChoresState = {
-  chores:[],
+  chores:{ page: 1, take: 10, data: []}
 }
 
 export const choresReducer = createReducer(
   initialState,
-  on(ChoresActions.loadChoresSuccess, (state, { chores }) => ({ ...state, chores})),
-  on(ChoresActions.createChoreSuccess, (state, { chore }) => ({ ...state, chores: [...state.chores, chore] })),
+  on(ChoresActions.loadChoresSuccess, (state, { chores }) => ({chores: chores})),
+  on(ChoresActions.createChoreSuccess, (state, { chore }) => ({ ...state, data:[...state.chores.data, chore] })),
   on(ChoresActions.deleteChoreSuccess, (state, { id }) => {
-    const choreIndex = state.chores.findIndex((chore) => chore.id === id)
+    const choreIndex = state.chores.data.findIndex((chore) => chore.id === id)
 
     if(choreIndex !== -1){
-      const stateCopy = [...state.chores]
-      return  { ...state, chores: stateCopy.filter((chore) => chore.id !== id)}
+      const stateCopy = [...state.chores.data]
+      return  { ...state, data: stateCopy.filter((chore) => chore.id !== id)}
     }
+
     return state
   })
 )
+

@@ -26,7 +26,3 @@ server.listen(port, function () {
     console.log(`listening at ${port}`);
 });
 
-// server.get("/chores/read", getChores);
-// server.get("/chores/read/:id", getChoreById);
-// server.post("/chores/create", postChore);
-// server.put("/chores/update", updateChoreById);

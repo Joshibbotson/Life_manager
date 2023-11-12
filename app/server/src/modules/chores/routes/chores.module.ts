@@ -31,12 +31,20 @@ export class ChoresRoutes {
         })
     }
 
+    // 
     protected readHandler(server: any) {
-        console.log("chores readHandler")
         server.get("/chores/read", async (req, res, next) => {
+            const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+            const pageSize = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
             try {
-                const read = await this.choresController.readRequest(req)
-                res.json(read)
+                const read = await this.choresController.readRequest(req, page, pageSize)
+                const returnData = {
+                    page: page,
+                    take: pageSize,
+                    data: read
+                }
+                console.log('returned read pre json: ', returnData)
+                res.json(returnData)
             } catch(error){
                 console .log( error)
                 res.status(500).json({ error: 'Internal Server Error' });
@@ -45,8 +53,10 @@ export class ChoresRoutes {
         });
 
          server.get("/chores/read/:id", async (req, res, next) => {
+            const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+            const pageSize = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
             try {
-                const read = await this.choresController.readRequest(req)
+                const read = await this.choresController.readRequest(req, page, pageSize)
                 res.json(read)
             } catch(error){
                 console .log( error)

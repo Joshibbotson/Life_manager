@@ -17,11 +17,11 @@ export class ChoresModel {
     return post
   }
 
-  public async read(request: any) {
+  public async read(request: any, page: number, pageSize: number) {
     if (request.params.id){
       return this.getChoreById(request)
     }
-        return this.getChores(request)
+        return this.getChores(page, pageSize)
   }
   
   public async update(request: any) {
@@ -63,18 +63,35 @@ export class ChoresModel {
     }
 }
 
-  private async getChores(req?, res?, next?) {
-    console.log("get request");
+  // private async getChores(req?, res?, next?) {
+  //   console.log("get request");
+  //   try {
+  //       const choreRepository = AppDataSource.manager.getRepository(ChoresEntity);
+  //       const chores = await choreRepository.find();
+  //       console.log("chores: ", chores);
+  //     return chores
+  //   } catch (error) {
+  //       console.error("Error fetching chores", error);
+  //       res.status(500).send("Internal Server Error");
+  //   }
+  // }
+
+  private async getChores(page, pageSize) {
     try {
-        const choreRepository = AppDataSource.manager.getRepository(ChoresEntity);
-        const chores = await choreRepository.find();
-        console.log("chores: ", chores);
-      return chores
+      const choreRepository = AppDataSource.manager.getRepository(ChoresEntity);
+      const skip = (page - 1) * pageSize; // Calculate how many items to skip
+      const chores = await choreRepository.find({
+        skip: skip,
+        take: pageSize,
+      });
+      console.log("chores: ", chores);
+      return chores;
     } catch (error) {
-        console.error("Error fetching chores", error);
-        res.status(500).send("Internal Server Error");
+      console.error("Error fetching chores", error);
+      throw new Error("Internal Server Error");
     }
   }
+  
 
   private async getChoreById(request) {
     try {

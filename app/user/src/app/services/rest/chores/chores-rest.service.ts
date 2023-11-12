@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { IChore } from '../../../../../api/dist/chores';
+import { IChore, IChoreReadRequest } from '../../../../../../api/dist/chores';
 import { Store } from '@ngrx/store';
-import * as ChoresActions from '../../../app/store/actions/chores.actions';
+import * as ChoresActions from '../../../store/actions/chores.actions';
+
 
 @Injectable({
   providedIn: 'root',
@@ -27,15 +28,19 @@ export class ChoresRestService {
     return this.http.put(`${this.url}/chores/update`, id);
   }
 
-  public read():Observable<IChore[]> {
+  public read():Observable<IChoreReadRequest> {
+    const page = 1; // Next page
+const pageSize = 40; // Items per page
     return this.http
-      .get<IChore[]>(`${this.url}/chores/read`)
+      .get<IChore[]>(`${this.url}/chores/read?page=${page}&pageSize=${pageSize}`)
       .pipe(map((response: any) => response));
   }
 
   public readById(id: number):Observable<IChore> {
+    const page = 2; // Next page
+const pageSize = 10; // Items per page
     return this.http
-      .get<IChore>(`${this.url}/chores/read/${id}`)
+      .get<IChore>(`${this.url}/chores/read/${id}?page=${page}&pageSize=${pageSize}`)
       .pipe(map((response: any) => response));
   }
 

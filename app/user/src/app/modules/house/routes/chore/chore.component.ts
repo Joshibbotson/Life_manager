@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs';
 import { Ilinks, LinksService } from 'src/app/services/links/links.service';
-import { ChoresRestService } from 'src/app/services/rest/chores-rest.service';
+import { ChoresRestService } from 'src/app/services/rest/chores/chores-rest.service';
 
 @Component({
   selector: 'app-chore',

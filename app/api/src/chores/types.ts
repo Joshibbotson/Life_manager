@@ -1,6 +1,6 @@
-import { IMetaProperties } from "../common/types.module";
+import { IMetaProperties, IMetaReadRequest } from "../common/types.module";
 
-export interface IChore extends IMetaProperties {
+export interface IChore extends IMetaProperties  {
     name: string,
     description: string,
     createdBy: string,
@@ -9,4 +9,4 @@ export interface IChore extends IMetaProperties {
 }
 
 
-
+export interface IChoreReadRequest extends IMetaReadRequest<IChore> {}

@@ -14,6 +14,8 @@
   - Add Users, including simple registration and login - []
   - Add luxon library - []
   - Add state via NgRx - [x]
+  - Setup Elastic - []
+  - Add testing suites - []
 
   ### Hosting
   - Setup CD/CI pipeline - []

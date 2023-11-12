@@ -3,12 +3,12 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Ilinks, LinksService } from 'src/app/services/links/links.service';
-import { ChoresRestService } from 'src/app/services/rest/chores-rest.service';
+import { ChoresRestService } from 'src/app/services/rest/chores/chores-rest.service';
 import { selectChores } from 'src/app/store/selectors/chores.selectors';
 import { IChore } from '../../../../../../../api/dist/chores';
 import * as ChoresActions from '../../../../store/actions/chores.actions'
-import { OnInit } from '@angular/core';
-
+import { Observable, map } from 'rxjs';
+ 
 @Component({
   selector: 'app-chores',
   templateUrl: './chores.component.html',
@@ -31,7 +31,7 @@ export class ChoresComponent {
     completed: this.completedControlGroup,
   });
   public showForm: boolean = false;
-  public  chores$;
+  public chores$: Observable<IChore[]>;
 
   constructor(
     private rest: ChoresRestService,
@@ -39,13 +39,15 @@ export class ChoresComponent {
     private router: Router,
     private store: Store
   ) {
-    this.chores$ = this.store.select(selectChores)
+    const choreRead$ = this.store.select(selectChores)
+    this.chores$ = choreRead$.pipe(map(x => x.data))
+    this.chores$.subscribe(x => console.log('Chores$ data:', x));
+
   }
 
   ngOnInit(){
     this.links.updateLinks(this.homeLinks);
     this.loadChores()
-
   }
 
   loadChores(){
