@@ -35,10 +35,13 @@ export class ChoresRoutes {
     // 
     protected readHandler(server: any) {
         server.get("/chores/read", async (req, res, next) => {
-            const page = req.query.page ? parseInt(req.query.page, 10) : 1;
-            const pageSize = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
+            const skip = req.query.skip ? parseInt(req.query.skip, 10) : 0;
+            const take = req.query.take ? parseInt(req.query.take, 10) : 10;
+            console.log("skip route:", skip)
+            console.log("take route:", take)
+
             try {
-                const read = await this.choresController.readRequest(req, page, pageSize)
+                const read = await this.choresController.readRequest(req, skip, take)
                 console.log('returned read pre json: ', read)
                 res.json(read)
             } catch(error){
@@ -49,10 +52,10 @@ export class ChoresRoutes {
         });
 
          server.get("/chores/read/:id", async (req, res, next) => {
-            const page = req.query.page ? parseInt(req.query.page, 10) : 1;
-            const pageSize = req.query.pageSize ? parseInt(req.query.pageSize, 10) : 10;
+            const skip = req.query.skip ? parseInt(req.query.skip, 10) : 0
+            const take = req.query.take ? parseInt(req.query.take, 10) : 10;
             try {
-                const read = await this.choresController.readRequest(req, page, pageSize)
+                const read = await this.choresController.readRequest(req, skip, take)
                 res.json(read)
             } catch(error){
                 console .log( error)

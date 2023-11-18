@@ -4,10 +4,10 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Ilinks, LinksService } from 'src/app/services/links/links.service';
 import { ChoresRestService } from 'src/app/services/rest/chores/chores-rest.service';
-import { selectChores } from 'src/app/store/selectors/chores.selectors';
 import { IChore } from '../../../../../../../api/dist/chores';
-import * as ChoresActions from '../../../../store/actions/chores.actions'
-import { Observable, map } from 'rxjs';
+import * as ChoresActions from '../../../../state/chores/chores.actions'
+import { Observable, map, take } from 'rxjs';
+import { selectChores } from 'src/app/state/chores/chores.selectors';
  
 @Component({
   selector: 'app-chores',
@@ -16,6 +16,7 @@ import { Observable, map } from 'rxjs';
 export class ChoresComponent {
   public loading = true;
   public homeLinks: Ilinks[] = [{ url: '/chores', name: 'Chores' }];
+  
   readonly nameControlGroup: FormControl = new FormControl('');
   readonly descriptionControlGroup: FormControl = new FormControl('');
   readonly createdByControlGroup: FormControl = new FormControl('');
@@ -51,10 +52,20 @@ export class ChoresComponent {
     this.loadChores()
   }
 
-  loadChores(){
-    this.store.dispatch(ChoresActions.loadChores())
-    this.loading = false;
+  public loadChores() {
+    this.store
+      .select(selectChores)
+      .pipe(
+        take(1), 
+        map(chores => {
+
+            this.store.dispatch(ChoresActions.loadChores({ skip: chores.skip, take: chores.take }));
+   
+        })
+      )
+      .subscribe(() => (this.loading = false));
   }
+  
 
   createChore(chore: IChore){
     this.store.dispatch(ChoresActions.createChore({ chore }))

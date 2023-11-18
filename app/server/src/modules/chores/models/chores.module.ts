@@ -17,11 +17,11 @@ export class ChoresModel {
     return post
   }
 
-  public async read(request: any, page: number, pageSize: number) {
+  public async read(request: any, skip: number, take: number) {
     if (request.params.id){
       return this.getChoreById(request)
     }
-        return this.getChores(page, pageSize)
+        return this.getChores(skip, take)
   }
   
   public async update(request: any) {
@@ -76,17 +76,21 @@ export class ChoresModel {
   //   }
   // }
 
-  private async getChores(page, pageSize) {
+  private async getChores(skip: number, take: number) {
     try {
       const choreRepository = AppDataSource.manager.getRepository(ChoresEntity);
-      const skip = (page - 1) * pageSize;
+      console.log("skip:", skip)
+      console.log("take:", take)
       const chores = await choreRepository.findAndCount({
         skip: skip,
-        take: pageSize,
+        take: take,
+        where: {
+          deleted: false,
+        }
       });
      const choresData = {
         skip: skip,
-        take: pageSize,
+        take: take,
         count: chores[1],
         data: chores[0]
       }

@@ -1,5 +1,14 @@
-<div *ngFor="let page of pageCountArr$ | async">
-  <button> {{page}}</button>
+<div class="flex border-slate-300 border rounded-lg w-fit">
+  <button [disabled]="(skip$ | async) === 0" class="flex justify-center items-center border-r-2 rounded-l-lg bg-white p-2 disabled:text-gray-400 disabled:bg-white hover:bg-slate-500 hover:text-white" (click)="previousPage()"> < Previous </button>
+  <ng-container *ngIf=" take$ | async as take">
+
+  <div *ngFor="let page of pageCountArr$ | async;" >
+    <button class="flex justify-center items-center  rounded bg-white w-10 p-2 hover:bg-slate-500 hover:text-white" [ngClass]="{ 'border border-black' : page *take  === (skip$ | async) }" (click)="updatePage(page)"> {{page + 1}}</button>
+  </div>
+  <button [disabled]="(isNextButtonDisabled$ | async)" class="flex justify-center items-center border-l-2 rounded-r-lg  bg-white disabled:bg-white p-2  disabled:text-gray-400  hover:bg-slate-500 hover:text-white" (click)="nextPage()"> Next ></button>
+</ng-container>
 </div>
-<div>Current Page: {{currentPage$ | async}}</div>
-<div>Items Per Page: {{take$ | async}}</div>
+
+
+<div>Current Page: {{ skip$ | async }}</div>
+<div>Items Per Page: {{ take$ | async }}</div>
