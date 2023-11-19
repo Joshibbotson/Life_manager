@@ -16,7 +16,8 @@ import { selectChores } from 'src/app/state/chores/chores.selectors';
 export class ChoresComponent {
   public loading = true;
   public homeLinks: Ilinks[] = [{ url: '/chores', name: 'Chores' }];
-  
+  editOpen: number | null = null; 
+
   readonly nameControlGroup: FormControl = new FormControl('');
   readonly descriptionControlGroup: FormControl = new FormControl('');
   readonly createdByControlGroup: FormControl = new FormControl('');
@@ -67,15 +68,23 @@ export class ChoresComponent {
   }
   
 
-  createChore(chore: IChore){
+  public createChore(chore: IChore){
     this.store.dispatch(ChoresActions.createChore({ chore }))
   }
 
-  toggleShowForm() {
+  public toggleShowForm() {
     this.showForm = !this.showForm;
     console.log(this.showForm);
   }
-  navigate(id: number) {
+
+  public toggleEditOptions(index: number) {
+    if (this.editOpen === index) {
+      this.editOpen = null; // Close if already open
+    } else {
+      this.editOpen = index; // Open specific row
+    }
+  }
+  public navigate(id: number) {
     this.router.navigate([`chores/${id}`]);
   }
 

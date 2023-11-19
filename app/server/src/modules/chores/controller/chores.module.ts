@@ -16,6 +16,7 @@ export class ChoresController {
   }
 
   public async readRequest(request: any, page:number, pageSize: number) {
+   
     const data = await this.choresModel.read(request, page, pageSize)    
     return data    
   }

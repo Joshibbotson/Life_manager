@@ -6,6 +6,8 @@ import { take } from 'rxjs/operators';
 import { selectChores } from 'src/app/state/chores/chores.selectors';
 import { Subject } from 'rxjs';
 
+
+// need to input or figure out best way to put handle what selector/actions to use so this is reusable.
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',

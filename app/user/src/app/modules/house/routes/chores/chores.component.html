@@ -79,22 +79,51 @@
             <tbody class="">
             <ng-container *ngFor="let chore of chores$ | async">
               <ng-container
-              *ngIf="!chore.deleted"
               >
               <tr
               class="z-10 border-b transition duration-300 ease-in-out hover:text-white hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600 cursor-pointer"
-              (click)="navigate(chore.id)"
               >
-              <td class="whitespace-nowrap px-6 py-4 font-medium">
+              <td class="whitespace-nowrap px-6 py-4 font-medium"               (click)="navigate(chore.id)"
+              >
                 {{ chore.id }}
               </td>
-              <td class="whitespace-nowrap px-6 py-4">{{ chore.name }}</td>
-              <td class="whitespace-nowrap px-6 py-4">
+              <td class="whitespace-nowrap px-6 py-4"               (click)="navigate(chore.id)"
+              >{{ chore.name }}</td>
+              <td class="whitespace-nowrap px-6 py-4"               (click)="navigate(chore.id)"
+              >
                 {{ chore.description }}
               </td>
-              <td class="whitespace-nowrap px-6 py-4">
+              <td class="whitespace-nowrap px-6 py-4"               (click)="navigate(chore.id)"
+              >
                 {{ chore.completed ? "Yes" : "No" }}
               </td>
+              <td class="whitespace-nowrap px-6 py-4"               (click)="navigate(chore.id)"
+              >
+                {{ chore.completed ? "Yes" : "No" }}
+              </td>
+              <!-- custom component this -->
+              <td class="whitespace-nowrap px-6 py-4" >
+                <ng-container *ngIf="editOpen === chore.id; else showButtons">
+                  <div class="flex flex-col absolute border border-black bg-white">
+                    <button class="text-black p-2 hover:text-white hover:bg-slate-400">Edit</button>
+                    <button class="text-black p-2 hover:text-white hover:bg-slate-400">Delete</button>
+                  </div>
+                </ng-container>
+                <ng-template #showButtons>
+                  <div (click)="toggleEditOptions(chore.id)">
+                    . . . 
+                  </div>
+                </ng-template> 
+              </td>
+              <!-- custom component this -->
+              <!-- custom checkbox -->
+              <td class="whitespace-nowrap px-6 py-4" >
+
+              <button *ngIf="!chore.completed" class="flex justify-center items-center border border-black-100  rounded-lg  p-2 disabled:text-gray-400 disabled:bg-white hover:bg-slate-500 hover:border-gray-100 " >
+                Complete Chore
+              </button>
+            </td>
+
             </tr>
           </ng-container>
         </ng-container>

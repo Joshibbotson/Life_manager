@@ -19,11 +19,13 @@ export class ChoresModel {
 
   public async read(request: any, skip: number, take: number) {
     if (request.params.id){
+
       return this.getChoreById(request)
     }
         return this.getChores(skip, take)
   }
-  
+
+ 
   public async update(request: any) {
         
   }
@@ -105,18 +107,22 @@ export class ChoresModel {
   
 
   private async getChoreById(request) {
+    console.log("got chore by id")
     try {
         const id: number = request.params.id;
         const choreRepository = AppDataSource.manager.getRepository(ChoresEntity);
-        const chore = await choreRepository.find({
+        const chore = await choreRepository.findOne({
             where: {
                 id: id,
             },
         });
+        if(!chore){
+      request.status(500).send("Chore not found");
+        }
       return chore
     } catch (error) {
-        console.error("Error fetching chores", error);
-        request.status(500).send("Internal Server Error");
+      console.error("Error fetching chore", error);
+      request.status(500).send("Internal Server Error");
     }
 }
 

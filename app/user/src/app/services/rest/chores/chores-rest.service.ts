@@ -29,8 +29,6 @@ export class ChoresRestService {
   }
 
   public read(skip: number, take: number ):Observable<IChoreReadRequest> {
-//     const page = 1; // Next page
-// const pageSize = 10; // Items per page
 console.log("skip: ", skip)
 console.log("take: ", take)
     return this.http
@@ -39,8 +37,9 @@ console.log("take: ", take)
   }
 
   public readById(id: number):Observable<IChore> {
+    console.log("read by Id: ", id)
     return this.http
-      .get<IChore>(`${this.url}/chores/read`)
+      .get<IChore>(`${this.url}/chores/read/${id}`)
       .pipe(map((response: any) => response));
   }
 

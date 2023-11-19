@@ -16,6 +16,7 @@ import { ChoreComponent } from './modules/house/routes/chore/chore.component';
 import { ChoresComponent } from './modules/house/routes/chores/chores.component';
 import { EffectsModule } from '@ngrx/effects';
 import { choresReducer } from './state/chores/chores.reducer';
+import { choreReducer } from './state/chores/chores.reducer';
 import { ChoresEffects } from './state/chores/chores.effects';
 import { PaginationComponent } from './components/pagination/pagination.component';
 
@@ -39,10 +40,11 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     ReactiveFormsModule,
     HttpClientModule,
     StoreModule.forRoot({
-      chores: choresReducer
+      chores: choresReducer, 
+      selectedChore: choreReducer
     }),
     EffectsModule.forRoot([
-      ChoresEffects
+      ChoresEffects, 
     ]),
   ],
   providers: [],

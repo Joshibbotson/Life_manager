@@ -1,3 +1,5 @@
+<!-- replace buttons with common-btn -->
+
 <div class="flex border-slate-300 border rounded-lg w-fit">
   <button [disabled]="(skip$ | async) === 0" class="flex justify-center items-center border-r-2 rounded-l-lg bg-white p-2 disabled:text-gray-400 disabled:bg-white hover:bg-slate-500 hover:text-white" (click)="previousPage()"> < Previous </button>
   <ng-container *ngIf=" take$ | async as take">
@@ -10,5 +12,5 @@
 </div>
 
 
-<div>Current Page: {{ skip$ | async }}</div>
-<div>Items Per Page: {{ take$ | async }}</div>
+<div>Skip: {{ skip$ | async }}</div>
+<div>Items Per Page (take): {{ take$ | async }}</div>

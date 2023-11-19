@@ -54,8 +54,11 @@ export class ChoresRoutes {
          server.get("/chores/read/:id", async (req, res, next) => {
             const skip = req.query.skip ? parseInt(req.query.skip, 10) : 0
             const take = req.query.take ? parseInt(req.query.take, 10) : 10;
+            console.log("Read by id: ", req.query)
             try {
                 const read = await this.choresController.readRequest(req, skip, take)
+                console.log('returned read pre json: ', read)
+
                 res.json(read)
             } catch(error){
                 console .log( error)
