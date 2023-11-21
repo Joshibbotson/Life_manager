@@ -12,8 +12,7 @@
 >
   Cancel
 </button>
-<app-pagination
-></app-pagination>
+<app-pagination/>
 <!-- componentalise this into a modal. -->
 <div class="container" *ngIf="showForm">
   <div
@@ -25,30 +24,30 @@
       ngDefaultControl
       type="string"
       label="Name"
-    ></common-input>
+    />
     <common-input
       formControlName="description"
       ngDefaultControl
       type="string"
       label="Description"
-    ></common-input>
+    />
     <common-input
       formControlName="createdBy"
       ngDefaultControl
       type="string"
       label="Created by"
-    ></common-input>
+    />
     <common-input
       formControlName="assignedTo"
       ngDefaultControl
       type="string"
       label="Assigned to"
-    ></common-input>
+    />
     <common-checkbox
       formControlName="completed"
       ngDefaultControl
       label="Completed"
-    ></common-checkbox>
+    />
     <button (click)="handleSubmit()">Submit</button>
   </div>
 </div>

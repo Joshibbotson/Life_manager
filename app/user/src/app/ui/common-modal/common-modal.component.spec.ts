@@ -1,21 +1,21 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { CommonModalComponent } from './common-modal.component';
+import { CommonModalComponent } from './common-modal.component'
 
 describe('CommonModalComponent', () => {
-  let component: CommonModalComponent;
-  let fixture: ComponentFixture<CommonModalComponent>;
+  let component: CommonModalComponent
+  let fixture: ComponentFixture<CommonModalComponent>
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CommonModalComponent]
-    });
-    fixture = TestBed.createComponent(CommonModalComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+      declarations: [CommonModalComponent],
+    })
+    fixture = TestBed.createComponent(CommonModalComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

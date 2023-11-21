@@ -1,8 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input } from '@angular/core'
 
-interface ILinks{
-  linkName:string;
-  routerLink:string;
+interface ILinks {
+  linkName: string
+  routerLink: string
 }
 
 @Component({
@@ -10,14 +10,10 @@ interface ILinks{
   templateUrl: './module-tab.component.html',
 })
 export class ModuleTabComponent {
-
   @Input()
-  title!: string;
+  title!: string
   @Input()
-  links: Array<ILinks> = [];
-  
+  links: Array<ILinks> = []
 
-  constructor(){
-  }
-
+  constructor() {}
 }

@@ -1,13 +1,13 @@
-import { Entity, Column } from "typeorm";
+import { Entity, Column } from 'typeorm'
 
 @Entity()
 export abstract class CommonEntity {
-    @Column()
-    deleted: boolean;
+  @Column()
+  deleted: boolean
 
-    @Column()
-    createdDate: Date;
+  @Column()
+  createdDate: Date
 
-    @Column()
-    editedDate: Date;
+  @Column()
+  editedDate: Date
 }

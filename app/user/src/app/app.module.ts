@@ -1,37 +1,27 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core'
+import { BrowserModule } from '@angular/platform-browser'
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { DashboardComponent } from './modules/dashboard/dashboard.component';
-import { ModuleTabComponent } from './ui/module-tab/module-tab.component';
-import { CommonInputComponent } from './ui/common-input/common-input.component';
-import { DashboardModulesComponent } from './modules/dashboard-modules/dashboard-modules.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonCheckboxComponent } from './ui/common-checkbox/common-checkbox.component';
-import { HttpClientModule } from '@angular/common/http';
-import { CommonModalComponent } from './ui/common-modal/common-modal.component';
-import { StoreModule } from '@ngrx/store';
-import { ChoreComponent } from './modules/house/routes/chore/chore.component';
-import { ChoresComponent } from './modules/house/routes/chores/chores.component';
-import { EffectsModule } from '@ngrx/effects';
-import { choresReducer } from './state/chores/chores.reducer';
-import { choreReducer } from './state/chores/chores.reducer';
-import { ChoresEffects } from './state/chores/chores.effects';
-import { PaginationComponent } from './components/pagination/pagination.component';
+import { AppRoutingModule } from './app-routing.module'
+import { AppComponent } from './app.component'
+import { DashboardComponent } from './modules/dashboard/dashboard.component'
+import { ModuleTabComponent } from './ui/module-tab/module-tab.component'
+import { DashboardModulesComponent } from './modules/dashboard-modules/dashboard-modules.component'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { HttpClientModule } from '@angular/common/http'
+import { CommonModalComponent } from './ui/common-modal/common-modal.component'
+import { StoreModule } from '@ngrx/store'
+import { EffectsModule } from '@ngrx/effects'
+import { choresReducer } from './state/chores/chores.reducer'
+import { choreReducer } from './state/chores/chores.reducer'
+import { ChoresEffects } from './state/chores/chores.effects'
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     ModuleTabComponent,
-    ChoresComponent,
-    CommonInputComponent,
     DashboardModulesComponent,
-    CommonCheckboxComponent,
     CommonModalComponent,
-    PaginationComponent,
-    ChoreComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,12 +30,10 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     ReactiveFormsModule,
     HttpClientModule,
     StoreModule.forRoot({
-      chores: choresReducer, 
-      selectedChore: choreReducer
+      chores: choresReducer,
+      selectedChore: choreReducer,
     }),
-    EffectsModule.forRoot([
-      ChoresEffects, 
-    ]),
+    EffectsModule.forRoot([ChoresEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent],

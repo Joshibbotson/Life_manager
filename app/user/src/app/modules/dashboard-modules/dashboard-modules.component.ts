@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 
 interface Ilinks {
-  linkName: string;
-  routerLink: string;
+  linkName: string
+  routerLink: string
 }
 
 @Component({
@@ -12,5 +12,5 @@ interface Ilinks {
 export class DashboardModulesComponent {
   public readonly links: Ilinks[] = [
     { linkName: 'Chores', routerLink: 'chores' },
-  ];
+  ]
 }

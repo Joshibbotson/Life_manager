@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { BehaviorSubject } from 'rxjs'
 
 export interface Ilinks {
-  url: string;
-  name: string;
+  url: string
+  name: string
 }
 
 @Injectable({
@@ -12,14 +12,14 @@ export interface Ilinks {
 export class LinksService {
   private linksData = new BehaviorSubject<Ilinks[]>([
     { url: '/', name: 'home' },
-  ]);
+  ])
   constructor() {}
 
   getLinks() {
-    return this.linksData.asObservable();
+    return this.linksData.asObservable()
   }
 
   updateLinks(newLinks: Ilinks[]) {
-    this.linksData.next(newLinks);
+    this.linksData.next(newLinks)
   }
 }
