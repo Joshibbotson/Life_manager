@@ -31,7 +31,7 @@ export class ChoresRoutes {
     })
   }
 
-  //
+  /** Read route */
   protected readHandler(server: any) {
     server.get('/chores/read', async (req, res, next) => {
       const skip = req.query.skip ? parseInt(req.query.skip, 10) : 0
@@ -65,7 +65,22 @@ export class ChoresRoutes {
     })
   }
 
-  protected updateHandler(server: any) {}
+  protected updateHandler(server: any) {
+    console.log('update called')
+    return server.put('/chores/update/:id', async (req, res, next) => {
+      try {
+        const updateRequest = await this.choresController.updateRequest(
+          req,
+          res,
+        )
+        console.log('Update req!:', updateRequest)
+        res.json(updateRequest)
+      } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Update Server Error' })
+      }
+    })
+  }
 
   protected deleteHandler(server: any) {
     return server.put('/chores/delete/:id', async (req, res, next) => {

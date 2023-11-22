@@ -19,7 +19,10 @@ export class ChoresController {
     return data
   }
 
-  public async updateRequest(request: any) {}
+  public async updateRequest(request: any, response: any) {
+    const updateOrError = await this.choresModel.update(request, response)
+    return updateOrError
+  }
 
   public async deleteRequest(request: any, response: any) {
     const deleteOrError = await this.choresModel.delete(request, response)

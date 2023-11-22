@@ -45,6 +45,15 @@ export const createChoreSuccess = createAction(
   props<{ chore: IChore }>(),
 )
 
+export const completeChore = createAction(
+  '[Chores] complete Chore',
+  props<{ id: number }>(),
+)
+export const completeChoreSuccess = createAction(
+  '[Chores] complete Chore Success',
+  props<{ chore: IChore }>(),
+)
+
 export const deleteChore = createAction(
   '[Chores] delete Chore',
   props<{ id: number }>(),

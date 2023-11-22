@@ -8,6 +8,7 @@ import {
   loadChoreByIdSuccess,
   loadChoreByIdFailure,
   reloadChores,
+  completeChoreSuccess,
 } from './chores.actions'
 
 export interface ChoresState {
@@ -58,7 +59,6 @@ export const choresReducer = createReducer(
     }
   }),
 
-  // maybe this does not return the correct state?
   on(deleteChoreSuccess, (state, { chore }) => {
     const choreIndex = state.chores.data.findIndex(
       (oldChore) => oldChore.id === chore.id,
@@ -75,6 +75,23 @@ export const choresReducer = createReducer(
       }
     }
     return state
+  }),
+
+  on(completeChoreSuccess, (state, { chore }) => {
+    const updatedChores = state.chores.data.map((oldChore) => {
+      if (oldChore.id === chore.id) {
+        return { ...oldChore, completed: chore.completed }
+      }
+      return oldChore
+    })
+
+    return {
+      ...state,
+      chores: {
+        ...state.chores,
+        data: updatedChores,
+      },
+    }
   }),
 
   on(reloadChores, (state) => {

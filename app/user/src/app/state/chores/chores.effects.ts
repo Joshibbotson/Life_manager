@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { catchError, concatMap, map, mergeMap, of, switchMap, tap } from 'rxjs'
+import { catchError, map, mergeMap, of, switchMap } from 'rxjs'
 import { ChoresRestService } from 'src/app/services/rest/chores/chores-rest.service'
 import {
   loadChores,
@@ -13,6 +13,8 @@ import {
   deleteChore,
   deleteChoreSuccess,
   reloadChores,
+  completeChore,
+  completeChoreSuccess,
 } from './chores.actions'
 
 @Injectable()
@@ -67,6 +69,18 @@ export class ChoresEffects {
       mergeMap((action) =>
         this.choresService.delete(action.id).pipe(
           map((chore) => deleteChoreSuccess({ chore })),
+          catchError((error) => of(error)),
+        ),
+      ),
+    ),
+  )
+
+  readonly completeChoreById$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(completeChore),
+      mergeMap((action) =>
+        this.choresService.update(action.id).pipe(
+          map((chore) => completeChoreSuccess({ chore })),
           catchError((error) => of(error)),
         ),
       ),

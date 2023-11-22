@@ -25,8 +25,13 @@ export class ChoresRestService {
     )
   }
 
-  public update(id: number) {
-    return this.http.put(`${this.url}/chores/update`, id)
+  public update(id: any): Observable<IChore> {
+    const payload = { id }
+    return this.http.put(`${this.url}/chores/update/${id}`, payload).pipe(
+      map((response: any) => {
+        return response
+      }),
+    )
   }
 
   public read(skip: number, take: number): Observable<IChoreReadRequest> {
@@ -49,9 +54,9 @@ export class ChoresRestService {
     //this allow's angular's HTTP library to serialize the id.
     return this.http.put(`${this.url}/chores/delete/${id}`, payload).pipe(
       map((response: any) => {
-        this.store.dispatch(
-          ChoresActions.deleteChoreSuccess({ chore: response }),
-        )
+        // this.store.dispatch(
+        //   ChoresActions.deleteChoreSuccess({ chore: response }),
+        // )
         return response
       }),
     )

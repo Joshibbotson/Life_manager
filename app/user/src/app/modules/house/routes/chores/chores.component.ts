@@ -134,4 +134,8 @@ export class ChoresComponent {
   public deleteChore(id: number) {
     this.store.dispatch(ChoresActions.deleteChore({ id }))
   }
+
+  public completeChore(id: number) {
+    this.store.dispatch(ChoresActions.completeChore({ id }))
+  }
 }

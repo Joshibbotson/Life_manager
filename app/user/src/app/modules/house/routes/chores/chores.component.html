@@ -138,6 +138,7 @@
                     <button
                       *ngIf="!chore.completed"
                       class="flex justify-center items-center border border-black-100 rounded-lg p-2 disabled:text-gray-400 disabled:bg-white hover:bg-slate-500 hover:border-gray-100"
+                      (click)="completeChore(chore.id)"
                     >
                       Complete Chore
                     </button>

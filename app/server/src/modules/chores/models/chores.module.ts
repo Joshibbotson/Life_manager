@@ -24,7 +24,9 @@ export class ChoresModel {
     return this.getChores(skip, take)
   }
 
-  public async update(request: any) {}
+  public async update(request: any, response: any) {
+    return this.updateChoreById(request, response)
+  }
 
   public async delete(request: any, response: any) {
     return this.deleteChoreById(request, response)
@@ -64,19 +66,6 @@ export class ChoresModel {
     }
   }
 
-  // private async getChores(req?, res?, next?) {
-  //   console.log("get request");
-  //   try {
-  //       const choreRepository = AppDataSource.manager.getRepository(ChoresEntity);
-  //       const chores = await choreRepository.find();
-  //       console.log("chores: ", chores);
-  //     return chores
-  //   } catch (error) {
-  //       console.error("Error fetching chores", error);
-  //       res.status(500).send("Internal Server Error");
-  //   }
-  // }
-
   private async getChores(skip: number, take: number) {
     try {
       const choreRepository = AppDataSource.manager.getRepository(ChoresEntity)
@@ -96,7 +85,6 @@ export class ChoresModel {
         data: chores[0],
       }
 
-      // console.log("chores: ", choresData);
       return choresData
     } catch (error) {
       console.error('Error fetching chores', error)
@@ -130,6 +118,20 @@ export class ChoresModel {
         id: req.body.id,
       })
       chore.deleted = true
+      await AppDataSource.getRepository(ChoresEntity).save(chore)
+      return chore
+    } catch (error) {
+      console.error('Error fetching chores', error)
+      res.status(500).send('Internal Server Error')
+    }
+  }
+
+  private async updateChoreById(req, res) {
+    try {
+      const chore = await AppDataSource.getRepository(ChoresEntity).findOneBy({
+        id: req.body.id,
+      })
+      chore.completed = true
       await AppDataSource.getRepository(ChoresEntity).save(chore)
       return chore
     } catch (error) {
