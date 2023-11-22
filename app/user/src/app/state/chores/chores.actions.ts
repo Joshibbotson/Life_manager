@@ -51,8 +51,9 @@ export const deleteChore = createAction(
 )
 export const deleteChoreSuccess = createAction(
   '[Chores] delete Chore Success',
-  props<{ id: number }>(),
+  props<{ chore: IChore }>(),
 )
+export const reloadChores = createAction('[Chores] Reload Chores')
 
 export const setSkipAndTake = createAction(
   '[Chores] Set Skip and Take',

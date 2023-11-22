@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, SimpleChanges } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { Store } from '@ngrx/store'
@@ -6,7 +6,14 @@ import { Ilinks, LinksService } from 'src/app/services/links/links.service'
 import { ChoresRestService } from 'src/app/services/rest/chores/chores-rest.service'
 import { IChore } from '../../../../../../../api/dist/chores'
 import * as ChoresActions from '../../../../state/chores/chores.actions'
-import { Observable, map, take } from 'rxjs'
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  map,
+  take,
+  takeUntil,
+} from 'rxjs'
 import { selectChores } from 'src/app/state/chores/chores.selectors'
 import { PaginationComponent } from 'src/app/components/pagination/pagination.component'
 import { CommonCheckboxComponent } from 'src/app/ui/common-checkbox/common-checkbox.component'
@@ -47,23 +54,27 @@ export class ChoresComponent {
     completed: this.completedControlGroup,
   })
   public showForm: boolean = false
-  public chores$: Observable<IChore[]>
+  public chores$!: Observable<IChore[]>
+  public destroy$: Subject<void> = new Subject()
+  trackById = this.trackByProperty('id')
 
   constructor(
-    private rest: ChoresRestService,
     private links: LinksService,
     private router: Router,
     private store: Store,
-  ) {
-    const choreRead$ = this.store.select(selectChores)
-
-    this.chores$ = choreRead$.pipe(map((x) => x.data))
-    this.chores$.subscribe((x) => console.log('Chores$ data:', x))
-  }
+  ) {}
 
   ngOnInit() {
     this.links.updateLinks(this.homeLinks)
     this.loadChores()
+    this.chores$ = this.store
+      .select(selectChores)
+      .pipe(map((choreData) => choreData.data))
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 
   public loadChores() {
@@ -77,7 +88,14 @@ export class ChoresComponent {
           )
         }),
       )
-      .subscribe(() => (this.loading = false))
+      .subscribe(
+        () => (
+          (this.loading = false),
+          (this.chores$ = this.store
+            .select(selectChores)
+            .pipe(map((choreData) => choreData.data)))
+        ),
+      )
   }
 
   public createChore(chore: IChore) {
@@ -86,7 +104,6 @@ export class ChoresComponent {
 
   public toggleShowForm() {
     this.showForm = !this.showForm
-    console.log(this.showForm)
   }
 
   public toggleEditOptions(index: number) {
@@ -104,13 +121,17 @@ export class ChoresComponent {
     this.choreFormGroup.patchValue({
       completed: this.choreFormGroup.value.completed === 'true' ? true : false,
     })
-    try {
-      ;(await this.rest.create(this.choreFormGroup.value)).subscribe(() =>
-        console.log('reloaded'),
-      )
-      this.toggleShowForm()
-    } catch (error) {
-      console.log(error)
-    }
+    this.store.dispatch(
+      ChoresActions.createChore({ chore: this.choreFormGroup.value }),
+    )
+    this.toggleShowForm()
+  }
+
+  trackByProperty<T = any>(property: keyof T) {
+    return (index: number, object: T) => object[property]
+  }
+
+  public deleteChore(id: number) {
+    this.store.dispatch(ChoresActions.deleteChore({ id }))
   }
 }

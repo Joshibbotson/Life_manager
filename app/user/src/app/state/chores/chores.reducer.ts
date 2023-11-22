@@ -7,6 +7,7 @@ import {
   loadChoresFailure,
   loadChoreByIdSuccess,
   loadChoreByIdFailure,
+  reloadChores,
 } from './chores.actions'
 
 export interface ChoresState {
@@ -46,20 +47,38 @@ export const choresReducer = createReducer(
     status: 'error',
   })),
 
-  on(createChoreSuccess, (state, { chore }) => ({
-    ...state,
-    data: [...state.chores.data, chore],
-  })),
+  on(createChoreSuccess, (state, { chore }) => {
+    console.log(chore)
+    return {
+      ...state,
+      chores: {
+        ...state.chores,
+        data: [...state.chores.data, chore],
+      },
+    }
+  }),
 
-  on(deleteChoreSuccess, (state, { id }) => {
-    const choreIndex = state.chores.data.findIndex((chore) => chore.id === id)
+  // maybe this does not return the correct state?
+  on(deleteChoreSuccess, (state, { chore }) => {
+    const choreIndex = state.chores.data.findIndex(
+      (oldChore) => oldChore.id === chore.id,
+    )
 
     if (choreIndex !== -1) {
       const stateCopy = [...state.chores.data]
-      return { ...state, data: stateCopy.filter((chore) => chore.id !== id) }
+      return {
+        ...state,
+        chores: {
+          ...state.chores,
+          data: stateCopy.filter((oldChore) => oldChore.id !== chore.id),
+        },
+      }
     }
-
     return state
+  }),
+
+  on(reloadChores, (state) => {
+    return { ...state }
   }),
 )
 

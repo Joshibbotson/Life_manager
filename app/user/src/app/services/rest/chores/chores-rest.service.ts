@@ -17,12 +17,9 @@ export class ChoresRestService {
   ) {}
 
   public create(request: any): Observable<IChore> {
+    console.log('client side create req:', request)
     return this.http.post(`${this.url}/chores/create`, request).pipe(
       map((response: any) => {
-        // Dispatch createChoreSuccess action to update the store
-        this.store.dispatch(
-          ChoresActions.createChoreSuccess({ chore: response }),
-        )
         return response
       }),
     )
@@ -50,8 +47,13 @@ export class ChoresRestService {
   public delete(id: number) {
     const payload = { id } // we need to change the ID to json by placing it in an object.
     //this allow's angular's HTTP library to serialize the id.
-    return this.http
-      .put(`${this.url}/chores/delete/${id}`, payload)
-      .pipe(map((response: any) => response))
+    return this.http.put(`${this.url}/chores/delete/${id}`, payload).pipe(
+      map((response: any) => {
+        this.store.dispatch(
+          ChoresActions.deleteChoreSuccess({ chore: response }),
+        )
+        return response
+      }),
+    )
   }
 }

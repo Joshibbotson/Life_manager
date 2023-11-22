@@ -22,6 +22,7 @@ export class ChoresRoutes {
     return server.post('/chores/create', async (req, res, next) => {
       try {
         const post = await this.choresController.createRequest(req, res)
+        console.log(post)
         res.json(post)
       } catch (error) {
         console.log(error)
@@ -73,6 +74,7 @@ export class ChoresRoutes {
           req,
           res,
         )
+        console.log(deleteRequest)
         res.json(deleteRequest)
       } catch (error) {
         console.log(error)

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs'
+import { catchError, concatMap, map, mergeMap, of, switchMap, tap } from 'rxjs'
 import { ChoresRestService } from 'src/app/services/rest/chores/chores-rest.service'
 import {
   loadChores,
@@ -10,6 +10,9 @@ import {
   createChoreSuccess,
   loadChoreById,
   loadChoreByIdSuccess,
+  deleteChore,
+  deleteChoreSuccess,
+  reloadChores,
 } from './chores.actions'
 
 @Injectable()
@@ -19,6 +22,19 @@ export class ChoresEffects {
     private choresService: ChoresRestService,
   ) {}
 
+  readonly createChore$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(createChore),
+      switchMap((action) =>
+        this.choresService.create(action.chore).pipe(
+          map((chore) => {
+            return createChoreSuccess({ chore })
+          }),
+          catchError((error) => of(error)),
+        ),
+      ),
+    ),
+  )
   readonly loadChores$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadChores, setSkipAndTake), // Listen for setPageAndPageSize action
@@ -45,13 +61,12 @@ export class ChoresEffects {
       ),
     ),
   )
-
-  createChore$ = createEffect(() =>
+  readonly deleteChoreById$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(createChore),
-      switchMap((action) =>
-        this.choresService.create(action.chore).pipe(
-          map((chore) => createChoreSuccess({ chore })),
+      ofType(deleteChore),
+      mergeMap((action) =>
+        this.choresService.delete(action.id).pipe(
+          map((chore) => deleteChoreSuccess({ chore })),
           catchError((error) => of(error)),
         ),
       ),
