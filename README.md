@@ -6,11 +6,13 @@ Clone the repository
 git clone git@github.com:Joshibbotson/Life_manager.git
 ```
 
-enter directory
+Enter directory
 
 ```shell
 cd Life_manager
 ```
+
+Install dependencies
 
 ```shell
 npm install
