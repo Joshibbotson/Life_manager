@@ -64,7 +64,11 @@ Serve Angular development server, if all is well it will be running on http://lo
 npm run start
 ```
 
-Install Server dependencies and run server
+### Run backend server
+
+Note: Ensure you have Postgres installed.
+
+Install Server dependencies
 
 ```shell
 npm install
@@ -76,19 +80,35 @@ Install nodemon
 npm i nodemon
 ```
 
-Setup Postgres server
+Setup .env file:
+
+- Create .env file in Life_manager/app/server
+- use the following Environment names:
+  DB_HOST
+  DB_PORT
+  DB_USERNAME
+  DB_PASSWORD
+  DB_DATABASE
+
+an example may look like:
 
 ```shell
-
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_DATABASE=postgres
 ```
 
 Run the server
 
 ```shell
-
+npm run server
 ```
 
--
+If all is well you should be good to go!
+
+---
 
 # TODO
 
@@ -98,6 +118,7 @@ Run the server
 - Add todo list - []
 - Add real time chat that allows users to link tasks with @ sign - []
 - Add notification system - []
+- Add ThreeJs floating spheres to represent chores assigned, completed and other statistics? Glowing spheres, floating around on a black canvas?
 
 ### General architectural changes
 
