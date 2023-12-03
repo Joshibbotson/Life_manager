@@ -83,12 +83,12 @@ npm i nodemon
 Setup .env file:
 
 - Create .env file in Life_manager/app/server
-- use the following Environment names:
+- use the following Environment names:\
   DB_HOST\
   DB_PORT\
   DB_USERNAME\
   DB_PASSWORD\
-  DB_DATABASE\
+  DB_DATABASE
 
 an example may look like:
 

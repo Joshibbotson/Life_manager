@@ -1,100 +1,125 @@
-import { AppDataSource } from '../../../data-source'
-import { ChoresEntity } from '../../../entities/chores'
-import { Users } from '../../../entities/common/users'
-import { Request, Response } from 'express'
-import { Validate } from '../../../../../api/dist/validation/validate'
-import { choresSchema } from '../../../../../api/dist/chores/actions'
+import { server } from '../../..'
+import { UsersController } from '../controllers/users.module'
 
-export class UsersRoutes {
+export class ChoresRoutes {
   public static readonly moduleName: string = 'ChoresRoutes'
 
-  protected readonly readRoute = this.readHandler()
+  private usersController: UsersController
 
-  protected readHandler() {
-    return
+  constructor(usersController: UsersController) {
+    this.usersController = usersController
   }
-}
 
-// this needs to seperated into MVC architecture
+  private readonly createRoute = this.createHandler(server)
+  private readonly readRoute = this.readHandler(server)
+  private readonly updateRoute = this.updateHandler(server)
+  private readonly deleteRoute = this.deleteHandler(server)
+  private readonly authRoute = this.authHandler(server)
 
-const validate = new Validate()
-export async function getChoreById(req, res, next) {
-  try {
-    const id: number = req.params.id
-    const choreRepository = AppDataSource.manager.getRepository(ChoresEntity)
-    const chores = await choreRepository.find({
-      where: {
-        id: id,
-      },
+  // Handle creation of user, return login token.
+  protected createHandler(server: any) {
+    console.log('createHandler')
+    return server.post('/user/create', async (req, res, next) => {
+      try {
+        const post = await this.usersController.createRequest(req, res)
+        console.log(post)
+        res.json(post)
+      } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Internal Server Error' })
+      }
+    })
+  }
+
+  /** Read route */
+  protected readHandler(server: any) {
+    server.get('/user/read', async (req, res, next) => {
+      const skip = req.query.skip ? parseInt(req.query.skip, 10) : 0
+      const take = req.query.take ? parseInt(req.query.take, 10) : 10
+      console.log('skip route:', skip)
+      console.log('take route:', take)
+
+      try {
+        const read = await this.usersController.readRequest(req, skip, take)
+        console.log('returned read pre json: ', read)
+        res.json(read)
+      } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Internal Server Error' })
+      }
     })
 
-    res.send(chores)
-    next()
-  } catch (error) {
-    console.error('Error fetching chores', error)
-    res.status(500).send('Internal Server Error')
-  }
-}
-export async function getChores(req, res, next) {
-  console.log('get request')
-  try {
-    const choreRepository = AppDataSource.manager.getRepository(ChoresEntity)
-    const chores = await choreRepository.find()
-    console.log('chores: ', chores)
+    server.get('/user/read/:id', async (req, res, next) => {
+      const skip = req.query.skip ? parseInt(req.query.skip, 10) : 0
+      const take = req.query.take ? parseInt(req.query.take, 10) : 10
+      console.log('Read by id: ', req.query)
+      try {
+        const read = await this.usersController.readRequest(req, skip, take)
+        console.log('returned read pre json: ', read)
 
-    res.send(chores)
-    next()
-  } catch (error) {
-    console.error('Error fetching chores', error)
-    res.status(500).send('Internal Server Error')
-  }
-}
-
-// TODO:
-// Add schema validation for req/res
-export async function postChore(req: Request, res: Response) {
-  console.log('post')
-  try {
-    const chore = new ChoresEntity()
-    const user = await AppDataSource.getRepository(Users).findOneBy({
-      id: 1,
+        res.json(read)
+      } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Internal Server Error' })
+      }
     })
-    const payload = req.body
-    chore.name = payload.name
-    chore.description = payload.description
-    chore.assignedTo = payload.assignedTo
-    chore.createdBy = payload.createdBy
-    chore.completed = payload.completed
-    chore.user = user
-    chore.deleted = false
-    chore.createdDate = new Date()
-    chore.editedDate = new Date()
-    const readOrError = await validate.validateSchema(chore, choresSchema)
-    if (readOrError) {
-      console.log(readOrError)
-      await AppDataSource.getRepository(ChoresEntity).save(chore)
-      res.status(201).send({ message: 'Chore created successfully' })
-    } else {
-      console.log('failed schema validation')
-    }
-  } catch (error) {
-    console.error('Error posting chores', error)
-    res.status(500).send('Internal Server Error')
   }
-}
 
-export async function updateChoreById(req, res) {
-  try {
-    const chore = await AppDataSource.getRepository(ChoresEntity).findOneBy({
-      id: req.body.id,
+  protected updateHandler(server: any) {
+    console.log('update called')
+    return server.put('/user/update/:id', async (req, res, next) => {
+      try {
+        const updateRequest = await this.usersController.updateRequest(req, res)
+        console.log('Update req!:', updateRequest)
+        res.json(updateRequest)
+      } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Update Server Error' })
+      }
     })
-    chore.deleted = true
-    chore
-    await AppDataSource.getRepository(ChoresEntity).save(chore)
+  }
 
-    res.status(201).send({ message: 'Chore deleted successfully' })
-  } catch (error) {
-    console.error('Error fetching chores', error)
-    res.status(500).send('Internal Server Error')
+  protected deleteHandler(server: any) {
+    return server.put('/user/delete/:id', async (req, res, next) => {
+      try {
+        const deleteRequest = await this.usersController.deleteRequest(req, res)
+        console.log(deleteRequest)
+        res.json(deleteRequest)
+      } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Delete Server Error' })
+      }
+    })
+  }
+
+  // authentication request, should return login token + user.name
+  protected authHandler(server: any) {
+    return server.get('user/login', async (req, res, next) => {
+      try {
+        const authReq = await this.usersController.authRequest(req, res)
+        console.log('authHandler, authReq:', authReq)
+        res.json(authReq)
+      } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Auth Server Error' })
+      }
+    })
+  }
+
+  // validate token request, should return valid boolean
+  protected validateTokenHandler(server: any) {
+    return server.get('user/validateToken', async (req, res, next) => {
+      try {
+        const validatTknReq = await this.usersController.validateTokenRequest(
+          req,
+          res,
+        )
+        console.log('validateTknHandler, validateTkReq:', validatTknReq)
+        res.json(validatTknReq)
+      } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Auth Server Error' })
+      }
+    })
   }
 }

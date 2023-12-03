@@ -1,7 +1,7 @@
 import { choresSchema } from '../../../../../api/dist/chores/actions'
 import { Validate } from '../../../../../api/dist/validation/validate'
 import { AppDataSource } from '../../../data-source'
-import { ChoresEntity } from '../../../entities/chores'
+import { Chores } from '../../../entities/chores'
 import { Users } from '../../../entities/common/users'
 
 export class ChoresModel {
@@ -35,7 +35,7 @@ export class ChoresModel {
   private async postChore(req: any, res: any) {
     console.log('post')
     try {
-      const chore = new ChoresEntity()
+      const chore = new Chores()
       const user = await AppDataSource.getRepository(Users).findOneBy({
         id: 1,
       })
@@ -55,7 +55,7 @@ export class ChoresModel {
       )
       if (readOrError) {
         console.log(readOrError)
-        const read = await AppDataSource.getRepository(ChoresEntity).save(chore)
+        const read = await AppDataSource.getRepository(Chores).save(chore)
         return read
       } else {
         console.log('failed schema validation')
@@ -68,7 +68,7 @@ export class ChoresModel {
 
   private async getChores(skip: number, take: number) {
     try {
-      const choreRepository = AppDataSource.manager.getRepository(ChoresEntity)
+      const choreRepository = AppDataSource.manager.getRepository(Chores)
       console.log('skip:', skip)
       console.log('take:', take)
       const chores = await choreRepository.findAndCount({
@@ -96,7 +96,7 @@ export class ChoresModel {
     console.log('got chore by id')
     try {
       const id: number = request.params.id
-      const choreRepository = AppDataSource.manager.getRepository(ChoresEntity)
+      const choreRepository = AppDataSource.manager.getRepository(Chores)
       const chore = await choreRepository.findOne({
         where: {
           id: id,
@@ -114,11 +114,11 @@ export class ChoresModel {
 
   private async deleteChoreById(req, res) {
     try {
-      const chore = await AppDataSource.getRepository(ChoresEntity).findOneBy({
+      const chore = await AppDataSource.getRepository(Chores).findOneBy({
         id: req.body.id,
       })
       chore.deleted = true
-      await AppDataSource.getRepository(ChoresEntity).save(chore)
+      await AppDataSource.getRepository(Chores).save(chore)
       return chore
     } catch (error) {
       console.error('Error fetching chores', error)
@@ -128,11 +128,11 @@ export class ChoresModel {
 
   private async updateChoreById(req, res) {
     try {
-      const chore = await AppDataSource.getRepository(ChoresEntity).findOneBy({
+      const chore = await AppDataSource.getRepository(Chores).findOneBy({
         id: req.body.id,
       })
       chore.completed = true
-      await AppDataSource.getRepository(ChoresEntity).save(chore)
+      await AppDataSource.getRepository(Chores).save(chore)
       return chore
     } catch (error) {
       console.error('Error fetching chores', error)

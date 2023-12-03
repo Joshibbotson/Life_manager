@@ -6,13 +6,8 @@ export class Users extends CommonEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({
-    length: 100,
-  })
-  userName: string
-
   @Column()
-  password: string
+  hashedPassword: string
 
   @Column({
     length: 100,
@@ -27,4 +22,7 @@ export class Users extends CommonEntity {
     default: [],
   })
   permissions: string[]
+
+  @Column()
+  active: boolean
 }

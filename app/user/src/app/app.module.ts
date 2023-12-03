@@ -14,6 +14,8 @@ import { EffectsModule } from '@ngrx/effects'
 import { choresReducer } from './state/chores/chores.reducer'
 import { choreReducer } from './state/chores/chores.reducer'
 import { ChoresEffects } from './state/chores/chores.effects'
+import { CoreChoresComponent } from './modules/house/routes/core-chores/core-chores.component'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 @NgModule({
   declarations: [
@@ -22,8 +24,10 @@ import { ChoresEffects } from './state/chores/chores.effects'
     ModuleTabComponent,
     DashboardModulesComponent,
     CommonModalComponent,
+    CoreChoresComponent,
   ],
   imports: [
+    FontAwesomeModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,

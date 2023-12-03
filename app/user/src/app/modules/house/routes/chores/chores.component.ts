@@ -1,19 +1,11 @@
-import { Component, SimpleChanges } from '@angular/core'
+import { Component, Output } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { Store } from '@ngrx/store'
 import { Ilinks, LinksService } from 'src/app/services/links/links.service'
-import { ChoresRestService } from 'src/app/services/rest/chores/chores-rest.service'
 import { IChore } from '../../../../../../../api/dist/chores'
 import * as ChoresActions from '../../../../state/chores/chores.actions'
-import {
-  BehaviorSubject,
-  Observable,
-  Subject,
-  map,
-  take,
-  takeUntil,
-} from 'rxjs'
+import { Observable, Subject, map, take } from 'rxjs'
 import { selectChores } from 'src/app/state/chores/chores.selectors'
 import { PaginationComponent } from 'src/app/components/pagination/pagination.component'
 import { CommonCheckboxComponent } from 'src/app/ui/common-checkbox/common-checkbox.component'
@@ -38,7 +30,6 @@ export class ChoresComponent {
   public loading = true
   public homeLinks: Ilinks[] = [{ url: '/chores', name: 'Chores' }]
   editOpen: number | null = null
-
   readonly nameControlGroup: FormControl = new FormControl('')
   readonly descriptionControlGroup: FormControl = new FormControl('')
   readonly createdByControlGroup: FormControl = new FormControl('')
@@ -106,7 +97,11 @@ export class ChoresComponent {
     this.showForm = !this.showForm
   }
 
-  public toggleEditOptions(index: number) {
+  public toggleEditOptions(index: number | null, event: Event) {
+    event.stopPropagation()
+
+    console.log('toggled:', index)
+
     if (this.editOpen === index) {
       this.editOpen = null // Close if already open
     } else {
@@ -131,6 +126,7 @@ export class ChoresComponent {
     return (index: number, object: T) => object[property]
   }
 
+  public editChore(id: number) {}
   public deleteChore(id: number) {
     this.store.dispatch(ChoresActions.deleteChore({ id }))
   }

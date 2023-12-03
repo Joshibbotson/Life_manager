@@ -1,7 +1,6 @@
 import { Validate } from '../../../../../api/dist/validation/validate'
 import { server } from '../../..'
 import { ChoresController } from '../controller/chores.module'
-import { count } from 'console'
 
 export class ChoresRoutes {
   public static readonly moduleName: string = 'ChoresRoutes'

@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core'
 import { LinksService } from 'src/app/services/links/links.service'
+import {
+  faChevronCircleLeft,
+  faChevronCircleRight,
+  faHome,
+} from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-dashboard',
@@ -7,6 +12,9 @@ import { LinksService } from 'src/app/services/links/links.service'
 })
 export class DashboardComponent implements OnInit {
   isSidebarOpen = true
+  readonly faHome = faHome
+  readonly faChevronCircleLeft = faChevronCircleLeft
+  readonly faChevronCircleRight = faChevronCircleRight
   public sideBarLinks$
 
   constructor(private links: LinksService) {
