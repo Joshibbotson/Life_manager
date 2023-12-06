@@ -2,8 +2,8 @@ import { usersSchema } from '../../../../../api/dist/users/actions'
 import { Validate } from '../../../../../api/dist/validation/validate'
 import { AppDataSource } from '../../../data-source'
 import { Users } from '../../../entities/common/users'
-import { bcrypt } from 'bcrypt'
-import { jwt } from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 export class UsersModel {
   public static readonly moduleName: string = 'UsersModel'
   public readonly validate: Validate
@@ -39,7 +39,9 @@ export class UsersModel {
   private async createUser(req: any, res: any) {
     console.log('createUser')
     try {
-      const payload = req.body
+      // const payload = req.body for testing using query not body
+      const payload = req.query
+      console.log(payload)
       const checkExistingUser = await AppDataSource.getRepository(
         Users,
       ).findOneBy({ email: payload.email })
@@ -51,6 +53,7 @@ export class UsersModel {
           status: 409,
         })
       }
+
       const salt = bcrypt.genSaltSync(10)
       const password = await bcrypt.hash(payload.password, salt)
 
@@ -154,21 +157,24 @@ export class UsersModel {
 
   public async authenticateLogin(req, res) {
     try {
-      const { email, password } = req.body
-
+      // const { email, password } = req.body
+      const { email, password } = req.query
+      console.log(email, password)
       const result = await AppDataSource.getRepository(Users).findOneBy({
         email: email,
       })
-
       const isMatch = await bcrypt.compare(password, result.hashedPassword)
 
       if (isMatch) {
+        console.log('gen log in token')
         const loginTkn = this.generateLoginToken(email)
-        return res.status(200).json({
+        console.log('gen log in token post')
+
+        return {
           success: true,
           token: loginTkn,
           user: { name: result.name, email: result.email },
-        })
+        }
       }
     } catch (error) {
       console.log(error)
@@ -182,17 +188,15 @@ export class UsersModel {
   public async validateTokenRequest(req, res) {
     try {
       console.log(req.body)
-      const { token } = req.body
+      // const { token } = req.body
+      const { token } = req.query
       const decoded = await jwt.verify(token, process.env.SECRET_WEBTKNKEY)
 
-      if (decoded) {
-        res.json({ valid: true })
-      }
+      return decoded
     } catch (error) {
-      res.json({ valid: false })
+      return error
     }
   }
-
   private generateLoginToken(email: string): string {
     return jwt.sign({ email }, process.env.SECRET_WEBTKNKEY, {
       expiresIn: '1h',

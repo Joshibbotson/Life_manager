@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 
 @Component({
+  standalone: true,
   selector: 'app-core-chores',
   templateUrl: './core-chores.component.html',
-  styleUrls: ['./core-chores.component.css']
+  styleUrls: ['./core-chores.component.css'],
 })
-export class CoreChoresComponent {
-
-}
+export class CoreChoresComponent {}

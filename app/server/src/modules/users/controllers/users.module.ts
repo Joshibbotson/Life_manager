@@ -20,8 +20,8 @@ export class UsersController {
   }
 
   public async updateRequest(request: any, response: any) {
-    const updateOrError = await this.usersModel.update(request, response)
-    return updateOrError
+    // const updateOrError = await this.usersModel.update(request, response)
+    // return updateOrError
   }
 
   public async deleteRequest(request: any, response: any) {

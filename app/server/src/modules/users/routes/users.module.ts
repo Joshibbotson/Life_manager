@@ -1,8 +1,8 @@
 import { server } from '../../..'
 import { UsersController } from '../controllers/users.module'
 
-export class ChoresRoutes {
-  public static readonly moduleName: string = 'ChoresRoutes'
+export class UsersRoutes {
+  public static readonly moduleName: string = 'UsersRoutes'
 
   private usersController: UsersController
 
@@ -15,6 +15,7 @@ export class ChoresRoutes {
   private readonly updateRoute = this.updateHandler(server)
   private readonly deleteRoute = this.deleteHandler(server)
   private readonly authRoute = this.authHandler(server)
+  private readonly validateTknRoute = this.validateTokenHandler(server)
 
   // Handle creation of user, return login token.
   protected createHandler(server: any) {
@@ -94,11 +95,11 @@ export class ChoresRoutes {
 
   // authentication request, should return login token + user.name
   protected authHandler(server: any) {
-    return server.get('user/login', async (req, res, next) => {
+    console.log('auth attempt')
+    server.get('/user/login', async (req, res, next) => {
       try {
         const authReq = await this.usersController.authRequest(req, res)
-        console.log('authHandler, authReq:', authReq)
-        res.json(authReq)
+        res.status(202).json(authReq)
       } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Auth Server Error' })
@@ -108,14 +109,19 @@ export class ChoresRoutes {
 
   // validate token request, should return valid boolean
   protected validateTokenHandler(server: any) {
-    return server.get('user/validateToken', async (req, res, next) => {
+    console.log('called')
+    server.get('/user/validateToken', async (req, res, next) => {
       try {
-        const validatTknReq = await this.usersController.validateTokenRequest(
+        const validateTknReq = await this.usersController.validateTokenRequest(
           req,
           res,
         )
-        console.log('validateTknHandler, validateTkReq:', validatTknReq)
-        res.json(validatTknReq)
+        console.log('validateTknHandler, validateTkReq:', validateTknReq)
+        if (validateTknReq) {
+          res.status(200).json({ valid: true, message: 'Token is valid' })
+        } else {
+          res.status(401).json({ valid: false, message: 'Invalid token' })
+        }
       } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Auth Server Error' })

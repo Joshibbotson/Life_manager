@@ -64,9 +64,11 @@
             <table class="min-w-full text-left text-sm font-light">
               <thead class="border-b font-medium dark:border-neutral-500">
                 <tr>
-                  <th scope="col" class="px-6 py-4">Name</th>
-                  <th scope="col" class="px-6 py-4">Description</th>
-                  <th scope="col" class="px-6 py-4">Completed</th>
+                  <th scope="col" colspan="1" class="px-6 py-4">Name</th>
+                  <th scope="col" colspan="1" class="px-6 py-4">Description</th>
+                  <th scope="col" colspan="1" class="px-6 py-4">Completed</th>
+                  <th scope="col" colspan="1" class="px-6 py-4"></th>
+                  <th scope="col" colspan="1" class="px-6 py-4"></th>
                 </tr>
               </thead>
               <tbody>
@@ -78,7 +80,7 @@
                     class="z-10 border-b transition duration-300 ease-in-out hover:text-white hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600 cursor-pointer"
                   >
                     <td
-                      class="whitespace-nowrap px-6 py-4"
+                      class="whitespace-nowrap px-6 py-4 w-100"
                       (click)="navigate(chore.id)"
                     >
                       {{ chore.name }}
@@ -130,7 +132,7 @@
                     <td class="whitespace-nowrap px-6 py-4">
                       <button
                         *ngIf="!chore.completed"
-                        class="flex justify-center items-center border border-black-100 rounded-lg p-2 disabled:text-gray-400 disabled:bg-white hover:bg-slate-500 hover:border-gray-100"
+                        class="items-center border border-black-100 rounded-lg p-2 disabled:text-gray-400 disabled:bg-white hover:bg-slate-500 hover:border-gray-100"
                         (click)="completeChore(chore.id)"
                       >
                         Complete Chore
