@@ -9,7 +9,7 @@ import { UsersModel } from './modules/users/models/users.module'
 import { UsersController } from './modules/users/controllers/users.module'
 import { UsersRoutes } from './modules/users/routes/users.module'
 
-export const port = 8080
+export const port = process.env.EXPRESS_PORT || 8080
 export const server = express()
 server.use(express.json())
 server.use(
