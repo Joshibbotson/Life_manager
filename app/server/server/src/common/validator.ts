@@ -4,11 +4,11 @@ import { Request, Response, Next } from 'express'
 
 export function validateSchemaMiddleware(schemaClass: any) {
   return async (req: Request, res: Response, next: Next) => {
-    // try {
-    //   const schemaInstance = new schemaClass(req.body)
+    try {
+      const schemaInstance = new schemaClass(req.body)
     //   const validationService = new ValidationService()
-    //   const validationErrors =
-    //     await validationService.validateSchema(schemaInstance)
+      const validationErrors =
+        // await validationService.validateSchema(schemaInstance)
 
     //   if (validationErrors) {
     //     res.status(400)
