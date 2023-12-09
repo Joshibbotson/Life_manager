@@ -5,9 +5,10 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "outDir": "./dist",
+    "outDir": "dist",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true
-  }
+  },
+  "include": ["src/**/*"]
 }

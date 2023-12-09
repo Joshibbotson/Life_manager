@@ -3,6 +3,14 @@
   "version": "0.0.1",
   "description": "Awesome project developed with TypeORM.",
   "type": "commonjs",
+  "scripts": {
+    "postinstall": "tsc",
+    "start": "node dist/src/index.js",
+    "server": "nodemon --exec ts-node src/index.ts",
+    "dist-server": "tsc",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "migration": "ts-node ./node-scripts/custom-migration.ts"
+  },
   "devDependencies": {
     "@types/node": "^16.11.10",
     "ts-node": "10.7.0",
@@ -18,12 +26,5 @@
     "reflect-metadata": "^0.1.13",
     "typeorm": "0.3.17",
     "ts-node": "10.7.0"
-  },
-  "scripts": {
-    "start": "ts-node src/index.ts",
-    "server": "nodemon --exec ts-node src/index.ts",
-    "dist-server": "tsc",
-    "typeorm": "typeorm-ts-node-commonjs",
-    "migration": "ts-node ./node-scripts/custom-migration.ts"
   }
 }
