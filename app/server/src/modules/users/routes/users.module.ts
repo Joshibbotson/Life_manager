@@ -96,7 +96,7 @@ export class UsersRoutes {
   // authentication request, should return login token + user.name
   protected authHandler(server: any) {
     console.log('auth attempt')
-    server.get('/user/login', async (req, res, next) => {
+    server.post('/user/login', async (req, res, next) => {
       try {
         const authReq = await this.usersController.authRequest(req, res)
         res.status(202).json(authReq)
@@ -110,17 +110,18 @@ export class UsersRoutes {
   // validate token request, should return valid boolean
   protected validateTokenHandler(server: any) {
     console.log('called')
-    server.get('/user/validateToken', async (req, res, next) => {
+    server.post('/user/validateToken', async (req, res, next) => {
       try {
         const validateTknReq = await this.usersController.validateTokenRequest(
           req,
           res,
         )
         console.log('validateTknHandler, validateTkReq:', validateTknReq)
-        if (validateTknReq) {
-          res.status(200).json({ valid: true, message: 'Token is valid' })
-        } else {
+        if (typeof validateTknReq === 'string') {
+          console.log('it is a string')
           res.status(401).json({ valid: false, message: 'Invalid token' })
+        } else if (validateTknReq) {
+          res.status(200).json({ valid: true, message: 'Token is valid' })
         }
       } catch (error) {
         console.log(error)

@@ -1,40 +1,45 @@
 import { Component } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService } from 'src/app/services/auth/auth.service'
 @Component({
   standalone: true,
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  imports: [ReactiveFormsModule],
 })
 export class LoginComponent {
-  loginForm?: any
+  public readonly loginForm: FormGroup
 
   constructor(
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router,
-  ) {}
-
-  ngOnInit(): void {
-    this.loginForm = this.fb.group({
-      username: ['', Validators.required],
+  ) {
+    this.loginForm = this.formBuilder.group({
+      email: ['', Validators.required],
       password: ['', Validators.required],
     })
   }
 
-  onSubmit(): void {
-    if (this.loginForm.valid) {
-      const username = this.loginForm.get('username').value
-      const password = this.loginForm.get('password').value
+  ngOnInit(): void {}
 
-      // Call the authentication service's login method
+  //it would be nice if the router.navigate took us back to whatever page we were on...
+  login(): void {
+    if (this.loginForm.valid) {
+      const username = this.loginForm.get('email')?.value
+      const password = this.loginForm.get('password')?.value
       if (this.authService.login(username, password)) {
-        // Navigate to the ProductListComponent upon successful login
-        this.router.navigate(['/product-list'])
+        this.router.navigate(['/'])
       } else {
-        // Handle authentication error (show error message, etc.)
+        console.log('incorrect login details')
+        // pop up an invalid log in error here? Use server error?
       }
     }
   }

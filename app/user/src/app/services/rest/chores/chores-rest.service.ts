@@ -2,8 +2,6 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable, map } from 'rxjs'
 import { IChore, IChoreReadRequest } from '../../../../../../api/dist/chores'
-import { Store } from '@ngrx/store'
-import * as ChoresActions from '../../../state/chores/chores.actions'
 
 @Injectable({
   providedIn: 'root',
@@ -11,10 +9,7 @@ import * as ChoresActions from '../../../state/chores/chores.actions'
 export class ChoresRestService {
   private readonly url = 'http://localhost:8080'
 
-  constructor(
-    private http: HttpClient,
-    private store: Store,
-  ) {}
+  constructor(private http: HttpClient) {}
 
   public create(request: any): Observable<IChore> {
     console.log('client side create req:', request)
@@ -35,8 +30,7 @@ export class ChoresRestService {
   }
 
   public read(skip: number, take: number): Observable<IChoreReadRequest> {
-    console.log('skip: ', skip)
-    console.log('take: ', take)
+    console.log('read')
     return this.http
       .get<IChore[]>(`${this.url}/chores/read?skip=${skip}&take=${take}`)
       .pipe(map((response: any) => response))
@@ -54,9 +48,6 @@ export class ChoresRestService {
     //this allow's angular's HTTP library to serialize the id.
     return this.http.put(`${this.url}/chores/delete/${id}`, payload).pipe(
       map((response: any) => {
-        // this.store.dispatch(
-        //   ChoresActions.deleteChoreSuccess({ chore: response }),
-        // )
         return response
       }),
     )

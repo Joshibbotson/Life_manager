@@ -1,8 +1,10 @@
+import { DateTime } from 'luxon'
+
 export interface IMetaProperties {
   id: number
   deleted: boolean
-  createdDate: Date // change this to DateTime
-  editedDate: Date // change this to DateTime
+  createdDate: DateTime
+  editedDate: DateTime
 }
 
 export interface IMetaReadRequest<T> {

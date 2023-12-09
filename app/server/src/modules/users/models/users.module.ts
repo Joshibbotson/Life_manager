@@ -157,8 +157,8 @@ export class UsersModel {
 
   public async authenticateLogin(req, res) {
     try {
-      // const { email, password } = req.body
-      const { email, password } = req.query
+      const { email, password } = req.body
+      // const { email, password } = req.query
       console.log(email, password)
       const result = await AppDataSource.getRepository(Users).findOneBy({
         email: email,
@@ -188,12 +188,15 @@ export class UsersModel {
   public async validateTokenRequest(req, res) {
     try {
       console.log(req.body)
-      // const { token } = req.body
-      const { token } = req.query
+      const { token } = req.body
       const decoded = await jwt.verify(token, process.env.SECRET_WEBTKNKEY)
 
       return decoded
     } catch (error) {
+      console.log(error.expiredAt)
+      if (error.expiredAt) {
+        return String(`Token Expired at: ${error.expiredAt}`)
+      }
       return error
     }
   }
