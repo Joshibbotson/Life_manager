@@ -122,12 +122,12 @@ If all is well you should be good to go!
 
 ### General architectural changes
 
-- Add pagination serverside - []
+- Add pagination serverside - [x]
 - Add schema validation - []
 - Add Users, including simple registration and login - []
-- Add luxon library - []
+- Add luxon library - [x]
+- Update clientside to follow angular 17 updates - []
 - Add state via NgRx - [x]
-- Setup Elastic - []
 - Add testing suites - []
 
 ### Hosting
