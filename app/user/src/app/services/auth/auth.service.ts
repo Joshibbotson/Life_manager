@@ -1,18 +1,35 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { map } from 'rxjs'
+import { BehaviorSubject, map } from 'rxjs'
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private readonly url = 'http://localhost:8080'
+  emailInUse$ = new BehaviorSubject<boolean>(false)
 
   constructor(
     private router: Router,
     private http: HttpClient,
   ) {}
+
+  // registerNewUser(name: string, email: string, password: string) {
+  //   return this.http
+  //     .post(`${this.url}/user/newuser`, {
+  //       name: name,
+  //       email: email,
+  //       password: password,
+  //     })
+  //     .subscribe(
+  //       (response: any) => {},
+  //       (error) => {
+  //         if (error.status === 409) {
+  //         }
+  //       },
+  //     )
+  // }
 
   registerNewUser(name: string, email: string, password: string) {
     return this.http
@@ -22,9 +39,12 @@ export class AuthService {
         password: password,
       })
       .subscribe(
-        (response: any) => {},
+        (response: any) => {
+          this.emailInUse$.next(false)
+        },
         (error) => {
           if (error.status === 409) {
+            this.emailInUse$.next(true)
           }
         },
       )
