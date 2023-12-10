@@ -119,7 +119,7 @@ export class UsersRoutes {
         console.log('validateTknHandler, validateTkReq:', validateTknReq)
         if (typeof validateTknReq === 'string') {
           console.log('it is a string')
-          res.status(401).json({ valid: false, message: 'Invalid token' })
+          res.status(201).json({ valid: false, message: 'Invalid token' })
         } else if (validateTknReq) {
           res.status(200).json({ valid: true, message: 'Token is valid' })
         }

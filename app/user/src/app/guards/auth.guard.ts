@@ -15,19 +15,24 @@ export class AuthGuardService {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
-  ): boolean {
-    const loginToken = localStorage.getItem('loginToken')
-    if (loginToken) {
-      if (this.authService.validateToken(loginToken)) {
-        return true
+  ): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      const loginToken = localStorage.getItem('loginToken')
+      if (loginToken) {
+        console.log('true a logntoken exist')
+        this.authService.validateToken(loginToken).subscribe((tkn) => {
+          console.log(tkn)
+          if (tkn) {
+            resolve(true)
+          } else {
+            this.authService.logout()
+            resolve(false)
+          }
+        })
       } else {
-        this.authService.logout()
-        // this.router.navigate(['/login'])
-        return false
+        this.router.navigate(['/login'])
+        resolve(false)
       }
-    }
-
-    this.router.navigate(['/login'])
-    return false
+    })
   }
 }

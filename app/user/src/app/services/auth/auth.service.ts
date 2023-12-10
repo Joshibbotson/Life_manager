@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
+import { map } from 'rxjs'
 
 @Injectable({
   providedIn: 'root',
@@ -45,6 +46,7 @@ export class AuthService {
   }
 
   public logout() {
+    console.log('this logout')
     localStorage.removeItem('loginToken')
     localStorage.removeItem('user')
     this.router.navigate(['/login'])
@@ -55,8 +57,11 @@ export class AuthService {
     const requestBody = { token: token }
     return this.http
       .post<{ valid: boolean }>(`${this.url}/user/validateToken`, requestBody)
-      .subscribe((response) => {
-        return response.valid ? true : false
-      })
+      .pipe(
+        map((response) => {
+          console.log(response.valid)
+          return response.valid
+        }),
+      )
   }
 }
