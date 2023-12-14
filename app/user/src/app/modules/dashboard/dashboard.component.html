@@ -1,7 +1,7 @@
 <div class="flex flex-col md:flex-row h-screen bg-gray-100">
   <!-- Sidebar -->
   <div
-    class="bg-gray-800 text-white md:block"
+    class="bg-gray-800 text-white md:flex flex-col"
     [ngClass]="getSideBarStyle()"
     id="sidebar"
   >
@@ -16,26 +16,37 @@
       <button class="py-2 px-3 text-center text-lg" (click)="toggleSidebar()">
         @if (windowWidth > 767) {
           <fa-icon
-            [icon]="isSidebarOpen ? faChevronCircleLeft : faChevronCircleRight"
+            [icon]="
+              isSidebarOpen() ? faChevronCircleLeft : faChevronCircleRight
+            "
             size="2x"
             class="hover:text-slate-200"
           ></fa-icon>
         } @else {
           <fa-icon
-            [icon]="isSidebarOpen ? faChevronCircleUp : faChevronCircleDown"
+            [icon]="isSidebarOpen() ? faChevronCircleUp : faChevronCircleDown"
             size="2x"
             class="hover:text-slate-200"
           ></fa-icon>
         }
       </button>
     </div>
-    @if (isSidebarOpen) {
-      <ul class="mt-6">
-        <ng-container *ngFor="let link of sideBarLinks$ | async">
-          <a href="{{ link.url }}">{{ link.name }}</a>
-        </ng-container>
-      </ul>
-      <button (click)="logout()">Logout</button>
+    @if (isSidebarOpen()) {
+      <div class="flex flex-col grow items-center justify-between">
+        <ul class="mt-6">
+          <ng-container *ngFor="let link of sideBarLinks$ | async">
+            <a href="{{ link.url }}">{{ link.name }}</a>
+          </ng-container>
+        </ul>
+        <div>
+          <button
+            class="border border-white rounded-md p-2 mb-6 hover:bg-white hover:text-red-500"
+            (click)="logout()"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
     }
   </div>
 

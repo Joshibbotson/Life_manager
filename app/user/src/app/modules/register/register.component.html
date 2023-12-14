@@ -1,52 +1,78 @@
-<main class="d-flex align-items-center justify-content-center vh-100">
-  <section
-    class="container shadow p-3 mb-5 bg-white rounded border-raidus-10 bg-light rounded p-5 w-50 h-50"
-  >
+<main class="flex items-center justify-center h-screen">
+  <section class="bg-white shadow-lg p-6 rounded-lg w-1/3 md:w-1/3 lg:w-1/2">
     <form
       [formGroup]="registerForm"
       (ngSubmit)="registerNewUser()"
-      class="d-flex flex-column w-100 input-group"
+      class="flex flex-col space-y-4"
     >
-      @if (emailInUse$) {
-        <p>Email is in use!</p>
+      <!-- Check if Email is in Use -->
+      @if (emailInUse$.value) {
+        <p class="text-red-500">Email is in use!</p>
       }
 
-      <label for="name">Name</label>
-      <input type="text" formControlName="name" class="form-control w-100" />
-
+      <label for="name" class="text-sm font-medium text-gray-700">Name*</label>
+      <input
+        type="text"
+        formControlName="name"
+        class="p-2 border border-gray-300 rounded-md w-full"
+      />
+      <!-- Name Validation -->
       @if (
         registerForm.controls['name'].invalid &&
         registerForm.controls['name'].touched
       ) {
-        <div class="text-danger">Name is required.</div>
+        <div class="text-sm text-red-500">Name is required.</div>
       }
-      <label for="email" class="label">Email</label>
-      <input type="email" formControlName="email" class="form-control w-100" />
+
+      <label for="email" class="text-sm font-medium text-gray-700"
+        >Email*</label
+      >
+      <input
+        type="email"
+        formControlName="email"
+        class="p-2 border border-gray-300 rounded-md w-full"
+      />
+      <!-- Email Validation -->
       @if (
         registerForm.controls['email'].invalid &&
         registerForm.controls['email'].touched
       ) {
-        <div class="text-danger">Email is required or invalid.</div>
+        <div class="text-sm text-red-500">Email is required or invalid.</div>
       }
-      <label for="password">Password</label>
+
+      <label for="password" class="text-sm font-medium text-gray-700"
+        >Password*</label
+      >
       <input
         type="password"
         formControlName="password"
-        class="form-control w-100"
+        class="p-2 border border-gray-300 rounded-md w-full"
       />
+      <!-- Password Validation -->
       @if (
         registerForm.controls['password'].invalid &&
         registerForm.controls['password'].touched
       ) {
-        <div class="text-danger">
+        <div class="text-sm text-red-500">
           Password is required and should have a minimum length of 8 characters.
         </div>
       }
-      <button type="submit" class="btn btn-primary">submit</button>
+
+      <button
+        type="submit"
+        class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+      >
+        Submit
+      </button>
     </form>
-    <div class="flex-column align-items-center justify-content-center">
-      <p>Have an account?</p>
-      <button routerLink="login" class="btn btn-primary">Login</button>
+    <div class="flex flex-col items-center justify-center mt-4">
+      <p>Already have an account?</p>
+      <button
+        routerLink="/login"
+        class="bg-blue-500 text-white p-2 mt-2 rounded-md hover:bg-blue-600"
+      >
+        Login
+      </button>
     </div>
   </section>
 </main>

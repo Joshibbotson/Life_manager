@@ -1,4 +1,10 @@
-import { Component, OnInit, SimpleChanges, effect } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  SimpleChanges,
+  WritableSignal,
+  signal,
+} from '@angular/core'
 import { LinksService } from 'src/app/services/links/links.service'
 import {
   faChevronCircleDown,
@@ -15,7 +21,9 @@ import { WindowSizeService } from 'src/app/services/window-service/window-size.s
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
-  public isSidebarOpen = true
+  public isSidebarOpen: WritableSignal<boolean | undefined> = signal<
+    boolean | undefined
+  >(undefined)
   readonly faHome = faHome
   readonly faChevronCircleLeft = faChevronCircleLeft
   readonly faChevronCircleRight = faChevronCircleRight
@@ -32,11 +40,15 @@ export class DashboardComponent implements OnInit {
     private windowSizeService: WindowSizeService,
   ) {
     this.sideBarLinks$ = this.links.getLinks()
-    effect(() => {
-      const size = this.windowSizeService.windowSize()
-      this.windowHeight = size.height
-      this.windowWidth = size.width
-    })
+    const size = this.windowSizeService.windowSize()
+    this.windowHeight = size.height
+    this.windowWidth = size.width
+    if (this.windowWidth < 727) {
+      this.isSidebarOpen.set(false)
+    } else {
+      console.log(this.windowWidth)
+      this.isSidebarOpen.set(true)
+    }
   }
 
   ngOnInit(): void {
@@ -45,7 +57,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnChanges(simpleChanges: SimpleChanges): void {}
   toggleSidebar() {
-    this.isSidebarOpen = !this.isSidebarOpen
+    this.isSidebarOpen.set(!this.isSidebarOpen())
   }
 
   logout() {
@@ -53,13 +65,13 @@ export class DashboardComponent implements OnInit {
   }
 
   getSideBarStyle() {
-    if (this.windowWidth > 767 && this.isSidebarOpen) {
+    if (this.windowWidth > 767 && this.isSidebarOpen()) {
       return 'w-64'
-    } else if (this.windowWidth > 767 && !this.isSidebarOpen) {
+    } else if (this.windowWidth > 767 && !this.isSidebarOpen()) {
       return 'w-24'
-    } else if (this.windowWidth < 767 && this.isSidebarOpen) {
+    } else if (this.windowWidth < 767 && this.isSidebarOpen()) {
       return 'min-h-screen w-full'
-    } else if (this.windowHeight < 767 && !this.isSidebarOpen) {
+    } else if (this.windowHeight < 767 && !this.isSidebarOpen()) {
       return 'h-12 w-full'
     }
     return ''

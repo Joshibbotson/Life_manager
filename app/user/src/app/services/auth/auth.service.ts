@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { BehaviorSubject, map } from 'rxjs'
+import { BehaviorSubject, Observable, map, tap } from 'rxjs'
 
 @Injectable({
   providedIn: 'root',
@@ -31,6 +31,7 @@ export class AuthService {
   //     )
   // }
 
+  // Should dispatch to user state here and user state should be something like {currUser: {}}
   registerNewUser(name: string, email: string, password: string) {
     return this.http
       .post(`${this.url}/user/newuser`, {
@@ -41,6 +42,7 @@ export class AuthService {
       .subscribe(
         (response: any) => {
           this.emailInUse$.next(false)
+          this.router.navigate(['/login'])
         },
         (error) => {
           if (error.status === 409) {
@@ -50,19 +52,16 @@ export class AuthService {
       )
   }
 
-  public login(email: string, password: string) {
-    console.log('email:', email, 'pass:', password)
-    const loginData = {
-      email: email,
-      password: password,
-    }
-    return this.http
-      .post(`${this.url}/user/login`, loginData)
-      .subscribe((response: any) => {
-        localStorage.setItem('loginToken', response.token)
-        localStorage.setItem('user', response.user)
-        return true
-      })
+  public login(email: string, password: string): Observable<any> {
+    const loginData = { email, password }
+    return this.http.post<any>(`${this.url}/user/login`, loginData).pipe(
+      tap((response) => {
+        if (response.success) {
+          localStorage.setItem('loginToken', response.token)
+          localStorage.setItem('user', JSON.stringify(response.user))
+        }
+      }),
+    )
   }
 
   public logout() {

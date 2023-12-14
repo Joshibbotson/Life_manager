@@ -20,11 +20,15 @@ export class UsersRoutes {
   // Handle creation of user, return login token.
   protected createHandler(server: any) {
     console.log('createHandler')
-    return server.post('/user/create', async (req, res, next) => {
+    return server.post('/user/newuser', async (req, res, next) => {
       try {
         const post = await this.usersController.createRequest(req, res)
-        console.log(post)
-        res.json(post)
+
+        return res.status(201).json({
+          success: true,
+          data: post,
+          status: 201,
+        })
       } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Internal Server Error' })

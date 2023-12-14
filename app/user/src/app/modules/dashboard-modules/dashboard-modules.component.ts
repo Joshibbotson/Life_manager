@@ -10,7 +10,7 @@ interface Ilinks {
   templateUrl: './dashboard-modules.component.html',
 })
 export class DashboardModulesComponent {
-  public readonly links: Ilinks[] = [
+  public readonly homeLinks: Ilinks[] = [
     { linkName: 'Chores', routerLink: 'chores' },
   ]
 }

@@ -22,7 +22,11 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
     component: ChoresComponent,
   },
-  { path: '', component: DashboardModulesComponent },
+  {
+    path: '',
+    canActivate: [AuthGuardService],
+    component: DashboardModulesComponent,
+  },
 ]
 
 @NgModule({

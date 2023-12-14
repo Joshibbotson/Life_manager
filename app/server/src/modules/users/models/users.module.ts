@@ -39,8 +39,8 @@ export class UsersModel {
   private async createUser(req: any, res: any) {
     console.log('createUser')
     try {
-      // const payload = req.body for testing using query not body
-      const payload = req.query
+      const payload = req.body
+      // const payload = req.query
       console.log(payload)
       const checkExistingUser = await AppDataSource.getRepository(
         Users,
