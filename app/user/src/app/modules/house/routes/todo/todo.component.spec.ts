@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { ChoreComponent } from './chore.component'
+import { TodoComponent } from './todo.component'
 
-describe('ChoreComponent', () => {
-  let component: ChoreComponent
-  let fixture: ComponentFixture<ChoreComponent>
+describe('TodoComponent', () => {
+  let component: TodoComponent
+  let fixture: ComponentFixture<TodoComponent>
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ChoreComponent],
+      declarations: [TodoComponent],
     })
-    fixture = TestBed.createComponent(ChoreComponent)
+    fixture = TestBed.createComponent(TodoComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })

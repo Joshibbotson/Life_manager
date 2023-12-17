@@ -12,7 +12,7 @@ import { Subject } from 'rxjs'
   imports: [],
 })
 export class ResetUserDetailsComponent {
-  public homeLinks: Ilinks[] = [{ url: '/chores', name: 'Chores' }]
+  public homeLinks: Ilinks[] = [{ url: '/todos', name: 'Todos' }]
 
   public destroy$: Subject<void> = new Subject()
 

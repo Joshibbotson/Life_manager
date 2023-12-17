@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { ChoresComponent } from './modules/house/routes/chores/chores.component'
+import { TodosComponent } from './modules/house/routes/todos/todos.component'
 import { DashboardModulesComponent } from './modules/dashboard-modules/dashboard-modules.component'
-import { ChoreComponent } from './modules/house/routes/chore/chore.component'
+import { TodoComponent } from './modules/house/routes/todo/todo.component'
 import { LoginComponent } from './modules/login/login.component'
 import { ResetUserDetailsComponent } from './modules/reset-user-details/reset-user-details.component'
 import { RegisterComponent } from './modules/register/register.component'
@@ -13,14 +13,14 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   {
-    path: 'chores/:id',
+    path: 'todos/:id',
     canActivate: [AuthGuardService],
-    component: ChoreComponent,
+    component: TodoComponent,
   },
   {
-    path: 'chores',
+    path: 'todos',
     canActivate: [AuthGuardService],
-    component: ChoresComponent,
+    component: TodosComponent,
   },
   {
     path: '',

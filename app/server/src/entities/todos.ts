@@ -5,11 +5,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
-import { Users } from './common/users'
+import { Users } from './users'
 import { CommonEntity } from './common/common-entity'
 
 @Entity()
-export class Chores extends CommonEntity {
+export class Todos extends CommonEntity {
   @PrimaryGeneratedColumn()
   id: number
 

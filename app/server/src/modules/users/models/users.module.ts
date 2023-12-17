@@ -1,7 +1,7 @@
 import { usersSchema } from '../../../../../api/dist/users/actions'
 import { Validate } from '../../../../../api/dist/validation/validate'
 import { AppDataSource } from '../../../data-source'
-import { Users } from '../../../entities/common/users'
+import { Users } from '../../../entities/users'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 export class UsersModel {
@@ -47,11 +47,11 @@ export class UsersModel {
       ).findOneBy({ email: payload.email })
 
       if (checkExistingUser) {
-        return res.status(409).json({
+        return {
           success: false,
           message: 'Email already exists',
           status: 409,
-        })
+        }
       }
 
       const salt = bcrypt.genSaltSync(10)
@@ -59,19 +59,22 @@ export class UsersModel {
 
       const user = new Users()
       user.name = payload.name
+      user.locale = payload.locale
       user.active = true
       user.email = payload.email
       user.hashedPassword = password
       user.permissions = []
-      user.deleted = false
-      user.createdDate = new Date()
-      user.editedDate = new Date()
+
       const readOrError = await this.validate.validateSchema(user, usersSchema)
 
       if (readOrError) {
         const read = await AppDataSource.getRepository(Users).save(user)
         console.log('create user read:', read)
-        return read
+        return this.authenticateLogin(
+          { body: { email: payload.email, password: payload.password } },
+          {},
+        )
+        // return read
       } else {
         console.log('failed schema validation')
       }
@@ -83,14 +86,14 @@ export class UsersModel {
 
   private async getUsers(skip: number, take: number) {
     try {
-      const choreRepository = AppDataSource.manager.getRepository(Users)
+      const todoRepository = AppDataSource.manager.getRepository(Users)
       console.log('skip:', skip)
       console.log('take:', take)
-      const users = await choreRepository.findAndCount({
+      const users = await todoRepository.findAndCount({
         skip: skip,
         take: take,
         where: {
-          deleted: false,
+          deletedDate: null,
         },
       })
       const usersData = {
@@ -108,33 +111,33 @@ export class UsersModel {
   }
 
   private async getUserById(request) {
-    console.log('got chore by id')
+    console.log('got todo by id')
     try {
       const id: number = request.params.id
-      const choreRepository = AppDataSource.manager.getRepository(Users)
-      const chore = await choreRepository.findOne({
+      const todoRepository = AppDataSource.manager.getRepository(Users)
+      const todo = await todoRepository.findOne({
         where: {
           id: id,
         },
       })
-      if (!chore) {
-        request.status(500).send('Chore not found')
+      if (!todo) {
+        request.status(500).send('Todo not found')
       }
-      return chore
+      return todo
     } catch (error) {
-      console.error('Error fetching chore', error)
+      console.error('Error fetching todo', error)
       request.status(500).send('Internal Server Error')
     }
   }
 
   private async deleteUserById(req, res) {
     try {
-      const chore = await AppDataSource.getRepository(Users).findOneBy({
+      const todo = await AppDataSource.getRepository(Users).findOneBy({
         id: req.body.id,
       })
-      chore.deleted = true
-      await AppDataSource.getRepository(Users).save(chore)
-      return chore
+
+      await AppDataSource.getRepository(Users).save(todo)
+      return todo
     } catch (error) {
       console.error('Error fetching users', error)
       res.status(500).send('Internal Server Error')
@@ -143,32 +146,33 @@ export class UsersModel {
 
   // private async updateUserById(req, res) {
   //   try {
-  //     const chore = await AppDataSource.getRepository(Users).findOneBy({
+  //     const todo = await AppDataSource.getRepository(Users).findOneBy({
   //       id: req.body.id,
   //     })
-  //     chore.completed = true
-  //     await AppDataSource.getRepository(Users).save(chore)
-  //     return chore
+  //     todo.completed = true
+  //     await AppDataSource.getRepository(Users).save(todo)
+  //     return todo
   //   } catch (error) {
   //     console.error('Error fetching users', error)
   //     res.status(500).send('Internal Server Error')
   //   }
   // }
 
+  // refactor this...?
   public async authenticateLogin(req, res) {
     try {
       const { email, password } = req.body
-      // const { email, password } = req.query
       console.log(email, password)
       const result = await AppDataSource.getRepository(Users).findOneBy({
         email: email,
       })
+      console.log(result)
       const isMatch = await bcrypt.compare(password, result.hashedPassword)
 
       if (isMatch) {
         console.log('gen log in token')
         const loginTkn = this.generateLoginToken(email)
-        console.log('gen log in token post')
+        console.log('gen log in token post: ', loginTkn)
 
         return {
           success: true,
@@ -202,7 +206,7 @@ export class UsersModel {
   }
   private generateLoginToken(email: string): string {
     return jwt.sign({ email }, process.env.SECRET_WEBTKNKEY, {
-      expiresIn: '1h',
+      expiresIn: '24h',
     })
   }
 }

@@ -11,6 +11,6 @@ interface Ilinks {
 })
 export class DashboardModulesComponent {
   public readonly homeLinks: Ilinks[] = [
-    { linkName: 'Chores', routerLink: 'chores' },
+    { linkName: 'Todos', routerLink: 'todos' },
   ]
 }

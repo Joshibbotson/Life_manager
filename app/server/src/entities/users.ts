@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
-import { CommonEntity } from './common-entity'
+import { CommonEntity } from './common/common-entity'
 
 @Entity()
 export class Users extends CommonEntity {
@@ -16,6 +16,9 @@ export class Users extends CommonEntity {
 
   @Column()
   email: string
+
+  @Column()
+  locale: string
 
   @Column('text', {
     array: true,

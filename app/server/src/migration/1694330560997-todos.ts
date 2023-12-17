@@ -1,12 +1,13 @@
 import { MigrationInterface, QueryRunner } from 'typeorm'
 
-export class Chores1694330560997 implements MigrationInterface {
+export class Todos1694330560997 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-        CREATE TABLE "chores" (
-            "deleted" boolean NOT NULL DEFAULT false,
+        CREATE TABLE "todos" (
+            "deletedDate" TIMESTAMP WITH TIME ZONE
             "createDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
             "updateDate" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+            "version' int NOT NULL,
             "id" int NOT NULL AUTO_INCREMENT,
             "name" varchar(100) NOT NULL,
             "description" text NOT NULL,
@@ -22,7 +23,7 @@ export class Chores1694330560997 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-        DROP TABLE "chores";
+        DROP TABLE "todos";
     `)
   }
 }

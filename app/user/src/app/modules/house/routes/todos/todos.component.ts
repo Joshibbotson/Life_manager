@@ -3,10 +3,10 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { Store } from '@ngrx/store'
 import { Ilinks, LinksService } from 'src/app/services/links/links.service'
-import { IChore } from '../../../../../../../api/dist/chores'
-import * as ChoresActions from '../../../../state/chores/chores.actions'
+import { ITodo } from '../../../../../../../api/dist/todos'
+import * as TodosActions from '../../../../state/todos/todos.actions'
 import { Observable, Subject, map, take } from 'rxjs'
-import { selectChores } from 'src/app/state/chores/chores.selectors'
+import { selectTodos } from 'src/app/state/todos/todos.selectors'
 import { PaginationComponent } from 'src/app/components/pagination/pagination.component'
 import { CommonCheckboxComponent } from 'src/app/ui/common-checkbox/common-checkbox.component'
 import { CommonInputComponent } from 'src/app/ui/common-input/common-input.component'
@@ -14,8 +14,8 @@ import { CommonModule, NgFor, NgIf } from '@angular/common'
 
 @Component({
   standalone: true,
-  selector: 'app-chores',
-  templateUrl: './chores.component.html',
+  selector: 'app-todos',
+  templateUrl: './todos.component.html',
   imports: [
     PaginationComponent,
     CommonCheckboxComponent,
@@ -26,9 +26,9 @@ import { CommonModule, NgFor, NgIf } from '@angular/common'
     CommonModule,
   ],
 })
-export class ChoresComponent {
+export class TodosComponent {
   public loading = true
-  public homeLinks: Ilinks[] = [{ url: '/chores', name: 'Chores' }]
+  public homeLinks: Ilinks[] = [{ url: '/todos', name: 'Todos' }]
   editOpen: number | null = null
   readonly nameControlGroup: FormControl = new FormControl('')
   readonly descriptionControlGroup: FormControl = new FormControl('')
@@ -37,7 +37,7 @@ export class ChoresComponent {
   readonly completedControlGroup: FormControl<boolean | null> = new FormControl(
     false,
   )
-  readonly choreFormGroup: FormGroup = new FormGroup({
+  readonly todoFormGroup: FormGroup = new FormGroup({
     name: this.nameControlGroup,
     description: this.descriptionControlGroup,
     createdBy: this.createdByControlGroup,
@@ -45,7 +45,7 @@ export class ChoresComponent {
     completed: this.completedControlGroup,
   })
   public showForm: boolean = false
-  public chores$!: Observable<IChore[]>
+  public todos$!: Observable<ITodo[]>
   public destroy$: Subject<void> = new Subject()
   trackById = this.trackByProperty('id')
 
@@ -57,10 +57,10 @@ export class ChoresComponent {
 
   ngOnInit() {
     this.links.updateLinks(this.homeLinks)
-    this.loadChores()
-    this.chores$ = this.store
-      .select(selectChores)
-      .pipe(map((choreData) => choreData.data))
+    this.loadTodos()
+    this.todos$ = this.store
+      .select(selectTodos)
+      .pipe(map((todoData) => todoData.data))
   }
 
   ngOnDestroy() {
@@ -68,29 +68,29 @@ export class ChoresComponent {
     this.destroy$.complete()
   }
 
-  public loadChores() {
+  public loadTodos() {
     this.store
-      .select(selectChores)
+      .select(selectTodos)
       .pipe(
         take(1),
-        map((chores) => {
+        map((todos) => {
           this.store.dispatch(
-            ChoresActions.loadChores({ skip: chores.skip, take: chores.take }),
+            TodosActions.loadTodos({ skip: todos.skip, take: todos.take }),
           )
         }),
       )
       .subscribe(
         () => (
           (this.loading = false),
-          (this.chores$ = this.store
-            .select(selectChores)
-            .pipe(map((choreData) => choreData.data)))
+          (this.todos$ = this.store
+            .select(selectTodos)
+            .pipe(map((todoData) => todoData.data)))
         ),
       )
   }
 
-  public createChore(chore: IChore) {
-    this.store.dispatch(ChoresActions.createChore({ chore }))
+  public createTodo(todo: ITodo) {
+    this.store.dispatch(TodosActions.createTodo({ todo }))
   }
 
   public toggleShowForm() {
@@ -109,15 +109,15 @@ export class ChoresComponent {
     }
   }
   public navigate(id: number) {
-    this.router.navigate([`chores/${id}`])
+    this.router.navigate([`todos/${id}`])
   }
 
   async handleSubmit() {
-    this.choreFormGroup.patchValue({
-      completed: this.choreFormGroup.value.completed === 'true' ? true : false,
+    this.todoFormGroup.patchValue({
+      completed: this.todoFormGroup.value.completed === 'true' ? true : false,
     })
     this.store.dispatch(
-      ChoresActions.createChore({ chore: this.choreFormGroup.value }),
+      TodosActions.createTodo({ todo: this.todoFormGroup.value }),
     )
     this.toggleShowForm()
   }
@@ -126,12 +126,12 @@ export class ChoresComponent {
     return (index: number, object: T) => object[property]
   }
 
-  public editChore(id: number) {}
-  public deleteChore(id: number) {
-    this.store.dispatch(ChoresActions.deleteChore({ id }))
+  public editTodo(id: number) {}
+  public deleteTodo(id: number) {
+    this.store.dispatch(TodosActions.deleteTodo({ id }))
   }
 
-  public completeChore(id: number) {
-    this.store.dispatch(ChoresActions.completeChore({ id }))
+  public completeTodo(id: number) {
+    this.store.dispatch(TodosActions.completeTodo({ id }))
   }
 }

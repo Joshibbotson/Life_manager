@@ -32,23 +32,27 @@ export class AuthService {
   // }
 
   // Should dispatch to user state here and user state should be something like {currUser: {}}
-  registerNewUser(name: string, email: string, password: string) {
+  registerNewUser(
+    name: string,
+    email: string,
+    password: string,
+    locale: string,
+  ): Observable<any> {
     return this.http
-      .post(`${this.url}/user/newuser`, {
+      .post<any>(`${this.url}/user/newuser`, {
+        //not <any> here describes what is returned, update this.
         name: name,
         email: email,
         password: password,
+        locale: locale,
       })
-      .subscribe(
-        (response: any) => {
-          this.emailInUse$.next(false)
-          this.router.navigate(['/login'])
-        },
-        (error) => {
-          if (error.status === 409) {
-            this.emailInUse$.next(true)
+      .pipe(
+        tap((response) => {
+          if (response.success) {
+            localStorage.setItem('loginToken', response.token)
+            localStorage.setItem('user', JSON.stringify(response.user))
           }
-        },
+        }),
       )
   }
 

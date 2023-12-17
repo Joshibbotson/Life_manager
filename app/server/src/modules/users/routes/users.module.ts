@@ -23,12 +23,7 @@ export class UsersRoutes {
     return server.post('/user/newuser', async (req, res, next) => {
       try {
         const post = await this.usersController.createRequest(req, res)
-
-        return res.status(201).json({
-          success: true,
-          data: post,
-          status: 201,
-        })
+        return res.status(201).json(post)
       } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Internal Server Error' })

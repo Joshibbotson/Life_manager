@@ -1,14 +1,14 @@
 import { Validate } from '../../../../../api/dist/validation/validate'
 import { server } from '../../..'
-import { ChoresController } from '../controller/chores.module'
+import { TodosController } from '../controller/todos.module'
 
-export class ChoresRoutes {
-  public static readonly moduleName: string = 'ChoresRoutes'
+export class TodosRoutes {
+  public static readonly moduleName: string = 'TodosRoutes'
 
-  private choresController: ChoresController
+  private todosController: TodosController
 
-  constructor(choresController: ChoresController) {
-    this.choresController = choresController
+  constructor(todosController: TodosController) {
+    this.todosController = todosController
   }
 
   private readonly createRoute = this.createHandler(server)
@@ -18,9 +18,9 @@ export class ChoresRoutes {
 
   protected createHandler(server: any) {
     console.log('createHandler')
-    return server.post('/chores/create', async (req, res, next) => {
+    return server.post('/todos/create', async (req, res, next) => {
       try {
-        const post = await this.choresController.createRequest(req, res)
+        const post = await this.todosController.createRequest(req, res)
         console.log(post)
         res.json(post)
       } catch (error) {
@@ -32,14 +32,14 @@ export class ChoresRoutes {
 
   /** Read route */
   protected readHandler(server: any) {
-    server.get('/chores/read', async (req, res, next) => {
+    server.get('/todos/read', async (req, res, next) => {
       const skip = req.query.skip ? parseInt(req.query.skip, 10) : 0
       const take = req.query.take ? parseInt(req.query.take, 10) : 10
       console.log('skip route:', skip)
       console.log('take route:', take)
 
       try {
-        const read = await this.choresController.readRequest(req, skip, take)
+        const read = await this.todosController.readRequest(req, skip, take)
         console.log('returned read pre json: ', read)
         res.json(read)
       } catch (error) {
@@ -48,12 +48,12 @@ export class ChoresRoutes {
       }
     })
 
-    server.get('/chores/read/:id', async (req, res, next) => {
+    server.get('/todos/read/:id', async (req, res, next) => {
       const skip = req.query.skip ? parseInt(req.query.skip, 10) : 0
       const take = req.query.take ? parseInt(req.query.take, 10) : 10
       console.log('Read by id: ', req.query)
       try {
-        const read = await this.choresController.readRequest(req, skip, take)
+        const read = await this.todosController.readRequest(req, skip, take)
         console.log('returned read pre json: ', read)
 
         res.json(read)
@@ -66,12 +66,9 @@ export class ChoresRoutes {
 
   protected updateHandler(server: any) {
     console.log('update called')
-    return server.put('/chores/update/:id', async (req, res, next) => {
+    return server.put('/todos/update/:id', async (req, res, next) => {
       try {
-        const updateRequest = await this.choresController.updateRequest(
-          req,
-          res,
-        )
+        const updateRequest = await this.todosController.updateRequest(req, res)
         console.log('Update req!:', updateRequest)
         res.json(updateRequest)
       } catch (error) {
@@ -82,12 +79,9 @@ export class ChoresRoutes {
   }
 
   protected deleteHandler(server: any) {
-    return server.put('/chores/delete/:id', async (req, res, next) => {
+    return server.put('/todos/delete/:id', async (req, res, next) => {
       try {
-        const deleteRequest = await this.choresController.deleteRequest(
-          req,
-          res,
-        )
+        const deleteRequest = await this.todosController.deleteRequest(req, res)
         console.log(deleteRequest)
         res.json(deleteRequest)
       } catch (error) {

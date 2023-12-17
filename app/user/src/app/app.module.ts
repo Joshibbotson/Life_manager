@@ -11,9 +11,9 @@ import { HttpClientModule } from '@angular/common/http'
 import { CommonModalComponent } from './ui/common-modal/common-modal.component'
 import { StoreModule } from '@ngrx/store'
 import { EffectsModule } from '@ngrx/effects'
-import { choresReducer } from './state/chores/chores.reducer'
-import { choreReducer } from './state/chores/chores.reducer'
-import { ChoresEffects } from './state/chores/chores.effects'
+import { todosReducer } from './state/todos/todos.reducer'
+import { todoReducer } from './state/todos/todos.reducer'
+import { TodosEffects } from './state/todos/todos.effects'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 @NgModule({
@@ -32,10 +32,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
     ReactiveFormsModule,
     HttpClientModule,
     StoreModule.forRoot({
-      chores: choresReducer,
-      selectedChore: choreReducer,
+      todos: todosReducer,
+      selectedTodo: todoReducer,
     }),
-    EffectsModule.forRoot([ChoresEffects]),
+    EffectsModule.forRoot([TodosEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent],

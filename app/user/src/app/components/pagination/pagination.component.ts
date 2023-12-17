@@ -1,9 +1,9 @@
 import { Component, OnDestroy } from '@angular/core'
 import { Store } from '@ngrx/store'
-import * as ChoresActions from '../../state/chores/chores.actions'
+import * as TodosActions from '../../state/todos/todos.actions'
 import { Observable, combineLatest, map } from 'rxjs'
 import { take } from 'rxjs/operators'
-import { selectChores } from 'src/app/state/chores/chores.selectors'
+import { selectTodos } from 'src/app/state/todos/todos.selectors'
 import { Subject } from 'rxjs'
 import { CommonModule, NgFor } from '@angular/common'
 
@@ -15,7 +15,7 @@ import { CommonModule, NgFor } from '@angular/common'
   imports: [NgFor, CommonModule],
 })
 export class PaginationComponent implements OnDestroy {
-  readonly paginationData$ = this.store.select(selectChores)
+  readonly paginationData$ = this.store.select(selectTodos)
   readonly skip$: Observable<number> = this.paginationData$.pipe(
     map((x) => x.skip),
   )
@@ -51,13 +51,13 @@ export class PaginationComponent implements OnDestroy {
     this.destroy$.complete()
   }
 
-  public loadChores() {
+  public loadTodos() {
     this.store
-      .select(selectChores)
+      .select(selectTodos)
       .pipe(take(1))
-      .subscribe((chores) => {
+      .subscribe((todos) => {
         this.store.dispatch(
-          ChoresActions.loadChores({ skip: chores.skip, take: chores.take }),
+          TodosActions.loadTodos({ skip: todos.skip, take: todos.take }),
         )
       })
   }
@@ -65,7 +65,7 @@ export class PaginationComponent implements OnDestroy {
   public updatePage(page: number) {
     this.take$.pipe(take(1)).subscribe((take) => {
       this.store.dispatch(
-        ChoresActions.loadChores({ skip: page * take, take: take }),
+        TodosActions.loadTodos({ skip: page * take, take: take }),
       )
     })
     this.skip$.subscribe((x) => console.log(x))
@@ -76,7 +76,7 @@ export class PaginationComponent implements OnDestroy {
       .pipe(take(1))
       .subscribe(([skip, take]) => {
         this.store.dispatch(
-          ChoresActions.loadChores({ skip: skip - take, take: take }),
+          TodosActions.loadTodos({ skip: skip - take, take: take }),
         )
       })
   }
@@ -85,7 +85,7 @@ export class PaginationComponent implements OnDestroy {
       .pipe(take(1))
       .subscribe(([skip, take]) => {
         this.store.dispatch(
-          ChoresActions.loadChores({ skip: skip + take, take: take }),
+          TodosActions.loadTodos({ skip: skip + take, take: take }),
         )
       })
   }

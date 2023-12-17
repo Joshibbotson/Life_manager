@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing'
 
-import { ChoresRestService } from './chores-rest.service'
+import { TodosRestService } from './todos-rest.service'
 
-describe('ChoresRestService', () => {
-  let service: ChoresRestService
+describe('TodosRestService', () => {
+  let service: TodosRestService
 
   beforeEach(() => {
     TestBed.configureTestingModule({})
-    service = TestBed.inject(ChoresRestService)
+    service = TestBed.inject(TodosRestService)
   })
 
   it('should be created', () => {

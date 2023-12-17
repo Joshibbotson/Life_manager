@@ -1,12 +1,11 @@
 import { Component } from '@angular/core'
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms'
-import { Router } from '@angular/router'
+import { Router, RouterModule } from '@angular/router'
 import { Store } from '@ngrx/store'
 import { Ilinks, LinksService } from 'src/app/services/links/links.service'
 import { Subject } from 'rxjs'
@@ -17,10 +16,10 @@ import { NgIf } from '@angular/common'
   standalone: true,
   selector: 'app-register',
   templateUrl: './register.component.html',
-  imports: [ReactiveFormsModule, NgIf],
+  imports: [ReactiveFormsModule, NgIf, RouterModule],
 })
 export class RegisterComponent {
-  public homeLinks: Ilinks[] = [{ url: '/chores', name: 'Chores' }]
+  public homeLinks: Ilinks[] = [{ url: '/todos', name: 'Todos' }]
   registerForm: FormGroup = this.formBuilder.group({
     name: ['', Validators.required],
     email: ['', Validators.email],
@@ -50,12 +49,28 @@ export class RegisterComponent {
       name: this.registerForm.value.name,
       email: this.registerForm.value.email,
       password: this.registerForm.value.password,
+      locale: Intl.DateTimeFormat().resolvedOptions().timeZone,
     }
+    console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
 
-    return this.authService.registerNewUser(
-      userInfo.name,
-      userInfo.email,
-      userInfo.password,
-    )
+    this.authService
+      .registerNewUser(
+        userInfo.name,
+        userInfo.email,
+        userInfo.password,
+        userInfo.locale,
+      )
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.router.navigate(['/'])
+          } else {
+            // Handle login failure, show error message?
+          }
+        },
+        error: (err) => {
+          console.error('HTTP error:', err)
+        },
+      })
   }
 }

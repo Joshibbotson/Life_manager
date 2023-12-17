@@ -1,13 +1,22 @@
-import { Entity, Column } from 'typeorm'
+import {
+  Entity,
+  UpdateDateColumn,
+  CreateDateColumn,
+  VersionColumn,
+  DeleteDateColumn,
+} from 'typeorm'
 
 @Entity()
 export abstract class CommonEntity {
-  @Column()
-  deleted: boolean
+  @DeleteDateColumn()
+  deletedDate: Date
 
-  @Column()
+  @CreateDateColumn()
   createdDate: Date
 
-  @Column()
-  editedDate: Date
+  @UpdateDateColumn()
+  updatedDate: Date
+
+  @VersionColumn()
+  version: number
 }

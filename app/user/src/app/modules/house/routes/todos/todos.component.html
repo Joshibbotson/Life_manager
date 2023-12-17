@@ -4,7 +4,7 @@
     (click)="toggleShowForm()"
     *ngIf="!showForm"
   >
-    Create Chore
+    Create Todo
   </button>
   <button
     class="cursor-pointer border-solid border-2 border-red-700 rounded-md p-2 hover:bg-red-700 hover:text-white"
@@ -18,7 +18,7 @@
   <div class="container" *ngIf="showForm">
     <div
       class="shadow-lg flex flex-col w-96 p-4 rounded-md justify-center bg-white"
-      [formGroup]="choreFormGroup"
+      [formGroup]="todoFormGroup"
     >
       <common-input
         formControlName="name"
@@ -73,7 +73,7 @@
               </thead>
               <tbody>
                 <ng-container
-                  *ngFor="let chore of chores$ | async; trackBy: trackById"
+                  *ngFor="let todo of todos$ | async; trackBy: trackById"
                 >
                   <!-- <ng-container> -->
                   <tr
@@ -81,27 +81,27 @@
                   >
                     <td
                       class="whitespace-nowrap px-6 py-4 w-100"
-                      (click)="navigate(chore.id)"
+                      (click)="navigate(todo.id)"
                     >
-                      {{ chore.name }}
+                      {{ todo.name }}
                     </td>
                     <td
                       class="whitespace-nowrap px-6 py-4"
-                      (click)="navigate(chore.id)"
+                      (click)="navigate(todo.id)"
                     >
-                      {{ chore.description }}
+                      {{ todo.description }}
                     </td>
 
                     <td
                       class="whitespace-nowrap px-6 py-4"
-                      (click)="navigate(chore.id)"
+                      (click)="navigate(todo.id)"
                     >
-                      {{ chore.completed ? 'Yes' : 'No' }}
+                      {{ todo.completed ? 'Yes' : 'No' }}
                     </td>
                     <!-- custom component this -->
                     <td class="whitespace-nowrap px-6 py-4">
                       <ng-container
-                        *ngIf="editOpen === chore.id; else showButtons"
+                        *ngIf="editOpen === todo.id; else showButtons"
                       >
                         <div
                           class="flex flex-col absolute border rounded-md bg-white"
@@ -113,14 +113,14 @@
                           </button>
                           <button
                             class="text-black p-2 hover:text-white hover:bg-slate-400 rounded-b-md"
-                            (click)="deleteChore(chore.id)"
+                            (click)="deleteTodo(todo.id)"
                           >
                             Delete
                           </button>
                         </div>
                       </ng-container>
                       <ng-template #showButtons>
-                        <div (click)="toggleEditOptions(chore.id, $event)">
+                        <div (click)="toggleEditOptions(todo.id, $event)">
                           . . .
                         </div>
                       </ng-template>
@@ -130,11 +130,11 @@
 
                     <td class="whitespace-nowrap px-6 py-4">
                       <button
-                        *ngIf="!chore.completed"
+                        *ngIf="!todo.completed"
                         class="items-center border border-black-100 rounded-lg p-2 disabled:text-gray-400 disabled:bg-white hover:bg-slate-500 hover:border-gray-100"
-                        (click)="completeChore(chore.id)"
+                        (click)="completeTodo(todo.id)"
                       >
-                        Complete Chore
+                        Complete Todo
                       </button>
                     </td>
                   </tr>
