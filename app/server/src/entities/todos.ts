@@ -3,6 +3,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
 import { Users } from './users'
@@ -21,16 +22,14 @@ export class Todos extends CommonEntity {
   @Column('text')
   description: string
 
-  @Column()
+  @OneToOne(() => Users, (users) => users.id)
+  @JoinColumn()
   createdBy: string
 
-  @Column()
-  assignedTo: string
+  @OneToOne(() => Users, (users) => users.id)
+  @JoinColumn()
+  assignedTo: number
 
   @Column()
   completed: boolean
-
-  @ManyToOne(() => Users, (users) => users.id)
-  @JoinColumn()
-  user: Users
 }

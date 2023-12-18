@@ -45,7 +45,6 @@ export class TodosModel {
       todo.assignedTo = payload.assignedTo
       todo.createdBy = payload.createdBy
       todo.completed = payload.completed
-      todo.user = user
       const readOrError = await this.validate.validateSchema(todo, todosSchema)
       if (readOrError) {
         console.log(readOrError)

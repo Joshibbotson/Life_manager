@@ -1,3 +1,4 @@
+import { Like } from 'typeorm'
 import { usersSchema } from '../../../../../api/dist/users/actions'
 import { Validate } from '../../../../../api/dist/validation/validate'
 import { AppDataSource } from '../../../data-source'
@@ -166,6 +167,12 @@ export class UsersModel {
       const result = await AppDataSource.getRepository(Users).findOneBy({
         email: email,
       })
+      if (!result) {
+        return res.status(500).json({
+          success: false,
+          message: 'user email does not exist',
+        })
+      }
       console.log(result)
       const isMatch = await bcrypt.compare(password, result.hashedPassword)
 
@@ -184,7 +191,7 @@ export class UsersModel {
       console.log(error)
       res.status(500).json({
         success: false,
-        message: 'user failed to register',
+        message: 'user failed to login',
       })
     }
   }
@@ -204,9 +211,30 @@ export class UsersModel {
       return error
     }
   }
+
   private generateLoginToken(email: string): string {
     return jwt.sign({ email }, process.env.SECRET_WEBTKNKEY, {
       expiresIn: '24h',
     })
+  }
+
+  public async searchUsers(req: any, response: any, take: number) {
+    const searchTerm = req.query.term
+
+    if (!searchTerm) {
+      return response.status(400).json({
+        success: false,
+        message: 'Search term is required',
+      })
+    }
+    try {
+      const userRepository = AppDataSource.getRepository(Users)
+      return userRepository.find({
+        where: { name: Like(`%${searchTerm}`) },
+        take: take,
+      })
+    } catch (error) {
+      return response.status(500).json({})
+    }
   }
 }

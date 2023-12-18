@@ -11,10 +11,9 @@ export class Todos1694330560997 implements MigrationInterface {
             "id" int NOT NULL AUTO_INCREMENT,
             "name" varchar(100) NOT NULL,
             "description" text NOT NULL,
-            "createdBy" varchar(255) NOT NULL,
-            "assignedTo" varchar(255) NOT NULL,
+            "createdBy" int NOT NULL,
+            "assignedTo" int NOT NULL,
             "completed" boolean NOT NULL,
-            "userId" int NOT NULL,
             PRIMARY KEY ("id"),
             CONSTRAINT "FK_DA9599E6A6BF3C8E68CBE51DDC2" FOREIGN KEY ("userId") REFERENCES "users" ("id")
         )

@@ -40,7 +40,12 @@ export class UsersRoutes {
       console.log('take route:', take)
 
       try {
-        const read = await this.usersController.readRequest(req, skip, take)
+        const read = await this.usersController.readRequest(
+          req,
+          res,
+          skip,
+          take,
+        )
         console.log('returned read pre json: ', read)
         res.json(read)
       } catch (error) {
@@ -54,7 +59,12 @@ export class UsersRoutes {
       const take = req.query.take ? parseInt(req.query.take, 10) : 10
       console.log('Read by id: ', req.query)
       try {
-        const read = await this.usersController.readRequest(req, skip, take)
+        const read = await this.usersController.readRequest(
+          req,
+          res,
+          skip,
+          take,
+        )
         console.log('returned read pre json: ', read)
 
         res.json(read)

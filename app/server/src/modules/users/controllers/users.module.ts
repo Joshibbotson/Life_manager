@@ -14,8 +14,17 @@ export class UsersController {
     return post
   }
 
-  public async readRequest(request: any, page: number, pageSize: number) {
-    const data = await this.usersModel.read(request, page, pageSize)
+  public async readRequest(
+    request: any,
+    response: any,
+    skip: number,
+    take: number,
+  ) {
+    if (request.query.term) {
+      const data = await this.usersModel.searchUsers(request, response, take)
+      return data
+    }
+    const data = await this.usersModel.read(request, skip, take)
     return data
   }
 
