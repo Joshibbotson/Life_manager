@@ -11,6 +11,7 @@ import { PaginationComponent } from 'src/app/components/pagination/pagination.co
 import { CommonCheckboxComponent } from 'src/app/ui/common-checkbox/common-checkbox.component'
 import { CommonInputComponent } from 'src/app/ui/common-input/common-input.component'
 import { CommonModule, NgFor, NgIf } from '@angular/common'
+import { UserSelectDropdownComponent } from '../../../../ui/user-select-dropdown/user-select-dropdown/user-select-dropdown.component'
 
 @Component({
   standalone: true,
@@ -24,6 +25,7 @@ import { CommonModule, NgFor, NgIf } from '@angular/common'
     NgIf,
     NgFor,
     CommonModule,
+    UserSelectDropdownComponent,
   ],
 })
 export class TodosComponent {
@@ -44,7 +46,7 @@ export class TodosComponent {
     assignedTo: this.assignedToControlGroup,
     completed: this.completedControlGroup,
   })
-  public showForm: boolean = false
+  public showForm: boolean = true // change back to false.
   public todos$!: Observable<ITodo[]>
   public destroy$: Subject<void> = new Subject()
   trackById = this.trackByProperty('id')

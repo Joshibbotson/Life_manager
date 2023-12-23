@@ -7,6 +7,7 @@ import { ITodo, ITodoReadRequest } from '../../../../../../api/dist/todos'
   providedIn: 'root',
 })
 export class TodosRestService {
+  // Move to shared file
   private readonly url = 'http://localhost:8080'
 
   constructor(private http: HttpClient) {}

@@ -219,7 +219,7 @@ export class UsersModel {
   }
 
   public async searchUsers(req: any, response: any, take: number) {
-    const searchTerm = req.query.term
+    const searchTerm: string = req.query.term
 
     if (!searchTerm) {
       return response.status(400).json({
@@ -229,10 +229,15 @@ export class UsersModel {
     }
     try {
       const userRepository = AppDataSource.getRepository(Users)
-      return userRepository.find({
-        where: { name: Like(`%${searchTerm}`) },
-        take: take,
-      })
+      const result = await userRepository
+        .createQueryBuilder('user')
+        .where('LOWER(user.name) LIKE :name', {
+          name: `%${searchTerm.toLowerCase()}%`,
+        })
+        .take(take)
+        .getMany()
+
+      return result
     } catch (error) {
       return response.status(500).json({})
     }

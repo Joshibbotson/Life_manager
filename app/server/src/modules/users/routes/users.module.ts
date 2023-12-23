@@ -38,7 +38,6 @@ export class UsersRoutes {
       const take = req.query.take ? parseInt(req.query.take, 10) : 10
       console.log('skip route:', skip)
       console.log('take route:', take)
-
       try {
         const read = await this.usersController.readRequest(
           req,
@@ -47,7 +46,11 @@ export class UsersRoutes {
           take,
         )
         console.log('returned read pre json: ', read)
-        res.json(read)
+        res.status(200).json({
+          success: true,
+          status: 200,
+          data: read,
+        })
       } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Internal Server Error' })

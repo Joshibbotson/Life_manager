@@ -1,1 +1,49 @@
-<p>user-select-dropdown works!</p>
+<form class="container flex flex-col relative">
+  @if (label) {
+    <label for="commonInput">{{ label }}</label>
+  }
+
+  <div
+    class="flex flex-wrap items-center border-solid border-2 rounded"
+    (click)="focusOnDiv()"
+  >
+    @for (user of selectedUserIdsArr; track $index) {
+      <div class="flex border-2 border-slate-200 rounded-md mr-2">
+        <div class="px-1">
+          {{ user.name }}
+        </div>
+        <button class="px-1">X</button>
+      </div>
+    }
+
+    <input
+      #focusableInput
+      name="commonInput"
+      type="text"
+      class="outline-none"
+      id="name"
+      [formControl]="searchTermControl"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+    />
+  </div>
+  <div class="absolute top-full bg-white w-full shadow-md">
+    @if (loading && searchTermControl.value) {
+      <ul>
+        <li>. . .</li>
+        <!-- make something prettier here. -->
+      </ul>
+    } @else if (!loading && searchTermControl.value && isInputFocused) {
+      <ul (mousedown)="onListMouseDown()" (mouseup)="onListMouseUp()">
+        @for (user of suggestedUsers; track $index) {
+          <li
+            (click)="onListItemClick(user)"
+            class="bg-white text-black hover:bg-slate-300 hover:text-white"
+          >
+            {{ user.name }}
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</form>

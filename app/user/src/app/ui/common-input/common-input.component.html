@@ -1,7 +1,7 @@
 <form class="container flex flex-col">
-  <ng-container *ngIf="label">
+  @if (label) {
     <label for="commonInput">{{ label }}</label>
-  </ng-container>
+  }
   <input
     name="commonInput"
     [type]="type"

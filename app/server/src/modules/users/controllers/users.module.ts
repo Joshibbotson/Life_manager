@@ -21,6 +21,7 @@ export class UsersController {
     take: number,
   ) {
     if (request.query.term) {
+      console.log('req.query.term in controller: ', request.query.term)
       const data = await this.usersModel.searchUsers(request, response, take)
       return data
     }
