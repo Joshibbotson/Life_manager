@@ -4,8 +4,7 @@
   "description": "Awesome project developed with TypeORM.",
   "type": "commonjs",
   "scripts": {
-    "postinstall": "tsc",
-    "start": "node dist/src/index.js",
+    "start": "node dist/index.js",
     "server": "nodemon --exec ts-node src/index.ts",
     "dist-server": "tsc",
     "typeorm": "typeorm-ts-node-commonjs",

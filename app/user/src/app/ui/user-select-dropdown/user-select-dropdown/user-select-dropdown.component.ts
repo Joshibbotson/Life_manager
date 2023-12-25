@@ -24,6 +24,8 @@ interface iUserRef {
   templateUrl: './user-select-dropdown.component.html',
 })
 export class UserSelectDropdownComponent implements OnDestroy {
+  // filters: notSelf, group, active
+  @Input() control!: FormControl
   @Input() label: string = ''
   @Input() maxSelectedUsers: number | undefined
   @Output() selectedUser = new EventEmitter<number[]>()
@@ -87,10 +89,18 @@ export class UserSelectDropdownComponent implements OnDestroy {
 
   onListItemClick(user: iUserRef) {
     this.selectedUserIdsArr.push(user)
+    this.control.patchValue(this.selectedUserIdsArr.map((user) => user.id))
     this.searchTermControl.patchValue('')
     this.isInputFocused = true
     this.isInteractingWithList = true
-    this.focusOnDiv()
+    this.focusOnInputBox()
+  }
+
+  deleteSelectedUser(id: number) {
+    this.selectedUserIdsArr.filter((user) => {
+      return user.id !== id
+    })
+    console.log(this.selectedUserIdsArr)
   }
 
   onListMouseDown() {
@@ -101,7 +111,15 @@ export class UserSelectDropdownComponent implements OnDestroy {
     this.isInteractingWithList = false
   }
 
-  focusOnDiv() {
+  focusOnInputBox() {
     this.focusableInput.nativeElement.focus()
+  }
+
+  onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Backspace') {
+      if (!this.searchTermControl.value) {
+        this.selectedUserIdsArr.pop()
+      }
+    }
   }
 }

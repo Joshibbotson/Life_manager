@@ -5,14 +5,14 @@
 
   <div
     class="flex flex-wrap items-center border-solid border-2 rounded"
-    (click)="focusOnDiv()"
+    (click)="focusOnInputBox()"
   >
     @for (user of selectedUserIdsArr; track $index) {
       <div class="flex border-2 border-slate-200 rounded-md mr-2">
         <div class="px-1">
           {{ user.name }}
         </div>
-        <button class="px-1">X</button>
+        <button class="px-1" (click)="deleteSelectedUser(user.id)">X</button>
       </div>
     }
 
@@ -25,6 +25,7 @@
       [formControl]="searchTermControl"
       (focus)="onFocus()"
       (blur)="onBlur()"
+      (keydown)="onKeyDown($event)"
     />
   </div>
   <div class="absolute top-full bg-white w-full shadow-md">
