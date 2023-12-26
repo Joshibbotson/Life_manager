@@ -1,5 +1,5 @@
 import { todosSchema } from '../../../../../api/dist/todos/actions'
-import { Validate } from '../../../../../api/dist/validation/validate'
+import { Validate } from '../../../../../api/dist/validation/validation'
 import { AppDataSource } from '../../../data-source'
 import { Todos } from '../../../entities/todos'
 import { Users } from '../../../entities/users'
@@ -8,9 +8,7 @@ export class TodosModel {
   public static readonly moduleName: string = 'TodosModel'
   public readonly validate: Validate
 
-  constructor(validate: Validate) {
-    this.validate = validate
-  }
+  constructor() {}
 
   public async create(request: any, response: any) {
     const post = await this.postTodo(request, response)
@@ -46,12 +44,13 @@ export class TodosModel {
       todo.createdBy = payload.createdBy
       todo.completed = payload.completed
       const readOrError = await this.validate.validateSchema(todo, todosSchema)
-      if (readOrError) {
-        console.log(readOrError)
+
+      if (typeof readOrError === 'string') {
+        console.log('readOrError', readOrError)
+        throw readOrError
+      } else {
         const read = await AppDataSource.getRepository(Todos).save(todo)
         return read
-      } else {
-        console.log('failed schema validation')
       }
     } catch (error) {
       console.error('Error posting todos', error)

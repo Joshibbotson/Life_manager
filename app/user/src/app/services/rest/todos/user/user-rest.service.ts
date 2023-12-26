@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { map } from 'rxjs'
+import { environment } from 'src/environments/environment'
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserRestService {
-  private readonly url = 'http://localhost:8080'
+  private readonly url = environment.apiBaseUrl
   constructor(private http: HttpClient) {}
 
   searchUsers(searchTerm: string) {

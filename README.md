@@ -88,7 +88,10 @@ Setup .env file:
   DB_PORT\
   DB_USERNAME\
   DB_PASSWORD\
-  DB_DATABASE
+  DB_DATABASE\
+  EXPRESS_PORT\
+  SECRET_WEBTKNKEY\
+  NODE_ENV
 
 an example may look like:
 
@@ -98,6 +101,9 @@ DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=postgres
 DB_DATABASE=postgres
+EXPRESS_PORT=8080
+SECRET_WEBTKNKEY=a-long-hexadecimal-number-perhaps
+NODE_ENV=development
 ```
 
 Run the server
@@ -114,17 +120,15 @@ If all is well you should be good to go!
 
 ### Modules:
 
-- Add japanese learning module - []
-- Add todo list - []
+- Add todo list - [x]
 - Add real time chat that allows users to link tasks with @ sign - []
 - Add notification system - []
-- Add ThreeJs floating spheres to represent chores assigned, completed and other statistics? Glowing spheres, floating around on a black canvas?
 
 ### General architectural changes
 
 - Add pagination serverside - [x]
-- Add schema validation - []
-- Add Users, including simple registration and login - []
+- Add schema validation - [x]
+- Add Users, including simple registration and login - [x]
 - Add luxon library - [x]
 - Update clientside to follow angular 17 updates - []
 - Add state via NgRx - [x]
@@ -133,4 +137,4 @@ If all is well you should be good to go!
 ### Hosting
 
 - Setup CD/CI pipeline - []
-- Setup apache web server on raspberry pi 3 - []
+- Deploy via digital ocean droplet - [x]

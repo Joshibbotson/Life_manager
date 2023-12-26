@@ -2,34 +2,18 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { BehaviorSubject, Observable, map, tap } from 'rxjs'
-
+import { environment } from 'src/environments/environment'
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly url = 'http://localhost:8080'
+  private readonly url = environment.apiBaseUrl
   emailInUse$ = new BehaviorSubject<boolean>(false)
 
   constructor(
     private router: Router,
     private http: HttpClient,
   ) {}
-
-  // registerNewUser(name: string, email: string, password: string) {
-  //   return this.http
-  //     .post(`${this.url}/user/newuser`, {
-  //       name: name,
-  //       email: email,
-  //       password: password,
-  //     })
-  //     .subscribe(
-  //       (response: any) => {},
-  //       (error) => {
-  //         if (error.status === 409) {
-  //         }
-  //       },
-  //     )
-  // }
 
   // Should dispatch to user state here and user state should be something like {currUser: {}}
   registerNewUser(

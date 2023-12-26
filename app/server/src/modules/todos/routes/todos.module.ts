@@ -1,4 +1,4 @@
-import { Validate } from '../../../../../api/dist/validation/validate'
+import { Validate } from '../../../../../api/dist/validation/validation'
 import { server } from '../../..'
 import { TodosController } from '../controller/todos.module'
 
@@ -91,5 +91,3 @@ export class TodosRoutes {
     })
   }
 }
-
-const validate = new Validate()

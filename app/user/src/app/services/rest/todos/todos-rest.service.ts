@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable, map } from 'rxjs'
 import { ITodo, ITodoReadRequest } from '../../../../../../api/dist/todos'
+import { environment } from 'src/environments/environment'
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodosRestService {
-  // Move to shared file
-  private readonly url = 'http://localhost:8080'
+  private readonly url = environment.apiBaseUrl
 
   constructor(private http: HttpClient) {}
 

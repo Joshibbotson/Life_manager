@@ -1,6 +1,5 @@
-import { Like } from 'typeorm'
 import { usersSchema } from '../../../../../api/dist/users/actions'
-import { Validate } from '../../../../../api/dist/validation/validate'
+import { Validate } from '../../../../../api/dist/validation/validation'
 import { AppDataSource } from '../../../data-source'
 import { Users } from '../../../entities/users'
 import bcrypt from 'bcrypt'
@@ -13,39 +12,12 @@ export class UsersModel {
     this.validate = validate
   }
 
-  // create user
-  public async create(request: any, response: any) {
-    const newUser = await this.createUser(request, response)
-    return newUser
-  }
-
-  // read users/specific userId
-  public async read(request: any, skip: number, take: number) {
-    if (request.params.id) {
-      return this.getUserById(request)
-    }
-    return this.getUsers(skip, take)
-  }
-
-  //update user
-  // public async update(request: any, response: any) {
-  //   return this.updateUserById(request, response)
-  // }
-
-  //soft delete user
-  public async delete(request: any, response: any) {
-    return this.deleteUserById(request, response)
-  }
-
-  private async createUser(req: any, res: any) {
-    console.log('createUser')
+  /** Create user */
+  public async createUser(req: any) {
     try {
-      const payload = req.body
-      // const payload = req.query
-      console.log(payload)
       const checkExistingUser = await AppDataSource.getRepository(
         Users,
-      ).findOneBy({ email: payload.email })
+      ).findOneBy({ email: req.email })
 
       if (checkExistingUser) {
         return {
@@ -56,40 +28,32 @@ export class UsersModel {
       }
 
       const salt = bcrypt.genSaltSync(10)
-      const password = await bcrypt.hash(payload.password, salt)
+      const password = await bcrypt.hash(req.password, salt)
 
       const user = new Users()
-      user.name = payload.name
-      user.locale = payload.locale
+      user.name = req.name
+      user.locale = req.locale
       user.active = true
-      user.email = payload.email
+      user.email = req.email
       user.hashedPassword = password
       user.permissions = []
 
       const readOrError = await this.validate.validateSchema(user, usersSchema)
 
-      if (readOrError) {
-        const read = await AppDataSource.getRepository(Users).save(user)
-        console.log('create user read:', read)
-        return this.authenticateLogin(
-          { body: { email: payload.email, password: payload.password } },
-          {},
-        )
-        // return read
+      if (typeof readOrError === 'string') {
+        throw readOrError
       } else {
-        console.log('failed schema validation')
+        const read = await AppDataSource.getRepository(Users).save(user)
+        return this.authenticateLogin(req.email, req.password)
       }
     } catch (error) {
-      console.error('Error posting users', error)
-      res.status(500).send('Internal Server Error')
+      throw error
     }
   }
 
-  private async getUsers(skip: number, take: number) {
+  public async getUsers(skip: number, take: number) {
     try {
       const todoRepository = AppDataSource.manager.getRepository(Users)
-      console.log('skip:', skip)
-      console.log('take:', take)
       const users = await todoRepository.findAndCount({
         skip: skip,
         take: take,
@@ -106,42 +70,63 @@ export class UsersModel {
 
       return usersData
     } catch (error) {
-      console.error('Error fetching users', error)
-      throw new Error('Internal Server Error')
+      throw error
     }
   }
 
-  private async getUserById(request) {
-    console.log('got todo by id')
+  public async getUserById(id: number) {
     try {
-      const id: number = request.params.id
-      const todoRepository = AppDataSource.manager.getRepository(Users)
-      const todo = await todoRepository.findOne({
+      const userRepository = AppDataSource.manager.getRepository(Users)
+      const user = await userRepository.findOne({
         where: {
           id: id,
         },
       })
-      if (!todo) {
-        request.status(500).send('Todo not found')
+      if (!user) {
+        throw new Error('User not found')
       }
-      return todo
+      return user
     } catch (error) {
-      console.error('Error fetching todo', error)
-      request.status(500).send('Internal Server Error')
+      throw error
     }
   }
 
-  private async deleteUserById(req, res) {
+  public async searchUsers(searchTerm: string, take: number) {
+    if (!searchTerm) {
+      throw new Error('Search term is required')
+    }
     try {
-      const todo = await AppDataSource.getRepository(Users).findOneBy({
-        id: req.body.id,
-      })
+      const userRepository = AppDataSource.getRepository(Users)
+      const result = await userRepository
+        .createQueryBuilder('user')
+        .where('LOWER(user.name) LIKE :name', {
+          name: `%${searchTerm.toLowerCase()}%`,
+        })
+        .take(take)
+        .getMany()
 
-      await AppDataSource.getRepository(Users).save(todo)
-      return todo
+      return {
+        success: true,
+        data: result,
+      }
     } catch (error) {
-      console.error('Error fetching users', error)
-      res.status(500).send('Internal Server Error')
+      throw error
+    }
+  }
+
+  /* Soft delete user. */
+  public async deleteUserById(id: number) {
+    try {
+      await AppDataSource.getRepository(Users).softDelete({ id: id })
+      const user = await AppDataSource.getRepository(Users).findOneBy({
+        id: id,
+      })
+      if (!user) {
+        throw new Error('User not found')
+      }
+      return user
+    } catch (error) {
+      throw error
     }
   }
 
@@ -160,27 +145,21 @@ export class UsersModel {
   // }
 
   // refactor this...?
-  public async authenticateLogin(req, res) {
+  public async authenticateLogin(email: string, password: string) {
     try {
-      const { email, password } = req.body
-      console.log(email, password)
       const result = await AppDataSource.getRepository(Users).findOneBy({
         email: email,
       })
       if (!result) {
-        return res.status(500).json({
+        throw {
           success: false,
           message: 'user email does not exist',
-        })
+        }
       }
-      console.log(result)
       const isMatch = await bcrypt.compare(password, result.hashedPassword)
 
       if (isMatch) {
-        console.log('gen log in token')
         const loginTkn = this.generateLoginToken(email)
-        console.log('gen log in token post: ', loginTkn)
-
         return {
           success: true,
           token: loginTkn,
@@ -188,27 +167,23 @@ export class UsersModel {
         }
       }
     } catch (error) {
-      console.log(error)
-      res.status(500).json({
+      throw {
         success: false,
         message: 'user failed to login',
-      })
+      }
     }
   }
 
-  public async validateTokenRequest(req, res) {
+  public async validateTokenRequest(token: string) {
     try {
-      console.log(req.body)
-      const { token } = req.body
       const decoded = await jwt.verify(token, process.env.SECRET_WEBTKNKEY)
 
       return decoded
     } catch (error) {
-      console.log(error.expiredAt)
       if (error.expiredAt) {
-        return String(`Token Expired at: ${error.expiredAt}`)
+        throw String(`Token Expired at: ${error.expiredAt}`)
       }
-      return error
+      throw error
     }
   }
 
@@ -216,30 +191,5 @@ export class UsersModel {
     return jwt.sign({ email }, process.env.SECRET_WEBTKNKEY, {
       expiresIn: '24h',
     })
-  }
-
-  public async searchUsers(req: any, response: any, take: number) {
-    const searchTerm: string = req.query.term
-
-    if (!searchTerm) {
-      return response.status(400).json({
-        success: false,
-        message: 'Search term is required',
-      })
-    }
-    try {
-      const userRepository = AppDataSource.getRepository(Users)
-      const result = await userRepository
-        .createQueryBuilder('user')
-        .where('LOWER(user.name) LIKE :name', {
-          name: `%${searchTerm.toLowerCase()}%`,
-        })
-        .take(take)
-        .getMany()
-
-      return result
-    } catch (error) {
-      return response.status(500).json({})
-    }
   }
 }
