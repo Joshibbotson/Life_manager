@@ -6,9 +6,6 @@ export class Users extends CommonEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
-  hashedPassword: string
-
   @Column({
     length: 100,
   })
@@ -18,7 +15,13 @@ export class Users extends CommonEntity {
   email: string
 
   @Column()
+  hashedPassword: string
+
+  @Column()
   locale: string
+
+  @Column()
+  admin: boolean
 
   @Column('text', {
     array: true,

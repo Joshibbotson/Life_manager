@@ -26,7 +26,6 @@ export class UsersModel {
           status: 409,
         }
       }
-
       const salt = bcrypt.genSaltSync(10)
       const password = await bcrypt.hash(req.password, salt)
 
@@ -34,6 +33,7 @@ export class UsersModel {
       user.name = req.name
       user.locale = req.locale
       user.active = true
+      user.admin = false
       user.email = req.email
       user.hashedPassword = password
       user.permissions = []

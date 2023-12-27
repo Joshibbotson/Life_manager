@@ -132,7 +132,10 @@ If all is well you should be good to go!
 - Add luxon library - [x]
 - Update clientside to follow angular 17 updates - []
 - Add state via NgRx - [x]
-- Add testing suites - []
+
+### Testing
+
+Add end to end testing via Playwright - []
 
 ### Hosting
 

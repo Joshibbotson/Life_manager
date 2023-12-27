@@ -78,4 +78,18 @@ export class DashboardComponent implements OnInit {
     }
     return ''
   }
+
+  getMainContentStyle() {
+    if (this.windowWidth > 767) {
+      return 'min-h-screen'
+    }
+    //  else if (this.windowWidth > 767 && !this.isSidebarOpen()) {
+    //   return 'w-24'
+    // } else if (this.windowWidth < 767 && this.isSidebarOpen()) {
+    //   return 'sm:min-h-screen w-full'
+    // } else if (this.windowHeight < 767 && !this.isSidebarOpen()) {
+    //   return 'h-12 w-full'
+    // }
+    return 'min-h-90'
+  }
 }
