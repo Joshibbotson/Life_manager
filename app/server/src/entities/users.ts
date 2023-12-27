@@ -14,7 +14,7 @@ export class Users extends CommonEntity {
   @Column()
   email: string
 
-  @Column()
+  @Column({ select: false })
   hashedPassword: string
 
   @Column()

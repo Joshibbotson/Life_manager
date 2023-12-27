@@ -1,5 +1,9 @@
 import { createAction, props } from '@ngrx/store'
-import { ITodo, ITodoReadRequest } from '../../../../../api/dist/todos/index'
+import {
+  IReadTodo,
+  ITodo,
+  ITodoReadRequest,
+} from '../../../../../api/dist/todos/index'
 
 export interface SetSkipAndTakeAction {
   skip: number
@@ -28,7 +32,7 @@ export const loadTodoById = createAction(
 
 export const loadTodoByIdSuccess = createAction(
   '[Todos] Load Todo By ID Success',
-  props<{ todo: ITodo }>(),
+  props<{ todo: IReadTodo }>(),
 )
 
 export const loadTodoByIdFailure = createAction(
@@ -42,7 +46,7 @@ export const createTodo = createAction(
 )
 export const createTodoSuccess = createAction(
   '[Todos] Create Todo Success',
-  props<{ todo: ITodo }>(),
+  props<{ todo: IReadTodo }>(),
 )
 
 export const completeTodo = createAction(

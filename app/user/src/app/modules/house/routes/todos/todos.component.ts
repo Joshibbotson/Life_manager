@@ -1,9 +1,9 @@
-import { Component, Output } from '@angular/core'
+import { Component } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { Store } from '@ngrx/store'
 import { Ilinks, LinksService } from 'src/app/services/links/links.service'
-import { ITodo } from '../../../../../../../api/dist/todos'
+import { IReadTodo, ITodo } from '../../../../../../../api/dist/todos'
 import * as TodosActions from '../../../../state/todos/todos.actions'
 import { Observable, Subject, map, take } from 'rxjs'
 import { selectTodos } from 'src/app/state/todos/todos.selectors'
@@ -47,7 +47,7 @@ export class TodosComponent {
     completed: this.completedControlGroup,
   })
   public showForm: boolean = true // change back to false.
-  public todos$!: Observable<ITodo[]>
+  public todos$!: Observable<IReadTodo[]>
   public destroy$: Subject<void> = new Subject()
   trackById = this.trackByProperty('id')
 

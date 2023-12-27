@@ -1,7 +1,11 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable, map } from 'rxjs'
-import { ITodo, ITodoReadRequest } from '../../../../../../api/dist/todos'
+import {
+  IReadTodo,
+  ITodo,
+  ITodoReadRequest,
+} from '../../../../../../api/dist/todos'
 import { environment } from 'src/environments/environment'
 
 @Injectable({
@@ -12,7 +16,7 @@ export class TodosRestService {
 
   constructor(private http: HttpClient) {}
 
-  public create(request: any): Observable<ITodo> {
+  public create(request: any): Observable<IReadTodo> {
     console.log('client side create req:', request)
     return this.http.post(`${this.url}/todos/create`, request).pipe(
       map((response: any) => {
@@ -37,7 +41,7 @@ export class TodosRestService {
       .pipe(map((response: any) => response))
   }
 
-  public readById(id: number): Observable<ITodo> {
+  public readById(id: number): Observable<IReadTodo> {
     console.log('read by Id: ', id)
     return this.http
       .get<ITodo>(`${this.url}/todos/read/${id}`)

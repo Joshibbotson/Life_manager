@@ -9,9 +9,15 @@ export class TodosController {
     this.todosModel = todosModel
   }
 
-  public async createRequest(request: any, response: any) {
-    const post = await this.todosModel.create(request, response)
-    return post
+  public async createRequest(request: any) {
+    try {
+      const todoCreateRequest = request.query // should be body usually
+      console.log(todoCreateRequest)
+      const post = await this.todosModel.createTodo(todoCreateRequest)
+      return post
+    } catch (error) {
+      throw error
+    }
   }
 
   public async readRequest(request: any, page: number, pageSize: number) {

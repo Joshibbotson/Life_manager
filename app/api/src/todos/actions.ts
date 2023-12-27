@@ -1,15 +1,18 @@
-import { IsString, IsBoolean, IsDate } from 'class-validator'
+import { IsString, IsBoolean, IsDate, IsNumber } from 'class-validator'
 import { DateTime } from 'luxon'
 
 export class todosSchema {
   @IsString()
-  name: string
+  title: string
 
   @IsString()
   description: string
 
-  @IsString()
+  @IsNumber()
   createdBy: string
+
+  @IsNumber()
+  assignedTo: string
 
   @IsDate()
   dueDate: DateTime | null

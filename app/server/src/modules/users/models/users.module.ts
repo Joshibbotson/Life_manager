@@ -12,6 +12,7 @@ export class UsersModel {
     this.validate = validate
   }
 
+  // make sure to only return necessary user info remove stuff like password.
   /** Create user */
   public async createUser(req: any) {
     try {
@@ -146,10 +147,13 @@ export class UsersModel {
 
   // refactor this...?
   public async authenticateLogin(email: string, password: string) {
+    console.log(email, password)
     try {
-      const result = await AppDataSource.getRepository(Users).findOneBy({
-        email: email,
-      })
+      const result = await AppDataSource.getRepository(Users)
+        .createQueryBuilder('user')
+        .addSelect('user.hashedPassword')
+        .where('user.email = :email', { email })
+        .getOne()
       if (!result) {
         throw {
           success: false,
@@ -157,7 +161,7 @@ export class UsersModel {
         }
       }
       const isMatch = await bcrypt.compare(password, result.hashedPassword)
-
+      console.log(isMatch)
       if (isMatch) {
         const loginTkn = this.generateLoginToken(email)
         return {
@@ -169,7 +173,7 @@ export class UsersModel {
     } catch (error) {
       throw {
         success: false,
-        message: 'user failed to login',
+        message: error,
       }
     }
   }

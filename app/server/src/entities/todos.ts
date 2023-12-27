@@ -3,11 +3,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
 import { Users } from './users'
 import { CommonEntity } from './common/common-entity'
+import { DateTime } from 'luxon'
 
 @Entity()
 export class Todos extends CommonEntity {
@@ -17,19 +17,23 @@ export class Todos extends CommonEntity {
   @Column({
     length: 100,
   })
-  name: string
+  title: string
 
   @Column('text')
   description: string
 
-  @OneToOne(() => Users, (users) => users.id)
+  @ManyToOne(() => Users)
   @JoinColumn()
-  createdBy: string
+  createdBy: number
 
-  @OneToOne(() => Users, (users) => users.id)
+  @ManyToOne(() => Users)
   @JoinColumn()
   assignedTo: number
 
   @Column()
   completed: boolean
+
+  @Column('timestamp with time zone', { nullable: true })
+  dueDate: Date | null
+  todo: DateTime<true>
 }

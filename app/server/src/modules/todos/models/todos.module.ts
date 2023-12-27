@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import { todosSchema } from '../../../../../api/dist/todos/actions'
 import { Validate } from '../../../../../api/dist/validation/validation'
 import { AppDataSource } from '../../../data-source'
@@ -8,11 +9,8 @@ export class TodosModel {
   public static readonly moduleName: string = 'TodosModel'
   public readonly validate: Validate
 
-  constructor() {}
-
-  public async create(request: any, response: any) {
-    const post = await this.postTodo(request, response)
-    return post
+  constructor(validate: Validate) {
+    this.validate = validate
   }
 
   public async read(request: any, skip: number, take: number) {
@@ -30,31 +28,30 @@ export class TodosModel {
     return this.deleteTodoById(request, response)
   }
 
-  private async postTodo(req: any, res: any) {
-    console.log('post')
+  public async createTodo(todoCreateRequest: any) {
     try {
       const todo = new Todos()
-      const user = await AppDataSource.getRepository(Users).findOneBy({
-        id: 1,
-      })
-      const payload = req.body
-      todo.name = payload.name
-      todo.description = payload.description
-      todo.assignedTo = payload.assignedTo
-      todo.createdBy = payload.createdBy
-      todo.completed = payload.completed
+      console.log('todoCreateRequest: ', todoCreateRequest)
+      todo.title = todoCreateRequest.title
+      todo.description = todoCreateRequest.description
+      todo.assignedTo = todoCreateRequest.assignedTo
+      todo.createdBy = todoCreateRequest.createdBy
+      todo.completed = todoCreateRequest.completed
+      todo.dueDate = todoCreateRequest.dueDate.toJSDate()
       const readOrError = await this.validate.validateSchema(todo, todosSchema)
 
       if (typeof readOrError === 'string') {
-        console.log('readOrError', readOrError)
         throw readOrError
       } else {
-        const read = await AppDataSource.getRepository(Todos).save(todo)
-        return read
+        const todosRepository = AppDataSource.getRepository(Todos)
+        await todosRepository.save(todo)
+        const todos = await todosRepository.find({
+          relations: ['createdBy', 'assignedTo'],
+        })
+        return todos
       }
     } catch (error) {
-      console.error('Error posting todos', error)
-      res.status(500).send('Internal Server Error')
+      throw error
     }
   }
 
@@ -69,7 +66,9 @@ export class TodosModel {
         where: {
           deletedDate: null,
         },
+        relations: ['createdBy', 'assignedTo'],
       })
+
       const todosData = {
         skip: skip,
         take: take,
@@ -93,6 +92,7 @@ export class TodosModel {
         where: {
           id: id,
         },
+        relations: ['createdBy', 'assignedTo'],
       })
       if (!todo) {
         request.status(500).send('Todo not found')

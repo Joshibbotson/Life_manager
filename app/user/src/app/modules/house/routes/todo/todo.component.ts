@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Observable, Subject } from 'rxjs'
 import { Ilinks, LinksService } from 'src/app/services/links/links.service'
 import { TodosRestService } from 'src/app/services/rest/todos/todos-rest.service'
-import { ITodo } from '../../../../../../../api/dist/todos'
+import { IReadTodo, ITodo } from '../../../../../../../api/dist/todos'
 import { Store } from '@ngrx/store'
 import { selectedTodo } from 'src/app/state/todos/todos.selectors'
 import { loadTodoById } from 'src/app/state/todos/todos.actions'
@@ -17,7 +17,7 @@ import { CommonModule, NgIf } from '@angular/common'
   imports: [NgIf, CommonModule],
 })
 export class TodoComponent implements OnDestroy {
-  public readonly todo$: Observable<ITodo | null> =
+  public readonly todo$: Observable<IReadTodo | null> =
     this.store.select(selectedTodo)
   public homeLinks: Ilinks[] = [{ url: '/todos', name: 'Todos' }]
   public loading = true

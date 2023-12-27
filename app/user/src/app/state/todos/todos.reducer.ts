@@ -1,5 +1,9 @@
 import { createReducer, on } from '@ngrx/store'
-import { ITodo, ITodoReadRequest } from '../../../../../api/dist/todos/index'
+import {
+  IReadTodo,
+  ITodo,
+  ITodoReadRequest,
+} from '../../../../../api/dist/todos/index'
 import {
   loadTodosSuccess,
   createTodoSuccess,
@@ -24,7 +28,7 @@ const initialState: TodosState = {
 }
 
 export interface TodoState {
-  selectedTodo: ITodo | null
+  selectedTodo: IReadTodo | null
   error: string | null
   status: string
 }

@@ -16,6 +16,9 @@ export class usersSchema {
   @IsString()
   locale: string
 
+  @IsBoolean()
+  admin: boolean
+
   @IsArray()
   permissions: string[]
 }

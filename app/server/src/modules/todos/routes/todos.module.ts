@@ -1,6 +1,13 @@
-import { Validate } from '../../../../../api/dist/validation/validation'
 import { server } from '../../..'
 import { TodosController } from '../controller/todos.module'
+
+enum TodoErrors {
+  createTodoError = 'Error creating Todo: ',
+  readTodoError = 'Error reading Todo: ',
+  readTodosError = 'Error reading Todos: ',
+  updateTodoError = 'Error updating Todo: ',
+  deleteTodoError = 'Error deleting Todo: ',
+}
 
 export class TodosRoutes {
   public static readonly moduleName: string = 'TodosRoutes'
@@ -17,15 +24,12 @@ export class TodosRoutes {
   private readonly deleteRoute = this.deleteHandler(server)
 
   protected createHandler(server: any) {
-    console.log('createHandler')
     return server.post('/todos/create', async (req, res, next) => {
       try {
-        const post = await this.todosController.createRequest(req, res)
-        console.log(post)
-        res.json(post)
+        const post = await this.todosController.createRequest(req)
+        res.status(201).json(post)
       } catch (error) {
-        console.log(error)
-        res.status(500).json({ error: 'Internal Server Error' })
+        res.status(500).json(TodoErrors.createTodoError + error)
       }
     })
   }

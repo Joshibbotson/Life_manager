@@ -6,7 +6,17 @@ export interface IUser extends IMetaProperties {
   active: boolean
   hashedPassword: string
   permissions: string[]
+  admin: boolean
   locale: string
 }
 
-export interface IUserReadRequest extends IMetaReadRequest<IUser> {}
+export interface IReadUser extends IMetaProperties {
+  name: string
+  email: string
+  active: boolean
+  permissions: string[]
+  admin: boolean
+  locale: string
+}
+
+export interface IUserReadRequest extends IMetaReadRequest<IReadUser> {}
