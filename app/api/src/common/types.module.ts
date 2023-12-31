@@ -8,9 +8,24 @@ export interface IMetaProperties {
   version: number
 }
 
-export interface IMetaReadRequest<T> {
+export interface IMetaReadRequest<T, I> {
   skip: number
   take: number
-  count: number
+  filter?: T[]
+  sort?: I[]
+  term?: string
+}
+
+export interface IMetaReadReponse<T> extends IPaginationInfo {
+  success: boolean
   data: T[]
+  error?: string
+}
+
+export interface IPaginationInfo {
+  skip: number
+  take: number
+  currentPage: number
+  totalPages: number
+  count: number
 }

@@ -21,6 +21,8 @@ export class Validate {
 
       await validateOrReject(formattedData)
     } catch (error) {
+      console.log(error)
+      //troublesome we really must format errors to be one kind of error message, an error logging class 100% needs creating here
       if (Array.isArray(error)) {
         const transformedError = error.map((err) => ({
           property: err.property,
@@ -28,6 +30,8 @@ export class Validate {
         }))
         throw transformedError
       } else {
+        console.log(error)
+
         throw error
       }
     }

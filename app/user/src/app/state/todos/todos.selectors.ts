@@ -6,7 +6,7 @@ export const selectTodoState = createFeatureSelector<TodoState>('selectedTodo')
 
 export const selectTodos = createSelector(
   selectTodosState,
-  (state: TodosState) => state.todos,
+  (state: TodosState) => state,
 )
 
 export const selectedTodo = createSelector(

@@ -3,6 +3,7 @@ import {
   IReadTodo,
   ITodo,
   ITodoReadRequest,
+  ITodoReadResponse,
 } from '../../../../../api/dist/todos/index'
 import {
   loadTodosSuccess,
@@ -15,41 +16,55 @@ import {
   completeTodoSuccess,
 } from './todos.actions'
 
+export type TodoStatus = 'pending' | 'loading' | 'success' | 'failure'
+
 export interface TodosState {
-  todos: ITodoReadRequest
-  error: string | null
-  status: string
+  todos: IReadTodo[] | []
+  error?: string
+  status: TodoStatus
+  count: number
+  skip: number
+  take: number
 }
 
 const initialState: TodosState = {
-  todos: { skip: 0, take: 10, count: 0, data: [] },
-  error: null,
+  todos: [],
+  error: undefined,
   status: 'pending',
+  count: 0,
+  skip: 0,
+  take: 10,
 }
 
 export interface TodoState {
   selectedTodo: IReadTodo | null
-  error: string | null
-  status: string
+  error?: string
+  status: TodoStatus
 }
 
 const initialTodoState: TodoState = {
   selectedTodo: null,
-  error: null,
+  error: undefined,
   status: 'pending',
 }
 
 export const todosReducer = createReducer(
   initialState,
-  on(loadTodosSuccess, (state, { todos }) => ({
-    todos: todos,
-    error: null,
-    status: 'success',
-  })),
-  on(loadTodosFailure, (state, { error }) => ({
+  on(
+    loadTodosSuccess,
+    (state, { todos, count, skip, take, error, status }) => ({
+      todos: todos,
+      error: error,
+      status: status,
+      count: count,
+      skip: skip,
+      take: take,
+    }),
+  ),
+  on(loadTodosFailure, (state, { error, status }) => ({
     ...state,
     error: error,
-    status: 'error',
+    status: status,
   })),
 
   on(createTodoSuccess, (state, { todo }) => {
@@ -58,18 +73,16 @@ export const todosReducer = createReducer(
       ...state,
       todos: {
         ...state.todos,
-        data: [...state.todos.data, todo],
+        data: [...state.todos, todo],
       },
     }
   }),
 
   on(deleteTodoSuccess, (state, { todo }) => {
-    const todoIndex = state.todos.data.findIndex(
-      (oldTodo) => oldTodo.id === todo.id,
-    )
+    const todoIndex = state.todos.findIndex((oldTodo) => oldTodo.id === todo.id)
 
     if (todoIndex !== -1) {
-      const stateCopy = [...state.todos.data]
+      const stateCopy = [...state.todos]
       return {
         ...state,
         todos: {
@@ -82,7 +95,7 @@ export const todosReducer = createReducer(
   }),
 
   on(completeTodoSuccess, (state, { todo }) => {
-    const updatedTodos = state.todos.data.map((oldTodo) => {
+    const updatedTodos = state.todos.map((oldTodo) => {
       if (oldTodo.id === todo.id) {
         return { ...oldTodo, completed: todo.completed }
       }
@@ -105,14 +118,15 @@ export const todosReducer = createReducer(
 
 export const todoReducer = createReducer(
   initialTodoState,
-  on(loadTodoByIdSuccess, (state, { todo }) => ({
-    selectedTodo: todo,
-    error: null,
-    status: 'success',
+  on(loadTodoByIdSuccess, (state, { todo, error, status }) => ({
+    selectedTodo: todo[0],
+    error: error,
+    status: status,
   })),
-  on(loadTodoByIdFailure, (state, { error }) => ({
+
+  on(loadTodoByIdFailure, (state, { error, status }) => ({
     selectedTodo: null,
     error,
-    status: 'error',
+    status: status,
   })),
 )

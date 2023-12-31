@@ -1,4 +1,5 @@
-import { usersSchema } from '../../../../../api/dist/users/actions'
+import { IReadUser } from '../../../../../api/dist/users'
+import { CreateUsersSchema } from '../../../../../api/dist/users/actions'
 import { Validate } from '../../../../../api/dist/validation/validation'
 import { AppDataSource } from '../../../data-source'
 import { Users } from '../../../entities/users'
@@ -12,7 +13,6 @@ export class UsersModel {
     this.validate = validate
   }
 
-  // make sure to only return necessary user info remove stuff like password.
   /** Create user */
   public async createUser(req: any) {
     try {
@@ -39,7 +39,10 @@ export class UsersModel {
       user.hashedPassword = password
       user.permissions = []
 
-      const readOrError = await this.validate.validateSchema(user, usersSchema)
+      const readOrError = await this.validate.validateSchema(
+        user,
+        CreateUsersSchema,
+      )
 
       if (typeof readOrError === 'string') {
         throw readOrError
@@ -161,13 +164,18 @@ export class UsersModel {
         }
       }
       const isMatch = await bcrypt.compare(password, result.hashedPassword)
-      console.log(isMatch)
+      const removedPasswordUser = Object.fromEntries(
+        Object.entries(result).filter((entry) => {
+          return !entry.includes('hashedPassword')
+        }),
+      )
+
       if (isMatch) {
         const loginTkn = this.generateLoginToken(email)
         return {
           success: true,
           token: loginTkn,
-          user: { name: result.name, email: result.email },
+          user: removedPasswordUser as IReadUser,
         }
       }
     } catch (error) {
@@ -181,7 +189,6 @@ export class UsersModel {
   public async validateTokenRequest(token: string) {
     try {
       const decoded = await jwt.verify(token, process.env.SECRET_WEBTKNKEY)
-
       return decoded
     } catch (error) {
       if (error.expiredAt) {

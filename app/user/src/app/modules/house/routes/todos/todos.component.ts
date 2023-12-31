@@ -12,6 +12,8 @@ import { CommonCheckboxComponent } from 'src/app/ui/common-checkbox/common-check
 import { CommonInputComponent } from 'src/app/ui/common-input/common-input.component'
 import { CommonModule, NgFor, NgIf } from '@angular/common'
 import { UserSelectDropdownComponent } from '../../../../ui/user-select-dropdown/user-select-dropdown/user-select-dropdown.component'
+import { faCheck, faX } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 @Component({
   standalone: true,
@@ -26,25 +28,31 @@ import { UserSelectDropdownComponent } from '../../../../ui/user-select-dropdown
     NgFor,
     CommonModule,
     UserSelectDropdownComponent,
+    FontAwesomeModule,
   ],
 })
 export class TodosComponent {
+  readonly faCheck = faCheck
+  readonly faCross = faX
+
   public loading = true
   public homeLinks: Ilinks[] = [{ url: '/todos', name: 'Todos' }]
   editOpen: number | null = null
-  readonly nameControlGroup: FormControl = new FormControl('')
+  readonly titleControlGroup: FormControl = new FormControl('')
   readonly descriptionControlGroup: FormControl = new FormControl('')
   readonly createdByControlGroup: FormControl = new FormControl('')
   readonly assignedToControlGroup: FormControl = new FormControl('')
+  readonly dueDateControlGroup: FormControl = new FormControl('')
   readonly completedControlGroup: FormControl<boolean | null> = new FormControl(
     false,
   )
   readonly todoFormGroup: FormGroup = new FormGroup({
-    name: this.nameControlGroup,
+    title: this.titleControlGroup,
     description: this.descriptionControlGroup,
     createdBy: this.createdByControlGroup,
     assignedTo: this.assignedToControlGroup,
     completed: this.completedControlGroup,
+    dueDate: this.dueDateControlGroup,
   })
   public showForm: boolean = true // change back to false.
   public todos$!: Observable<IReadTodo[]>
@@ -62,7 +70,7 @@ export class TodosComponent {
     this.loadTodos()
     this.todos$ = this.store
       .select(selectTodos)
-      .pipe(map((todoData) => todoData.data))
+      .pipe(map((todoData) => todoData.todos))
   }
 
   ngOnDestroy() {
@@ -86,7 +94,7 @@ export class TodosComponent {
           (this.loading = false),
           (this.todos$ = this.store
             .select(selectTodos)
-            .pipe(map((todoData) => todoData.data)))
+            .pipe(map((todoData) => todoData.todos)))
         ),
       )
   }
@@ -101,13 +109,10 @@ export class TodosComponent {
 
   public toggleEditOptions(index: number | null, event: Event) {
     event.stopPropagation()
-
-    console.log('toggled:', index)
-
     if (this.editOpen === index) {
-      this.editOpen = null // Close if already open
+      this.editOpen = null
     } else {
-      this.editOpen = index // Open specific row
+      this.editOpen = index
     }
   }
   public navigate(id: number) {

@@ -1,6 +1,6 @@
 import { IsString, IsBoolean, IsArray } from 'class-validator'
 
-export class usersSchema {
+export class CreateUsersSchema {
   @IsString()
   name: string
 
@@ -9,6 +9,26 @@ export class usersSchema {
 
   @IsString()
   hashedPassword: string
+
+  @IsBoolean()
+  active: boolean
+
+  @IsString()
+  locale: string
+
+  @IsBoolean()
+  admin: boolean
+
+  @IsArray()
+  permissions: string[]
+}
+
+export class ReadUsersSchema {
+  @IsString()
+  name: string
+
+  @IsString()
+  email: string
 
   @IsBoolean()
   active: boolean

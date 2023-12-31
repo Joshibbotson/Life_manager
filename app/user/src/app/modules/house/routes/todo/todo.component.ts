@@ -10,6 +10,7 @@ import { loadTodoById } from 'src/app/state/todos/todos.actions'
 import { filter, takeUntil } from 'rxjs/operators'
 import { CommonModule, NgIf } from '@angular/common'
 
+// redundant component
 @Component({
   standalone: true,
   selector: 'app-todo',

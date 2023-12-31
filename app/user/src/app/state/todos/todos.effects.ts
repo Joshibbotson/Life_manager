@@ -45,7 +45,16 @@ export class TodosEffects {
           action, //merge streams together into one
         ) =>
           this.todosService.read(action.skip, action.take).pipe(
-            map((todos) => loadTodosSuccess({ todos })),
+            map((todos) =>
+              loadTodosSuccess({
+                todos: todos.data,
+                error: todos.error,
+                count: todos.count,
+                skip: todos.skip,
+                take: todos.take,
+                status: 'success',
+              }),
+            ),
             catchError((error) => of(error)),
           ),
       ),
@@ -57,7 +66,13 @@ export class TodosEffects {
       ofType(loadTodoById),
       mergeMap((action) =>
         this.todosService.readById(action.id).pipe(
-          map((todo) => loadTodoByIdSuccess({ todo })),
+          map((todo) =>
+            loadTodoByIdSuccess({
+              todo: todo.data,
+              error: todo.error,
+              status: 'success',
+            }),
+          ),
           catchError((error) => of(error)),
         ),
       ),

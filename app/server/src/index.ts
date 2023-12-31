@@ -25,6 +25,6 @@ const usersModel = new UsersModel(new Validate())
 const usersController = new UsersController(usersModel)
 const usersRoutes = new UsersRoutes(usersController)
 
-server.listen(port, '0.0.0.0', function () {
+server.listen(Number(port), '0.0.0.0', function () {
   console.log(`listening at ${port}`)
 })

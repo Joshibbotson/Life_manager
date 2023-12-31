@@ -16,6 +16,8 @@ import {
 import { AuthService } from 'src/app/services/auth/auth.service'
 import { WindowSizeService } from 'src/app/services/window-service/window-size.service'
 import { Observable } from 'rxjs'
+import { Store } from '@ngrx/store'
+import * as AuthActions from '../../state/auth/auth.actions'
 
 @Component({
   selector: 'app-dashboard',
@@ -26,6 +28,7 @@ export class DashboardComponent implements OnInit {
     boolean | undefined
   >(undefined)
   readonly faHome = faHome
+
   readonly faChevronCircleLeft = faChevronCircleLeft
   readonly faChevronCircleRight = faChevronCircleRight
   readonly faChevronCircleDown = faChevronCircleDown
@@ -39,6 +42,7 @@ export class DashboardComponent implements OnInit {
     private links: LinksService,
     private auth: AuthService,
     private windowSizeService: WindowSizeService,
+    private store: Store,
   ) {
     this.sideBarLinks$ = this.links.getLinks()
 
@@ -63,7 +67,7 @@ export class DashboardComponent implements OnInit {
   }
 
   logout() {
-    this.auth.logout()
+    this.store.dispatch(AuthActions.logoutUser())
   }
 
   getSideBarStyle() {

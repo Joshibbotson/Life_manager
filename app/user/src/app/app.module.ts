@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
-
+import { StoreDevtoolsModule } from '@ngrx/store-devtools'
+import * as AuthActions from '../app/state/auth/auth.actions'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { DashboardComponent } from './modules/dashboard/dashboard.component'
@@ -9,12 +10,15 @@ import { DashboardModulesComponent } from './modules/dashboard-modules/dashboard
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http'
 import { CommonModalComponent } from './ui/common-modal/common-modal.component'
-import { StoreModule } from '@ngrx/store'
+import { Store, StoreModule } from '@ngrx/store'
 import { EffectsModule } from '@ngrx/effects'
 import { todosReducer } from './state/todos/todos.reducer'
 import { todoReducer } from './state/todos/todos.reducer'
 import { TodosEffects } from './state/todos/todos.effects'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { authReducer } from './state/auth/auth.reducer'
+import { AuthEffects } from './state/auth/auth.effects'
+import { environment } from 'src/environments/environment'
 
 @NgModule({
   declarations: [
@@ -34,10 +38,30 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
     StoreModule.forRoot({
       todos: todosReducer,
       selectedTodo: todoReducer,
+      auth: authReducer,
     }),
-    EffectsModule.forRoot([TodosEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Restrict extension to log-only mode
+      logOnly: environment.production,
+    }),
+
+    EffectsModule.forRoot([TodosEffects, AuthEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private store: Store) {
+    this.rehydrateAuthState()
+  }
+
+  private rehydrateAuthState(): void {
+    const userJson = localStorage.getItem('user')
+
+    if (userJson) {
+      const user = JSON.parse(userJson)
+      console.log(user)
+      this.store.dispatch(AuthActions.rehydrateUser({ user }))
+    }
+  }
+}

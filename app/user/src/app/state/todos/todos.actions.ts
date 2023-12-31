@@ -4,6 +4,7 @@ import {
   ITodo,
   ITodoReadRequest,
 } from '../../../../../api/dist/todos/index'
+import { TodoStatus } from './todos.reducer'
 
 export interface SetSkipAndTakeAction {
   skip: number
@@ -17,12 +18,19 @@ export const loadTodos = createAction(
 
 export const loadTodosSuccess = createAction(
   '[Todos] Load Todos Success',
-  props<{ todos: ITodoReadRequest }>(),
+  props<{
+    todos: IReadTodo[]
+    error?: string
+    status: TodoStatus
+    count: number
+    skip: number
+    take: number
+  }>(),
 ) // represents the actual data emitted by the observable hence it's not an observable type but it's actual data.
 
 export const loadTodosFailure = createAction(
   '[Todos] Load Todos Failure',
-  props<{ error: string }>(),
+  props<{ error: string; status: TodoStatus }>(),
 )
 
 export const loadTodoById = createAction(
@@ -32,12 +40,16 @@ export const loadTodoById = createAction(
 
 export const loadTodoByIdSuccess = createAction(
   '[Todos] Load Todo By ID Success',
-  props<{ todo: IReadTodo }>(),
+  props<{
+    todo: IReadTodo[]
+    error?: string
+    status: TodoStatus
+  }>(),
 )
 
 export const loadTodoByIdFailure = createAction(
   '[Todos] Load Todo By ID Failure',
-  props<{ error: string }>(),
+  props<{ error: string; status: TodoStatus }>(),
 )
 
 export const createTodo = createAction(
@@ -55,7 +67,7 @@ export const completeTodo = createAction(
 )
 export const completeTodoSuccess = createAction(
   '[Todos] complete Todo Success',
-  props<{ todo: ITodo }>(),
+  props<{ todo: IReadTodo }>(),
 )
 
 export const deleteTodo = createAction(
@@ -64,7 +76,7 @@ export const deleteTodo = createAction(
 )
 export const deleteTodoSuccess = createAction(
   '[Todos] delete Todo Success',
-  props<{ todo: ITodo }>(),
+  props<{ todo: IReadTodo }>(),
 )
 export const reloadTodos = createAction('[Todos] Reload Todos')
 

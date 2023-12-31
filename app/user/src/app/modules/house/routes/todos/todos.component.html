@@ -1,61 +1,10 @@
-<div (click)="toggleEditOptions(null, $event)" class="h-full grow">
-  <button
-    class="cursor-pointer border-solid border-2 border-sky-500 rounded-md p-2 hover:bg-sky-700 hover:text-white"
-    (click)="toggleShowForm()"
-    *ngIf="!showForm"
-  >
-    Create Todo
-  </button>
-  <button
-    class="cursor-pointer border-solid border-2 border-red-700 rounded-md p-2 hover:bg-red-700 hover:text-white"
-    (click)="toggleShowForm()"
-    *ngIf="showForm"
-  >
-    Cancel
-  </button>
+<div
+  (click)="toggleEditOptions(null, $event)"
+  class="overflow-auto h-full grow"
+>
   <app-pagination />
+
   <!-- componentalise this into a modal. -->
-  <div class="container" *ngIf="showForm">
-    <div
-      class="shadow-lg flex flex-col w-96 p-4 rounded-md justify-center bg-white"
-      [formGroup]="todoFormGroup"
-    >
-      <common-input
-        formControlName="name"
-        ngDefaultControl
-        type="string"
-        label="Name"
-      />
-      <common-input
-        formControlName="description"
-        ngDefaultControl
-        type="string"
-        label="Description"
-      />
-      <common-input
-        formControlName="createdBy"
-        ngDefaultControl
-        type="string"
-        label="Created by"
-      />
-      <user-select-dropdown
-        label="Created by"
-        [control]="createdByControlGroup"
-      />
-      <common-input
-        formControlName="assignedTo"
-        ngDefaultControl
-        type="string"
-        label="Assigned to"
-      />
-      <common-checkbox
-        formControlName="completed"
-        ngDefaultControl
-        label="Completed"
-      />
-      <button (click)="handleSubmit()">Submit</button>
-    </div>
-  </div>
 
   <!-- Make something a bit prettier than this. -->
   @if (loading) {
@@ -68,22 +17,43 @@
             <table class="min-w-full text-left text-sm font-light">
               <thead class="border-b font-medium dark:border-neutral-500">
                 <tr>
-                  <th scope="col" colspan="1" class="px-6 py-4">Name</th>
-                  <th scope="col" colspan="1" class="px-6 py-4">Description</th>
-                  <th scope="col" colspan="1" class="px-6 py-4">Completed</th>
-                  <th scope="col" colspan="1" class="px-6 py-4"></th>
-                  <th scope="col" colspan="1" class="px-6 py-4"></th>
+                  <th scope="col" class="px-6 py-4"></th>
+                  <th scope="col" class="px-6 py-4">Title</th>
+                  <th scope="col" class="px-6 py-4">Description</th>
+                  <th scope="col" class="px-6 py-4">Assigned To</th>
+                  <th scope="col" class="px-6 py-4">Due Date</th>
+                  <th scope="col" class="px-6 py-4">Completed</th>
+                  <th scope="col" class="px-6 py-4"></th>
                 </tr>
               </thead>
               <tbody>
-                <ng-container
-                  *ngFor="let todo of todos$ | async; trackBy: trackById"
-                >
+                @for (todo of todos$ | async; track todo.id) {
                   <tr
-                    class="z-10 border-b transition duration-300 ease-in-out hover:text-white hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600 cursor-pointer"
+                    class="z-10 transition duration-300 ease-in-out hover:text-white hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600 cursor-pointer"
                   >
                     <td
-                      class="whitespace-nowrap px-6 py-4 w-100"
+                      class="whitespace-nowrap px-6 py-4 flex justify-center items-center"
+                    >
+                      @if (!todo.completed) {
+                        <button
+                          class="items-center border border-black rounded-full w-7 h-7 disabled:text-gray-400 disabled:bg-white hover:bg-slate-500 hover:border-gray-100"
+                          (click)="completeTodo(todo.id)"
+                        ></button>
+                      } @else if (todo.completed) {
+                        <button
+                          class="items-center border border-green-200 rounded-full w-7 h-7 disabled:text-gray-400 disabled:bg-white bg-green-400 hover:border-gray-100"
+                          (click)="completeTodo(todo.id)"
+                        >
+                          <fa-icon
+                            [icon]="faCheck"
+                            size="sm"
+                            class="text-white"
+                          ></fa-icon>
+                        </button>
+                      }
+                    </td>
+                    <td
+                      class="whitespace-nowrap px-6 py-4"
                       (click)="navigate(todo.id)"
                     >
                       {{ todo.title }}
@@ -94,16 +64,36 @@
                     >
                       {{ todo.description }}
                     </td>
-
                     <td
                       class="whitespace-nowrap px-6 py-4"
                       (click)="navigate(todo.id)"
                     >
-                      {{ todo.completed ? 'Yes' : 'No' }}
+                      {{ todo.assignedTo.name }}
+                    </td>
+                    <td
+                      class="whitespace-nowrap px-6 py-4"
+                      (click)="navigate(todo.id)"
+                    >
+                      {{ todo.dueDate }}
+                    </td>
+
+                    <td
+                      class="whitespace-nowrap px-6 py-4 border"
+                      (click)="navigate(todo.id)"
+                    >
+                      @if (todo.completed) {
+                        <fa-icon
+                          [icon]="faCheck"
+                          size="lg"
+                          class="text-green-600"
+                        ></fa-icon>
+                      } @else {
+                        -
+                      }
                     </td>
                     <!-- custom component this -->
                     <td class="whitespace-nowrap px-6 py-4">
-                      @if (editOpen === todo.id) {
+                      <!-- @if (editOpen === todo.id) {
                         <div
                           class="flex flex-col absolute border rounded-md bg-white"
                         >
@@ -123,24 +113,93 @@
                         <div (click)="toggleEditOptions(todo.id, $event)">
                           . . .
                         </div>
-                      }
+                      } -->
+                      <button
+                        class="text-black p-2 hover:text-white rounded-b-md"
+                        (click)="deleteTodo(todo.id)"
+                      >
+                        <fa-icon
+                          [icon]="faCross"
+                          size="1x"
+                          class="hover:text-red-400 text-red-700"
+                        />
+                      </button>
                       <!-- custom component this -->
                       <!-- custom checkbox -->
                     </td>
-
-                    <td class="whitespace-nowrap px-6 py-4">
-                      <button
-                        *ngIf="!todo.completed"
-                        class="items-center border border-black-100 rounded-lg p-2 disabled:text-gray-400 disabled:bg-white hover:bg-slate-500 hover:border-gray-100"
-                        (click)="completeTodo(todo.id)"
-                      >
-                        Complete Todo
-                      </button>
-                    </td>
                   </tr>
-                </ng-container>
+                }
               </tbody>
             </table>
+            @if (!showForm) {
+              <div class="w-full">
+                <button
+                  class="cursor-pointer border-solid border-2 border-sky-500 rounded-md p-2 hover:bg-sky-700 hover:text-white w-full"
+                  (click)="toggleShowForm()"
+                >
+                  + Create Todo
+                </button>
+              </div>
+            } @else {
+              <div
+                class="w-full bg-white rounded-md"
+                [formGroup]="todoFormGroup"
+              >
+                <tr class="flex items-center justify-center">
+                  <td class="whitespace-nowrap px-6 py-4 w-100 w-1/7">
+                    <common-input
+                      formControlName="title"
+                      ngDefaultControl
+                      type="string"
+                      label="Title"
+                    />
+                  </td>
+                  <td class="whitespace-nowrap px-6 py-4 w-100">
+                    <common-input
+                      formControlName="description"
+                      ngDefaultControl
+                      type="string"
+                      label="Description"
+                    />
+                  </td>
+                  <td class="whitespace-nowrap px-6 py-4 w-100">
+                    <user-select-dropdown
+                      label="Assigned to"
+                      [control]="assignedToControlGroup"
+                    />
+                  </td>
+                  <td class="whitespace-nowrap px-6 py-4 w-100">
+                    <common-input
+                      type="date"
+                      formControlName="dueDate"
+                      ngDefaultControl
+                      label="Due Date"
+                    />
+                  </td>
+
+                  <td class="whitespace-nowrap px-6 py-4 w-full">
+                    <button
+                      class="cursor-pointer border-solid border-2 border-green-700 rounded-md p-2 hover:bg-green-700 hover:text-white w-full"
+                      (click)="handleSubmit()"
+                    >
+                      Submit
+                    </button>
+                  </td>
+                </tr>
+                <div class="px-5">
+                  <button
+                    class="cursor-pointer border-solid border-2 border-red-700 rounded-md p-2 hover:bg-red-700 hover:text-white w-full"
+                    (click)="toggleShowForm()"
+                  >
+                    <fa-icon
+                      [icon]="faCross"
+                      size="1x"
+                      class="hover:text-slate-200"
+                    ></fa-icon>
+                  </button>
+                </div>
+              </div>
+            }
           </div>
         </div>
       </div>

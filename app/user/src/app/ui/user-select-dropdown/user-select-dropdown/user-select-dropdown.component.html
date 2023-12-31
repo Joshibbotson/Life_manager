@@ -1,6 +1,6 @@
 <form class="container flex flex-col relative">
   @if (label) {
-    <label for="commonInput">{{ label }}</label>
+    <label for="commonInput" class="z-0">{{ label }}</label>
   }
 
   <div
@@ -28,7 +28,7 @@
       (keydown)="onKeyDown($event)"
     />
   </div>
-  <div class="absolute top-full bg-white w-full shadow-md">
+  <div class="absolute top-full bg-white w-full shadow-md z-10">
     @if (loading && searchTermControl.value) {
       <ul>
         <li>. . .</li>
@@ -39,7 +39,7 @@
         @for (user of suggestedUsers; track $index) {
           <li
             (click)="onListItemClick(user)"
-            class="bg-white text-black hover:bg-slate-300 hover:text-white"
+            class="bg-white text-black hover:bg-slate-300 hover:text-white z-10"
           >
             {{ user.name }}
           </li>

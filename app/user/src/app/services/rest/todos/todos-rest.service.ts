@@ -4,7 +4,11 @@ import { Observable, map } from 'rxjs'
 import {
   IReadTodo,
   ITodo,
+  ITodoCreateResponse,
+  ITodoDeleteResponse,
   ITodoReadRequest,
+  ITodoReadResponse,
+  ITodoUpdateResponse,
 } from '../../../../../../api/dist/todos'
 import { environment } from 'src/environments/environment'
 
@@ -16,7 +20,7 @@ export class TodosRestService {
 
   constructor(private http: HttpClient) {}
 
-  public create(request: any): Observable<IReadTodo> {
+  public create(request: any): Observable<ITodoCreateResponse> {
     console.log('client side create req:', request)
     return this.http.post(`${this.url}/todos/create`, request).pipe(
       map((response: any) => {
@@ -25,7 +29,7 @@ export class TodosRestService {
     )
   }
 
-  public update(id: any): Observable<ITodo> {
+  public update(id: any): Observable<ITodoUpdateResponse> {
     const payload = { id }
     return this.http.put(`${this.url}/todos/update/${id}`, payload).pipe(
       map((response: any) => {
@@ -34,21 +38,21 @@ export class TodosRestService {
     )
   }
 
-  public read(skip: number, take: number): Observable<ITodoReadRequest> {
+  public read(skip: number, take: number): Observable<ITodoReadResponse> {
     console.log('read')
     return this.http
       .get<ITodo[]>(`${this.url}/todos/read?skip=${skip}&take=${take}`)
       .pipe(map((response: any) => response))
   }
 
-  public readById(id: number): Observable<IReadTodo> {
+  public readById(id: number): Observable<ITodoReadResponse> {
     console.log('read by Id: ', id)
     return this.http
       .get<ITodo>(`${this.url}/todos/read/${id}`)
       .pipe(map((response: any) => response))
   }
 
-  public delete(id: number) {
+  public delete(id: number): Observable<ITodoDeleteResponse> {
     const payload = { id } // we need to change the ID to json by placing it in an object.
     //this allow's angular's HTTP library to serialize the id.
     return this.http.put(`${this.url}/todos/delete/${id}`, payload).pipe(

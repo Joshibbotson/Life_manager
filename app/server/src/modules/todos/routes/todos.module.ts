@@ -1,5 +1,6 @@
 import { server } from '../../..'
 import { TodosController } from '../controller/todos.module'
+import { Request, Response, NextFunction } from 'express'
 
 enum TodoErrors {
   createTodoError = 'Error creating Todo: ',
@@ -24,74 +25,99 @@ export class TodosRoutes {
   private readonly deleteRoute = this.deleteHandler(server)
 
   protected createHandler(server: any) {
-    return server.post('/todos/create', async (req, res, next) => {
-      try {
-        const post = await this.todosController.createRequest(req)
-        res.status(201).json(post)
-      } catch (error) {
-        res.status(500).json(TodoErrors.createTodoError + error)
-      }
-    })
+    return server.post(
+      '/todos/create',
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const post = await this.todosController.createRequest(req)
+          res.status(201).json(post)
+        } catch (error) {
+          res.status(500).json(TodoErrors.createTodoError + error)
+        }
+      },
+    )
   }
 
   /** Read route */
   protected readHandler(server: any) {
-    server.get('/todos/read', async (req, res, next) => {
-      const skip = req.query.skip ? parseInt(req.query.skip, 10) : 0
-      const take = req.query.take ? parseInt(req.query.take, 10) : 10
-      console.log('skip route:', skip)
-      console.log('take route:', take)
+    server.get(
+      '/todos/read',
+      async (req: Request, res: Response, next: NextFunction) => {
+        const { skip, take } = req.query
 
-      try {
-        const read = await this.todosController.readRequest(req, skip, take)
-        console.log('returned read pre json: ', read)
-        res.json(read)
-      } catch (error) {
-        console.log(error)
-        res.status(500).json({ error: 'Internal Server Error' })
-      }
-    })
+        try {
+          const read = await this.todosController.readRequest(
+            req,
+            Number(skip),
+            Number(take),
+          )
+          console.log('returned read pre json: ', read)
+          res.json(read)
+        } catch (error) {
+          console.log(error)
+          res.status(500).json({ error: 'Internal Server Error' })
+        }
+      },
+    )
 
-    server.get('/todos/read/:id', async (req, res, next) => {
-      const skip = req.query.skip ? parseInt(req.query.skip, 10) : 0
-      const take = req.query.take ? parseInt(req.query.take, 10) : 10
-      console.log('Read by id: ', req.query)
-      try {
-        const read = await this.todosController.readRequest(req, skip, take)
-        console.log('returned read pre json: ', read)
+    server.get(
+      '/todos/read/:id',
+      async (req: Request, res: Response, next: NextFunction) => {
+        const { skip, take } = req.query
+        console.log('Read by id: ', req.query)
+        try {
+          const read = await this.todosController.readRequest(
+            req,
+            Number(skip),
+            Number(take),
+          )
+          console.log('returned read pre json: ', read)
 
-        res.json(read)
-      } catch (error) {
-        console.log(error)
-        res.status(500).json({ error: 'Internal Server Error' })
-      }
-    })
+          res.json(read)
+        } catch (error) {
+          console.log(error)
+          res.status(500).json({ error: 'Internal Server Error' })
+        }
+      },
+    )
   }
 
   protected updateHandler(server: any) {
     console.log('update called')
-    return server.put('/todos/update/:id', async (req, res, next) => {
-      try {
-        const updateRequest = await this.todosController.updateRequest(req, res)
-        console.log('Update req!:', updateRequest)
-        res.json(updateRequest)
-      } catch (error) {
-        console.log(error)
-        res.status(500).json({ error: 'Update Server Error' })
-      }
-    })
+    return server.put(
+      '/todos/update/:id',
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const updateRequest = await this.todosController.updateRequest(
+            req,
+            res,
+          )
+          console.log('Update req!:', updateRequest)
+          res.json(updateRequest)
+        } catch (error) {
+          console.log(error)
+          res.status(500).json({ error: 'Update Server Error' })
+        }
+      },
+    )
   }
 
   protected deleteHandler(server: any) {
-    return server.put('/todos/delete/:id', async (req, res, next) => {
-      try {
-        const deleteRequest = await this.todosController.deleteRequest(req, res)
-        console.log(deleteRequest)
-        res.json(deleteRequest)
-      } catch (error) {
-        console.log(error)
-        res.status(500).json({ error: 'Delete Server Error' })
-      }
-    })
+    return server.put(
+      '/todos/delete/:id',
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const deleteRequest = await this.todosController.deleteRequest(
+            req,
+            res,
+          )
+          console.log(deleteRequest)
+          res.json(deleteRequest)
+        } catch (error) {
+          console.log(error)
+          res.status(500).json({ error: 'Delete Server Error' })
+        }
+      },
+    )
   }
 }

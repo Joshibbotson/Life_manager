@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { todosSchema } from '../../../../../api/dist/todos/actions'
+import { CreateTodoSchema } from '../../../../../api/dist/todos/actions'
 import { Validate } from '../../../../../api/dist/validation/validation'
 import { AppDataSource } from '../../../data-source'
 import { Todos } from '../../../entities/todos'
@@ -34,11 +34,15 @@ export class TodosModel {
       console.log('todoCreateRequest: ', todoCreateRequest)
       todo.title = todoCreateRequest.title
       todo.description = todoCreateRequest.description
-      todo.assignedTo = todoCreateRequest.assignedTo
-      todo.createdBy = todoCreateRequest.createdBy
+      todo.assignedTo = todoCreateRequest.assignedTo[0]
+      todo.createdBy = todoCreateRequest.createdBy[0]
       todo.completed = todoCreateRequest.completed
-      todo.dueDate = todoCreateRequest.dueDate.toJSDate()
-      const readOrError = await this.validate.validateSchema(todo, todosSchema)
+      todo.dueDate = new Date(todoCreateRequest.dueDate)
+      console.log('formattedtodo: ', todo)
+      const readOrError = await this.validate.validateSchema(
+        todo,
+        CreateTodoSchema,
+      )
 
       if (typeof readOrError === 'string') {
         throw readOrError

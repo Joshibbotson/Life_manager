@@ -19,9 +19,7 @@ export class AuthGuardService {
     return new Promise<boolean>((resolve) => {
       const loginToken = localStorage.getItem('loginToken')
       if (loginToken) {
-        console.log('true a logntoken exist')
         this.authService.validateToken(loginToken).subscribe((tkn) => {
-          console.log(tkn)
           if (tkn) {
             resolve(true)
           } else {

@@ -1,13 +1,17 @@
 import { DateTime } from 'luxon'
-import { IMetaProperties, IMetaReadRequest } from '../common/types.module'
+import {
+  IMetaProperties,
+  IMetaReadReponse,
+  IMetaReadRequest,
+} from '../common/types.module'
 import { IReadUser } from '../users'
 
 export interface ITodo extends IMetaProperties {
   title: string
   description: string
-  createdBy: string
-  assignedTo: string
-  dueDate: DateTime | null
+  createdBy: number
+  assignedTo: number
+  dueDate: Date | null
   completed: string
 }
 
@@ -20,4 +24,18 @@ export interface IReadTodo extends IMetaProperties {
   completed: string
 }
 
-export interface ITodoReadRequest extends IMetaReadRequest<IReadTodo> {}
+export interface ITodoCreateRequest extends ITodo {}
+export interface ITodoCreateResponse extends IReadTodo {}
+
+export interface IFilter {}
+export interface ISort {}
+export interface ITodoReadRequest extends IMetaReadRequest<IFilter, ISort> {}
+export interface ITodoReadResponse extends IMetaReadReponse<IReadTodo> {}
+
+export interface ITodoUpdateRequest extends Partial<IReadTodo> {}
+export interface ITodoUpdateResponse extends IReadTodo {}
+
+export interface ITodoDeleteRequest {
+  id: number
+}
+export interface ITodoDeleteResponse extends IReadTodo {}

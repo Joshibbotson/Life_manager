@@ -130,7 +130,7 @@ If all is well you should be good to go!
 - Add schema validation - [x]
 - Add Users, including simple registration and login - [x]
 - Add luxon library - [x]
-- Update clientside to follow angular 17 updates - []
+- Update clientside to follow angular 17 updates - [x]
 - Add state via NgRx - [x]
 
 ### Testing

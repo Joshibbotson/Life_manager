@@ -23,6 +23,7 @@ export class UsersController {
       const skip = request.query.skip ? parseInt(request.query.skip, 10) : 0
       const take = request.query.take ? parseInt(request.query.take, 10) : 10
       if (Object.keys(request.query).includes('term')) {
+        console.log(request.query)
         const data = await this.usersModel.searchUsers(request.query.term, take)
         return data
       }

@@ -9,9 +9,6 @@ import { FormControl, FormGroup } from '@angular/forms'
   imports: [NgIf],
 })
 export class CommonInputComponent {
-  // need to figure this out.
-  // @Input() formGroup!: FormGroup;
-  // @Input() formControlId!: FormControl;
   @Input() label: string = ''
   @Input() type: string = 'text'
   @Input() min!: number

@@ -11,8 +11,7 @@ export class TodosController {
 
   public async createRequest(request: any) {
     try {
-      const todoCreateRequest = request.query // should be body usually
-      console.log(todoCreateRequest)
+      const todoCreateRequest = request.body
       const post = await this.todosModel.createTodo(todoCreateRequest)
       return post
     } catch (error) {
