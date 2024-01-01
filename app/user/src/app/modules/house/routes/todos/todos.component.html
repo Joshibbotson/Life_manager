@@ -1,10 +1,5 @@
-<div
-  (click)="toggleEditOptions(null, $event)"
-  class="overflow-auto h-full grow"
->
+<div class="overflow-auto h-full grow">
   <app-pagination />
-
-  <!-- componentalise this into a modal. -->
 
   <!-- Make something a bit prettier than this. -->
   @if (loading) {
@@ -78,7 +73,7 @@
                     </td>
 
                     <td
-                      class="whitespace-nowrap px-6 py-4 border"
+                      class="whitespace-nowrap px-6 py-4"
                       (click)="navigate(todo.id)"
                     >
                       @if (todo.completed) {
@@ -91,29 +86,7 @@
                         -
                       }
                     </td>
-                    <!-- custom component this -->
                     <td class="whitespace-nowrap px-6 py-4">
-                      <!-- @if (editOpen === todo.id) {
-                        <div
-                          class="flex flex-col absolute border rounded-md bg-white"
-                        >
-                          <button
-                            class="text-black p-2 hover:text-white border-slate-400 hover:bg-slate-400 rounded-t-md"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            class="text-black p-2 hover:text-white hover:bg-slate-400 rounded-b-md"
-                            (click)="deleteTodo(todo.id)"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      } @else {
-                        <div (click)="toggleEditOptions(todo.id, $event)">
-                          . . .
-                        </div>
-                      } -->
                       <button
                         class="text-black p-2 hover:text-white rounded-b-md"
                         (click)="deleteTodo(todo.id)"
@@ -124,8 +97,6 @@
                           class="hover:text-red-400 text-red-700"
                         />
                       </button>
-                      <!-- custom component this -->
-                      <!-- custom checkbox -->
                     </td>
                   </tr>
                 }

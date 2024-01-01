@@ -30,6 +30,7 @@ export class TodosRoutes {
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           const post = await this.todosController.createRequest(req)
+          console.log('post:', post)
           res.status(201).json(post)
         } catch (error) {
           res.status(500).json(TodoErrors.createTodoError + error)
@@ -43,19 +44,12 @@ export class TodosRoutes {
     server.get(
       '/todos/read',
       async (req: Request, res: Response, next: NextFunction) => {
-        const { skip, take } = req.query
-
         try {
-          const read = await this.todosController.readRequest(
-            req,
-            Number(skip),
-            Number(take),
-          )
+          const read = await this.todosController.readRequest(req)
           console.log('returned read pre json: ', read)
-          res.json(read)
+          res.status(200).json(read)
         } catch (error) {
-          console.log(error)
-          res.status(500).json({ error: 'Internal Server Error' })
+          res.status(500).json(TodoErrors.readTodosError + error)
         }
       },
     )
@@ -66,17 +60,12 @@ export class TodosRoutes {
         const { skip, take } = req.query
         console.log('Read by id: ', req.query)
         try {
-          const read = await this.todosController.readRequest(
-            req,
-            Number(skip),
-            Number(take),
-          )
+          const read = await this.todosController.readRequest(req)
           console.log('returned read pre json: ', read)
-
-          res.json(read)
+          res.status(200).json(read)
         } catch (error) {
           console.log(error)
-          res.status(500).json({ error: 'Internal Server Error' })
+          res.status(500).json(TodoErrors.readTodoError + error)
         }
       },
     )

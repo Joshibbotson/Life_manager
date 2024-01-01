@@ -1,11 +1,11 @@
-import { Component } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { Store } from '@ngrx/store'
 import { Ilinks, LinksService } from 'src/app/services/links/links.service'
 import { IReadTodo, ITodo } from '../../../../../../../api/dist/todos'
 import * as TodosActions from '../../../../state/todos/todos.actions'
-import { Observable, Subject, map, take } from 'rxjs'
+import { Observable, Subject, first, map, take, tap } from 'rxjs'
 import { selectTodos } from 'src/app/state/todos/todos.selectors'
 import { PaginationComponent } from 'src/app/components/pagination/pagination.component'
 import { CommonCheckboxComponent } from 'src/app/ui/common-checkbox/common-checkbox.component'
@@ -14,6 +14,8 @@ import { CommonModule, NgFor, NgIf } from '@angular/common'
 import { UserSelectDropdownComponent } from '../../../../ui/user-select-dropdown/user-select-dropdown/user-select-dropdown.component'
 import { faCheck, faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { selectCurrentUser } from 'src/app/state/auth/auth.selectors'
+import { IReadUser } from '../../../../../../../api/dist/users'
 
 @Component({
   standalone: true,
@@ -31,7 +33,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
     FontAwesomeModule,
   ],
 })
-export class TodosComponent {
+export class TodosComponent implements OnInit, OnDestroy {
   readonly faCheck = faCheck
   readonly faCross = faX
 
@@ -54,10 +56,10 @@ export class TodosComponent {
     completed: this.completedControlGroup,
     dueDate: this.dueDateControlGroup,
   })
-  public showForm: boolean = true // change back to false.
+  public showForm: boolean = false
   public todos$!: Observable<IReadTodo[]>
+  public loggedInUser!: IReadUser | null
   public destroy$: Subject<void> = new Subject()
-  trackById = this.trackByProperty('id')
 
   constructor(
     private links: LinksService,
@@ -71,6 +73,16 @@ export class TodosComponent {
     this.todos$ = this.store
       .select(selectTodos)
       .pipe(map((todoData) => todoData.todos))
+    this.store
+      .select(selectCurrentUser)
+      .pipe(
+        first(),
+        tap((user) => {
+          this.loggedInUser = user
+          console.log(this.loggedInUser)
+        }),
+      )
+      .subscribe()
   }
 
   ngOnDestroy() {
@@ -107,14 +119,6 @@ export class TodosComponent {
     this.showForm = !this.showForm
   }
 
-  public toggleEditOptions(index: number | null, event: Event) {
-    event.stopPropagation()
-    if (this.editOpen === index) {
-      this.editOpen = null
-    } else {
-      this.editOpen = index
-    }
-  }
   public navigate(id: number) {
     this.router.navigate([`todos/${id}`])
   }
@@ -122,6 +126,7 @@ export class TodosComponent {
   async handleSubmit() {
     this.todoFormGroup.patchValue({
       completed: this.todoFormGroup.value.completed === 'true' ? true : false,
+      createdBy: this.loggedInUser?.id,
     })
     this.store.dispatch(
       TodosActions.createTodo({ todo: this.todoFormGroup.value }),
@@ -129,11 +134,8 @@ export class TodosComponent {
     this.toggleShowForm()
   }
 
-  trackByProperty<T = any>(property: keyof T) {
-    return (index: number, object: T) => object[property]
-  }
-
   public editTodo(id: number) {}
+
   public deleteTodo(id: number) {
     this.store.dispatch(TodosActions.deleteTodo({ id }))
   }

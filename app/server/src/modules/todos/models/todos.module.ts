@@ -4,6 +4,8 @@ import { Validate } from '../../../../../api/dist/validation/validation'
 import { AppDataSource } from '../../../data-source'
 import { Todos } from '../../../entities/todos'
 import { Users } from '../../../entities/users'
+import { ITodoQueryOptions } from '../../../../../api/dist/todos/types'
+import { SelectQueryBuilder } from 'typeorm'
 
 export class TodosModel {
   public static readonly moduleName: string = 'TodosModel'
@@ -11,13 +13,6 @@ export class TodosModel {
 
   constructor(validate: Validate) {
     this.validate = validate
-  }
-
-  public async read(request: any, skip: number, take: number) {
-    if (request.params.id) {
-      return this.getTodoById(request)
-    }
-    return this.getTodos(skip, take)
   }
 
   public async update(request: any, response: any) {
@@ -30,17 +25,17 @@ export class TodosModel {
 
   public async createTodo(todoCreateRequest: any) {
     try {
-      const todo = new Todos()
+      const todoEntity = new Todos()
       console.log('todoCreateRequest: ', todoCreateRequest)
-      todo.title = todoCreateRequest.title
-      todo.description = todoCreateRequest.description
-      todo.assignedTo = todoCreateRequest.assignedTo[0]
-      todo.createdBy = todoCreateRequest.createdBy[0]
-      todo.completed = todoCreateRequest.completed
-      todo.dueDate = new Date(todoCreateRequest.dueDate)
-      console.log('formattedtodo: ', todo)
+      todoEntity.title = todoCreateRequest.title
+      todoEntity.description = todoCreateRequest.description
+      todoEntity.assignedTo = todoCreateRequest.assignedTo[0]
+      todoEntity.createdBy = todoCreateRequest.createdBy
+      todoEntity.completed = todoCreateRequest.completed
+      todoEntity.dueDate = new Date(todoCreateRequest.dueDate)
+      console.log('formattedtodo: ', todoEntity)
       const readOrError = await this.validate.validateSchema(
-        todo,
+        todoEntity,
         CreateTodoSchema,
       )
 
@@ -48,49 +43,54 @@ export class TodosModel {
         throw readOrError
       } else {
         const todosRepository = AppDataSource.getRepository(Todos)
-        await todosRepository.save(todo)
-        const todos = await todosRepository.find({
+        const savedTodo = await todosRepository.save(todoEntity)
+        const todo = await AppDataSource.getRepository(Todos).findOne({
+          where: { id: savedTodo.id },
           relations: ['createdBy', 'assignedTo'],
         })
-        return todos
+        return todo
       }
     } catch (error) {
       throw error
     }
   }
 
-  private async getTodos(skip: number, take: number) {
+  public async getTodos(queryOpts: ITodoQueryOptions) {
     try {
-      const todoRepository = AppDataSource.manager.getRepository(Todos)
-      console.log('skip:', skip)
-      console.log('take:', take)
-      const todos = await todoRepository.findAndCount({
-        skip: skip,
-        take: take,
-        where: {
-          deletedDate: null,
-        },
-        relations: ['createdBy', 'assignedTo'],
-      })
+      const todoRepository = AppDataSource.getRepository(Todos)
 
-      const todosData = {
-        skip: skip,
-        take: take,
-        count: todos[1],
-        data: todos[0],
+      let query: SelectQueryBuilder<Todos> =
+        todoRepository.createQueryBuilder('todo')
+
+      query = query
+        .leftJoinAndSelect('todo.createdBy', 'createdBy')
+        .leftJoinAndSelect('todo.assignedTo', 'assignedTo')
+
+      query = query.where('todo.deletedDate IS NULL')
+
+      if (queryOpts.skip !== undefined) {
+        query = query.skip(queryOpts.skip)
+      }
+      if (queryOpts.take !== undefined) {
+        query = query.take(queryOpts.take)
       }
 
-      return todosData
+      const [todos, count] = await query.getManyAndCount()
+
+      return {
+        skip: queryOpts.skip,
+        take: queryOpts.take,
+        count: count,
+        data: todos,
+      }
     } catch (error) {
-      console.error('Error fetching todos', error)
-      throw new Error('Internal Server Error')
+      throw error
     }
   }
 
-  private async getTodoById(request) {
+  public async getTodoById(id: number) {
     console.log('got todo by id')
     try {
-      const id: number = request.params.id
       const todoRepository = AppDataSource.manager.getRepository(Todos)
       const todo = await todoRepository.findOne({
         where: {
@@ -99,12 +99,11 @@ export class TodosModel {
         relations: ['createdBy', 'assignedTo'],
       })
       if (!todo) {
-        request.status(500).send('Todo not found')
+        throw new Error('Todo not found')
       }
       return todo
     } catch (error) {
-      console.error('Error fetching todo', error)
-      request.status(500).send('Internal Server Error')
+      throw error
     }
   }
 
@@ -120,7 +119,6 @@ export class TodosModel {
         })
       }
 
-      // await AppDataSource.getRepository(Todos).save(todo)
       return todo
     } catch (error) {
       console.error('Error fetching todos', error)
@@ -128,12 +126,13 @@ export class TodosModel {
     }
   }
 
+  // Rudimentary, requires overall.
   private async updateTodoById(req, res) {
     try {
       const todo = await AppDataSource.getRepository(Todos).findOneBy({
         id: req.body.id,
       })
-      todo.completed = true
+      todo.completed = !todo.completed
       await AppDataSource.getRepository(Todos).save(todo)
       return todo
     } catch (error) {

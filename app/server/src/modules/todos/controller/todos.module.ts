@@ -1,5 +1,5 @@
 import { TodosModel } from '../models/todos.module'
-
+import { ITodoQueryOptions } from '../../../../../api/dist/todos/types'
 export class TodosController {
   public static readonly moduleName: string = 'TodosController'
 
@@ -19,9 +19,29 @@ export class TodosController {
     }
   }
 
-  public async readRequest(request: any, page: number, pageSize: number) {
-    const data = await this.todosModel.read(request, page, pageSize)
-    return data
+  public async readRequest(request: any) {
+    try {
+      const { skip, take, filter, sort, term } = request.query
+      const { id } = request.params
+
+      const queryOpts: ITodoQueryOptions = {
+        skip: skip,
+        take: take,
+        filter: filter,
+        sort: sort,
+        term: term,
+        id: id,
+      }
+
+      if (queryOpts.id) {
+        const data = await this.todosModel.getTodoById(queryOpts.id)
+        return data
+      }
+      const data = await this.todosModel.getTodos(queryOpts)
+      return data
+    } catch (error) {
+      throw error
+    }
   }
 
   public async updateRequest(request: any, response: any) {

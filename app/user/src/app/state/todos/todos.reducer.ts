@@ -68,13 +68,10 @@ export const todosReducer = createReducer(
   })),
 
   on(createTodoSuccess, (state, { todo }) => {
-    console.log(todo)
+    console.log('createTodoSuccess', todo)
     return {
       ...state,
-      todos: {
-        ...state.todos,
-        data: [...state.todos, todo],
-      },
+      todos: [...state.todos, todo],
     }
   }),
 
@@ -82,13 +79,9 @@ export const todosReducer = createReducer(
     const todoIndex = state.todos.findIndex((oldTodo) => oldTodo.id === todo.id)
 
     if (todoIndex !== -1) {
-      const stateCopy = [...state.todos]
       return {
         ...state,
-        todos: {
-          ...state.todos,
-          data: stateCopy.filter((oldTodo) => oldTodo.id !== todo.id),
-        },
+        todos: [...state.todos.filter((oldTodo) => oldTodo.id !== todo.id)],
       }
     }
     return state
@@ -104,10 +97,7 @@ export const todosReducer = createReducer(
 
     return {
       ...state,
-      todos: {
-        ...state.todos,
-        data: updatedTodos,
-      },
+      todos: updatedTodos,
     }
   }),
 

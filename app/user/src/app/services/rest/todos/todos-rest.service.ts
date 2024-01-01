@@ -24,6 +24,7 @@ export class TodosRestService {
     console.log('client side create req:', request)
     return this.http.post(`${this.url}/todos/create`, request).pipe(
       map((response: any) => {
+        console.log('create res: ', response)
         return response
       }),
     )

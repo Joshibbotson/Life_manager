@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 
-interface Ilinks {
+interface Ilink {
   linkName: string
   routerLink: string
 }
@@ -10,7 +10,9 @@ interface Ilinks {
   templateUrl: './dashboard-modules.component.html',
 })
 export class DashboardModulesComponent {
-  public readonly homeLinks: Ilinks[] = [
-    { linkName: 'Todos', routerLink: 'todos' },
-  ]
+  public readonly todosLink: Ilink = { linkName: 'Todos', routerLink: 'todos' }
+  public readonly choresLink: Ilink = {
+    linkName: 'Chores',
+    routerLink: 'chores',
+  }
 }

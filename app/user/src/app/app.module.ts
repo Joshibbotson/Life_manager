@@ -41,7 +41,7 @@ import { environment } from 'src/environments/environment'
       auth: authReducer,
     }),
     StoreDevtoolsModule.instrument({
-      maxAge: 25, // Restrict extension to log-only mode
+      maxAge: 25,
       logOnly: environment.production,
     }),
 
@@ -60,7 +60,6 @@ export class AppModule {
 
     if (userJson) {
       const user = JSON.parse(userJson)
-      console.log(user)
       this.store.dispatch(AuthActions.rehydrateUser({ user }))
     }
   }

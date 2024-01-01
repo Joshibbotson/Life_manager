@@ -1,3 +1,4 @@
+import { Request } from 'express'
 import { UsersModel } from '../models/users.module'
 
 export class UsersController {
@@ -18,18 +19,25 @@ export class UsersController {
     }
   }
 
-  public async readRequest(request: any) {
+  public async readRequest(request: Request) {
     try {
-      const skip = request.query.skip ? parseInt(request.query.skip, 10) : 0
-      const take = request.query.take ? parseInt(request.query.take, 10) : 10
-      if (Object.keys(request.query).includes('term')) {
-        console.log(request.query)
-        const data = await this.usersModel.searchUsers(request.query.term, take)
+      const skip = request.query.skip
+        ? parseInt(request.query.skip as string, 10)
+        : 0
+      const take = request.query.take
+        ? parseInt(request.query.take as string, 10)
+        : 10
+
+      if (typeof request.query.term === 'string') {
+        const term = request.query.term
+        const data = await this.usersModel.searchUsers(term, take)
         return data
       }
+
       if (request.params.id) {
-        return await this.usersModel.getUserById(request)
+        return await this.usersModel.getUserById(parseInt(request.params.id))
       }
+
       return await this.usersModel.getUsers(skip, take)
     } catch (error) {
       throw error

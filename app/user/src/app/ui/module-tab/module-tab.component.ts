@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 
-interface ILinks {
+interface ILink {
   linkName: string
   routerLink: string
 }
@@ -11,9 +11,8 @@ interface ILinks {
 })
 export class ModuleTabComponent {
   @Input()
-  title!: string
-  @Input()
-  links: Array<ILinks> = []
+  link!: ILink
+  @Input() disabled: boolean = false
 
   constructor() {}
 }

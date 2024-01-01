@@ -30,10 +30,7 @@
   </div>
   <div class="absolute top-full bg-white w-full shadow-md z-10">
     @if (loading && searchTermControl.value) {
-      <ul>
-        <li>. . .</li>
-        <!-- make something prettier here. -->
-      </ul>
+      . . .
     } @else if (!loading && searchTermControl.value && isInputFocused) {
       <ul (mousedown)="onListMouseDown()" (mouseup)="onListMouseUp()">
         @for (user of suggestedUsers; track $index) {

@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import {
   IMetaProperties,
+  IMetaQueryParams,
   IMetaReadReponse,
   IMetaReadRequest,
 } from '../common/types.module'
@@ -39,3 +40,7 @@ export interface ITodoDeleteRequest {
   id: number
 }
 export interface ITodoDeleteResponse extends IReadTodo {}
+
+export interface ITodoQueryOptions extends IMetaQueryParams<IFilter, ISort> {
+  id: number
+}
