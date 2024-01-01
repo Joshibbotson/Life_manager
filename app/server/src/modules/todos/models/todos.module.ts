@@ -19,10 +19,6 @@ export class TodosModel {
     return this.updateTodoById(request, response)
   }
 
-  public async delete(request: any, response: any) {
-    return this.deleteTodoById(request, response)
-  }
-
   public async createTodo(todoCreateRequest: any) {
     try {
       const todoEntity = new Todos()
@@ -67,7 +63,14 @@ export class TodosModel {
         .leftJoinAndSelect('todo.assignedTo', 'assignedTo')
 
       query = query.where('todo.deletedDate IS NULL')
-
+      if (queryOpts.filter !== undefined) {
+        if (queryOpts.filter.createdById) {
+          query = query.andWhere('todo.createdBy = :createdById', {
+            createdById: queryOpts.filter.createdById,
+          })
+        }
+      }
+      console.log(query)
       if (queryOpts.skip !== undefined) {
         query = query.skip(queryOpts.skip)
       }
@@ -107,22 +110,19 @@ export class TodosModel {
     }
   }
 
-  private async deleteTodoById(req, res) {
+  public async deleteTodoById(id: number) {
     try {
-      console.log('delete by id: ', req.body.id)
       const todo = await AppDataSource.getRepository(Todos).findOneBy({
-        id: req.body.id,
+        id: id,
       })
       if (todo) {
         await AppDataSource.getRepository(Todos).softDelete({
-          id: req.body.id,
+          id: id,
         })
       }
-
       return todo
     } catch (error) {
-      console.error('Error fetching todos', error)
-      res.status(500).send('Internal Server Error')
+      throw error
     }
   }
 

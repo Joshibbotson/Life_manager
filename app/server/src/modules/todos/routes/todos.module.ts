@@ -64,13 +64,13 @@ export class TodosRoutes {
           console.log('returned read pre json: ', read)
           res.status(200).json(read)
         } catch (error) {
-          console.log(error)
           res.status(500).json(TodoErrors.readTodoError + error)
         }
       },
     )
   }
 
+  // needs overhaul
   protected updateHandler(server: any) {
     console.log('update called')
     return server.put(
@@ -81,11 +81,10 @@ export class TodosRoutes {
             req,
             res,
           )
-          console.log('Update req!:', updateRequest)
-          res.json(updateRequest)
+          res.status(200).json(updateRequest)
         } catch (error) {
           console.log(error)
-          res.status(500).json({ error: 'Update Server Error' })
+          res.status(500).json(TodoErrors.updateTodoError + error)
         }
       },
     )
@@ -96,15 +95,11 @@ export class TodosRoutes {
       '/todos/delete/:id',
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const deleteRequest = await this.todosController.deleteRequest(
-            req,
-            res,
-          )
+          const deleteRequest = await this.todosController.deleteRequest(req)
           console.log(deleteRequest)
-          res.json(deleteRequest)
+          res.status(200).json(deleteRequest)
         } catch (error) {
-          console.log(error)
-          res.status(500).json({ error: 'Delete Server Error' })
+          res.status(500).json(TodoErrors.deleteTodoError + error)
         }
       },
     )

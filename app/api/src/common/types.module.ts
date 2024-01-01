@@ -11,8 +11,8 @@ export interface IMetaProperties {
 export interface IMetaReadRequest<F, S> {
   skip: number
   take: number
-  filter?: F[]
-  sort?: S[]
+  filter?: F
+  sort?: S
   term?: string
 }
 
@@ -33,7 +33,7 @@ export interface IPaginationInfo {
 export interface IMetaQueryParams<F, S> {
   take: number
   skip: number
-  filter: F[]
-  sort: S[]
+  filter: F
+  sort: S
   term: string
 }

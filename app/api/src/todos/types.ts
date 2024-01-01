@@ -28,7 +28,9 @@ export interface IReadTodo extends IMetaProperties {
 export interface ITodoCreateRequest extends ITodo {}
 export interface ITodoCreateResponse extends IReadTodo {}
 
-export interface IFilter {}
+export interface IFilter {
+  createdById: number
+}
 export interface ISort {}
 export interface ITodoReadRequest extends IMetaReadRequest<IFilter, ISort> {}
 export interface ITodoReadResponse extends IMetaReadReponse<IReadTodo> {}
