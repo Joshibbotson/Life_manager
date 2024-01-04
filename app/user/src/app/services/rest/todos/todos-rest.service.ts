@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable, map } from 'rxjs'
 import {
+  IFilter,
   IReadTodo,
+  ISort,
   ITodo,
   ITodoCreateResponse,
   ITodoDeleteResponse,
@@ -39,10 +41,27 @@ export class TodosRestService {
     )
   }
 
-  public read(skip: number, take: number): Observable<ITodoReadResponse> {
-    console.log('read')
+  public read(
+    skip: number,
+    take: number,
+    filter?: Partial<IFilter>,
+    sort?: Partial<ISort>,
+    term?: string,
+  ): Observable<ITodoReadResponse> {
+    console.log(filter)
+    const filterParam = filter
+      ? `&filter=${encodeURIComponent(JSON.stringify(filter))}`
+      : ''
+    const sortParam = sort
+      ? `&sort=${encodeURIComponent(JSON.stringify(sort))}`
+      : ''
+    const termParam = term ? `&term=${encodeURIComponent(term)}` : ''
+
+    console.log(filterParam)
     return this.http
-      .get<ITodo[]>(`${this.url}/todos/read?skip=${skip}&take=${take}`)
+      .get<ITodoReadResponse>(
+        `${this.url}/todos/read?skip=${skip}&take=${take}${filterParam}${sortParam}${termParam}`,
+      )
       .pipe(map((response: any) => response))
   }
 

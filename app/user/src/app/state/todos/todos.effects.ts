@@ -44,19 +44,27 @@ export class TodosEffects {
         (
           action, //merge streams together into one
         ) =>
-          this.todosService.read(action.skip, action.take).pipe(
-            map((todos) =>
-              loadTodosSuccess({
-                todos: todos.data,
-                error: todos.error,
-                count: todos.count,
-                skip: todos.skip,
-                take: todos.take,
-                status: 'success',
-              }),
+          this.todosService
+            .read(
+              action.skip,
+              action.take,
+              action.filter,
+              action.sort,
+              action.term,
+            )
+            .pipe(
+              map((todos) =>
+                loadTodosSuccess({
+                  todos: todos.data,
+                  error: todos.error,
+                  count: todos.count,
+                  skip: todos.skip,
+                  take: todos.take,
+                  status: 'success',
+                }),
+              ),
+              catchError((error) => of(error)),
             ),
-            catchError((error) => of(error)),
-          ),
       ),
     ),
   )

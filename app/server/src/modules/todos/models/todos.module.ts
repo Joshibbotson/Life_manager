@@ -70,7 +70,6 @@ export class TodosModel {
           })
         }
       }
-      console.log(query)
       if (queryOpts.skip !== undefined) {
         query = query.skip(queryOpts.skip)
       }

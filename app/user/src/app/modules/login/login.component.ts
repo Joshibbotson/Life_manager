@@ -16,6 +16,7 @@ import {
 } from 'src/app/state/auth/auth.selectors'
 import { Subject, takeUntil } from 'rxjs'
 import { IReadUser } from '../../../../../api/dist/users'
+import { IAuthLoginReponse } from '../../../../../api/dist/auth/types.module'
 
 @Component({
   standalone: true,
@@ -68,7 +69,7 @@ export class LoginComponent implements OnDestroy {
       this.store
         .select(selectCurrentUser)
         .pipe(takeUntil(this.destroy$))
-        .subscribe((user: IReadUser | null) => {
+        .subscribe((user: IAuthLoginReponse | null) => {
           console.log('i select user: ', user)
           if (user) {
             this.router.navigate(['/'])

@@ -1,9 +1,10 @@
 import { createAction, props } from '@ngrx/store'
 import { IReadUser } from '../../../../../api/dist/users'
+import { IAuthLoginReponse } from '../../../../../api/dist/auth/types.module'
 
 export const rehydrateUser = createAction(
   '[Auth] Rehydrate User',
-  props<{ user: IReadUser }>(),
+  props<{ loginResponse: IAuthLoginReponse }>(),
 )
 
 export const loginUser = createAction(
@@ -13,7 +14,7 @@ export const loginUser = createAction(
 
 export const loginUserSuccess = createAction(
   '[Auth] Login User Success',
-  props<{ user: IReadUser }>(),
+  props<{ loginResponse: IAuthLoginReponse }>(),
 )
 
 export const loginUserFailure = createAction(

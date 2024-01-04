@@ -58,7 +58,7 @@ export class TodosComponent implements OnInit, OnDestroy {
   })
   public showForm: boolean = false
   public todos$!: Observable<IReadTodo[]>
-  public loggedInUser!: IReadUser | null
+  public loggedInUser!: IReadUser | undefined
   public destroy$: Subject<void> = new Subject()
 
   constructor(
@@ -69,20 +69,11 @@ export class TodosComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.links.updateLinks(this.homeLinks)
+    this.updatedCurrentUser()
     this.loadTodos()
     this.todos$ = this.store
       .select(selectTodos)
       .pipe(map((todoData) => todoData.todos))
-    this.store
-      .select(selectCurrentUser)
-      .pipe(
-        first(),
-        tap((user) => {
-          this.loggedInUser = user
-          console.log(this.loggedInUser)
-        }),
-      )
-      .subscribe()
   }
 
   ngOnDestroy() {
@@ -97,7 +88,15 @@ export class TodosComponent implements OnInit, OnDestroy {
         take(1),
         map((todos) => {
           this.store.dispatch(
-            TodosActions.loadTodos({ skip: todos.skip, take: todos.take }),
+            TodosActions.loadTodos({
+              skip: todos.skip,
+              take: todos.take,
+              filter: this.loggedInUser?.id
+                ? { createdById: this.loggedInUser?.id }
+                : undefined,
+              sort: {},
+              term: undefined,
+            }),
           )
         }),
       )
@@ -109,6 +108,18 @@ export class TodosComponent implements OnInit, OnDestroy {
             .pipe(map((todoData) => todoData.todos)))
         ),
       )
+  }
+
+  public updatedCurrentUser() {
+    this.store
+      .select(selectCurrentUser)
+      .pipe(
+        first(),
+        tap((response) => {
+          this.loggedInUser = response?.user
+        }),
+      )
+      .subscribe()
   }
 
   public createTodo(todo: ITodo) {

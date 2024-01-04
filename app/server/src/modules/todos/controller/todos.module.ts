@@ -25,7 +25,7 @@ export class TodosController {
     try {
       const { skip, take, filter, sort, term } = request.query
       const { id } = request.params
-
+      console.log(filter)
       let filters: IFilter
       let sorts: ISort
       if (typeof filter === 'string') {

@@ -5,7 +5,7 @@ export const selectAuthState = createFeatureSelector<AuthState>('auth')
 
 export const selectCurrentUser = createSelector(
   selectAuthState,
-  (state: AuthState) => state.user,
+  (state: AuthState) => state.loginResponse,
 )
 
 export const selectAuthError = createSelector(

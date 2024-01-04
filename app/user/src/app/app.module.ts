@@ -59,8 +59,8 @@ export class AppModule {
     const userJson = localStorage.getItem('user')
 
     if (userJson) {
-      const user = JSON.parse(userJson)
-      this.store.dispatch(AuthActions.rehydrateUser({ user }))
+      const loginResponse = JSON.parse(userJson)
+      this.store.dispatch(AuthActions.rehydrateUser({ loginResponse }))
     }
   }
 }

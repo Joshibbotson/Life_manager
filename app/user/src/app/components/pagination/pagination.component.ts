@@ -12,7 +12,7 @@ import { CommonModule, NgFor } from '@angular/common'
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
   standalone: true,
-  imports: [NgFor, CommonModule],
+  imports: [CommonModule],
 })
 export class PaginationComponent implements OnDestroy {
   readonly paginationData$ = this.store.select(selectTodos)
@@ -57,7 +57,13 @@ export class PaginationComponent implements OnDestroy {
       .pipe(take(1))
       .subscribe((todos) => {
         this.store.dispatch(
-          TodosActions.loadTodos({ skip: todos.skip, take: todos.take }),
+          TodosActions.loadTodos({
+            skip: todos.skip,
+            take: todos.take,
+            filter: { createdById: 1 },
+            sort: undefined,
+            term: '',
+          }),
         )
       })
   }
@@ -65,7 +71,11 @@ export class PaginationComponent implements OnDestroy {
   public updatePage(page: number) {
     this.take$.pipe(take(1)).subscribe((take) => {
       this.store.dispatch(
-        TodosActions.loadTodos({ skip: page * take, take: take }),
+        TodosActions.loadTodos({
+          skip: page * take,
+          take: take,
+          filter: { createdById: 1 },
+        }),
       )
     })
     this.skip$.subscribe((x) => console.log(x))

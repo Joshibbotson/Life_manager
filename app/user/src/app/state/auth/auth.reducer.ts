@@ -1,24 +1,27 @@
 import { createReducer, on } from '@ngrx/store'
 import * as AuthActions from './auth.actions'
-import { IReadUser } from '../../../../../api/dist/users'
+import { IAuthLoginReponse } from '../../../../../api/dist/auth/types.module'
 
 export interface AuthState {
-  user: IReadUser | null
+  loginResponse: IAuthLoginReponse | null
   error: any
 }
 
 export const initialState: AuthState = {
-  user: null,
+  loginResponse: null,
   error: null,
 }
 
 export const authReducer = createReducer(
   initialState,
-  on(AuthActions.rehydrateUser, (state, { user }) => ({
+  on(AuthActions.rehydrateUser, (state, { loginResponse }) => ({
     ...state,
-    user,
+    loginResponse,
   })),
-  on(AuthActions.loginUserSuccess, (state, { user }) => ({ ...state, user })),
+  on(AuthActions.loginUserSuccess, (state, { loginResponse }) => ({
+    ...state,
+    loginResponse,
+  })),
   on(AuthActions.loginUserFailure, (state, { error }) => ({ ...state, error })),
-  on(AuthActions.logoutUser, (state) => ({ ...state, user: null })),
+  on(AuthActions.logoutUser, (state) => ({ ...state, loginResponse: null })),
 )

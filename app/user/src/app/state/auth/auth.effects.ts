@@ -17,18 +17,14 @@ export class AuthEffects {
       ofType(AuthActions.loginUser),
       mergeMap((action) =>
         this.authService.login(action.email, action.password).pipe(
-          map((user) => AuthActions.loginUserSuccess({ user })),
+          map((loginResponse) =>
+            AuthActions.loginUserSuccess({ loginResponse }),
+          ),
           catchError((error) => of(AuthActions.loginUserFailure({ error }))),
         ),
       ),
     ),
   )
-
-  // rehydrateUser$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(AuthActions.rehydrateUser),
-
-  //   ))
 
   logout$ = createEffect(
     () =>

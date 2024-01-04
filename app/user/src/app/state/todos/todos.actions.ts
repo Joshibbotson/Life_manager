@@ -1,19 +1,23 @@
 import { createAction, props } from '@ngrx/store'
 import {
+  IFilter,
   IReadTodo,
+  ISort,
   ITodo,
-  ITodoReadRequest,
 } from '../../../../../api/dist/todos/index'
 import { TodoStatus } from './todos.reducer'
 
-export interface SetSkipAndTakeAction {
+export interface ILoadTodosProps {
   skip: number
   take: number
+  filter?: IFilter
+  sort?: ISort
+  term?: string
 }
 
 export const loadTodos = createAction(
   '[Todos] Load Todos',
-  props<SetSkipAndTakeAction>(),
+  props<ILoadTodosProps>(),
 ) // represents the call
 
 export const loadTodosSuccess = createAction(
@@ -80,11 +84,14 @@ export const deleteTodoSuccess = createAction(
 )
 export const reloadTodos = createAction('[Todos] Reload Todos')
 
+//update naming.
 export const setSkipAndTake = createAction(
   '[Todos] Set Skip and Take',
-  props<SetSkipAndTakeAction>(),
+  props<ILoadTodosProps>(),
 )
 export const setSkipAndTakeSuccess = createAction(
   '[Todos] Set Skip and Take Success',
-  props<SetSkipAndTakeAction>(),
+  props<ILoadTodosProps>(),
 )
+
+export const resetTodosState = createAction('[Todos] reset todos state')
