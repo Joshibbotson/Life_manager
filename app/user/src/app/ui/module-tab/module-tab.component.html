@@ -12,8 +12,8 @@
     [routerLink]="disabled ? null : [link.routerLink]"
     [class.disabled]="disabled"
     routerLinkActive="router-link-active"
-    class="text-5xl font-mono text-slate-700"
-    [ngClass]="disabled ? 'text-slate-400 ' : ''"
+    class="text-5xl font-mono"
+    [ngClass]="disabled ? 'text-slate-400 ' : 'text-slate-700'"
     >{{ link.linkName }}</a
   >
 </div>

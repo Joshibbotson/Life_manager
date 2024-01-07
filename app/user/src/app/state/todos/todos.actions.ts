@@ -10,8 +10,8 @@ import { TodoStatus } from './todos.reducer'
 export interface ILoadTodosProps {
   skip: number
   take: number
-  filter?: IFilter
-  sort?: ISort
+  filter?: Partial<IFilter>
+  sort?: Partial<ISort>
   term?: string
 }
 
@@ -45,10 +45,10 @@ export const loadTodoById = createAction(
 export const loadTodoByIdSuccess = createAction(
   '[Todos] Load Todo By ID Success',
   props<{
-    todo: IReadTodo[]
+    todo: IReadTodo
     error?: string
     status: TodoStatus
-  }>(),
+  }>(), // put this into an interface
 )
 
 export const loadTodoByIdFailure = createAction(

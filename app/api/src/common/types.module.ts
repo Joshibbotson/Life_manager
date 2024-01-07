@@ -22,6 +22,12 @@ export interface IMetaReadReponse<T> extends IPaginationInfo {
   error?: string
 }
 
+export interface IMetaReadOneResponse<T> {
+  success: boolean
+  data: T
+  error?: string
+}
+
 export interface IPaginationInfo {
   skip: number
   take: number

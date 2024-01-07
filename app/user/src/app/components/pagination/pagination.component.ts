@@ -1,11 +1,13 @@
-import { Component, OnDestroy } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { Store } from '@ngrx/store'
 import * as TodosActions from '../../state/todos/todos.actions'
 import { Observable, combineLatest, map } from 'rxjs'
-import { take } from 'rxjs/operators'
+import { first, take, tap } from 'rxjs/operators'
 import { selectTodos } from 'src/app/state/todos/todos.selectors'
 import { Subject } from 'rxjs'
 import { CommonModule, NgFor } from '@angular/common'
+import { selectCurrentUser } from 'src/app/state/auth/auth.selectors'
+import { IReadUser } from '../../../../../api/dist/users'
 
 // need to input or figure out best way to put handle what selector/actions to use so this is reusable.
 @Component({
@@ -14,8 +16,9 @@ import { CommonModule, NgFor } from '@angular/common'
   standalone: true,
   imports: [CommonModule],
 })
-export class PaginationComponent implements OnDestroy {
+export class PaginationComponent implements OnInit, OnDestroy {
   readonly paginationData$ = this.store.select(selectTodos)
+  public loggedInUser!: IReadUser | undefined
   readonly skip$: Observable<number> = this.paginationData$.pipe(
     map((x) => x.skip),
   )
@@ -46,9 +49,25 @@ export class PaginationComponent implements OnDestroy {
 
   constructor(private store: Store) {}
 
+  ngOnInit() {
+    this.updatedCurrentUser()
+  }
+
   ngOnDestroy() {
     this.destroy$.next()
     this.destroy$.complete()
+  }
+
+  public updatedCurrentUser() {
+    this.store
+      .select(selectCurrentUser)
+      .pipe(
+        first(),
+        tap((response) => {
+          this.loggedInUser = response?.user
+        }),
+      )
+      .subscribe()
   }
 
   public loadTodos() {
@@ -60,7 +79,10 @@ export class PaginationComponent implements OnDestroy {
           TodosActions.loadTodos({
             skip: todos.skip,
             take: todos.take,
-            filter: { createdById: 1 },
+            filter: {
+              createdById: this.loggedInUser?.id,
+              assignedToId: this.loggedInUser?.id,
+            },
             sort: undefined,
             term: '',
           }),
@@ -74,7 +96,10 @@ export class PaginationComponent implements OnDestroy {
         TodosActions.loadTodos({
           skip: page * take,
           take: take,
-          filter: { createdById: 1 },
+          filter: {
+            createdById: this.loggedInUser?.id,
+            assignedToId: this.loggedInUser?.id,
+          },
         }),
       )
     })
@@ -86,7 +111,16 @@ export class PaginationComponent implements OnDestroy {
       .pipe(take(1))
       .subscribe(([skip, take]) => {
         this.store.dispatch(
-          TodosActions.loadTodos({ skip: skip - take, take: take }),
+          TodosActions.loadTodos({
+            skip: skip - take,
+            take: take,
+            filter: {
+              createdById: this.loggedInUser?.id,
+              assignedToId: this.loggedInUser?.id,
+            },
+            sort: undefined,
+            term: '',
+          }),
         )
       })
   }
@@ -95,7 +129,16 @@ export class PaginationComponent implements OnDestroy {
       .pipe(take(1))
       .subscribe(([skip, take]) => {
         this.store.dispatch(
-          TodosActions.loadTodos({ skip: skip + take, take: take }),
+          TodosActions.loadTodos({
+            skip: skip + take,
+            take: take,
+            filter: {
+              createdById: this.loggedInUser?.id,
+              assignedToId: this.loggedInUser?.id,
+            },
+            sort: undefined,
+            term: '',
+          }),
         )
       })
   }

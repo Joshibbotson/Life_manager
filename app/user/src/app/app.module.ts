@@ -19,7 +19,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { authReducer } from './state/auth/auth.reducer'
 import { AuthEffects } from './state/auth/auth.effects'
 import { environment } from 'src/environments/environment'
-
+import { reducers } from './state/index'
+import { clearStateMetaReducer } from './state/meta.reducer'
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,6 +41,7 @@ import { environment } from 'src/environments/environment'
       selectedTodo: todoReducer,
       auth: authReducer,
     }),
+    StoreModule.forRoot(reducers, { metaReducers: [clearStateMetaReducer] }),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
@@ -57,10 +59,10 @@ export class AppModule {
 
   private rehydrateAuthState(): void {
     const userJson = localStorage.getItem('user')
-
-    if (userJson) {
-      const loginResponse = JSON.parse(userJson)
-      this.store.dispatch(AuthActions.rehydrateUser({ loginResponse }))
+    const token = localStorage.getItem('loginToken')
+    if (userJson && token) {
+      const user = JSON.parse(userJson)
+      this.store.dispatch(AuthActions.rehydrateUser({ user, token }))
     }
   }
 }

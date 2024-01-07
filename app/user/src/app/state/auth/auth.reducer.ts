@@ -14,14 +14,26 @@ export const initialState: AuthState = {
 
 export const authReducer = createReducer(
   initialState,
-  on(AuthActions.rehydrateUser, (state, { loginResponse }) => ({
+  on(AuthActions.rehydrateUser, (state, { user, token }) => ({
     ...state,
-    loginResponse,
+    loginResponse: {
+      success: true,
+      token: token,
+      user: user,
+    },
   })),
   on(AuthActions.loginUserSuccess, (state, { loginResponse }) => ({
     ...state,
     loginResponse,
   })),
   on(AuthActions.loginUserFailure, (state, { error }) => ({ ...state, error })),
-  on(AuthActions.logoutUser, (state) => ({ ...state, loginResponse: null })),
+  on(AuthActions.registerUserSuccess, (state, { loginResponse }) => ({
+    ...state,
+    loginResponse,
+  })),
+  on(AuthActions.registerUserFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+  on(AuthActions.logoutUser, () => ({ ...initialState })),
 )

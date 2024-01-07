@@ -57,11 +57,10 @@ export class TodosRoutes {
     server.get(
       '/todos/read/:id',
       async (req: Request, res: Response, next: NextFunction) => {
-        const { skip, take } = req.query
-        console.log('Read by id: ', req.query)
+        console.log('Read by id: ', req.params)
         try {
           const read = await this.todosController.readRequest(req)
-          console.log('returned read pre json: ', read)
+          console.log('returned todo by id pre json: ', read)
           res.status(200).json(read)
         } catch (error) {
           res.status(500).json(TodoErrors.readTodoError + error)

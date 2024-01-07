@@ -24,6 +24,7 @@ export class AuthGuardService {
             resolve(true)
           } else {
             this.authService.logout()
+            console.log('auth guard: should redirect to /login')
             resolve(false)
           }
         })

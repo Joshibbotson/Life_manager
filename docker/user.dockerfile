@@ -1,27 +1,23 @@
 # Stage 1: Base Node.js image to build the Angular app
-FROM node:16 AS build
+FROM node:18 AS build
 
 WORKDIR /app
 
 # Copy package.json and package-lock.json to install dependencies
-COPY package.json package-lock.json ./
+COPY ./user/package*.json ./
 
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the app's source code
-COPY . .
+COPY ./user/ .
 
 # Build the Angular app (replace 'your-angular-app' with your actual app name)
-RUN npm run build -- --prod --output-path=dist/Life_manager
+RUN npm run build --prod
 
-# Stage 2: Use a lightweight web server to serve the built Angular app
-FROM nginx:latest
-
-# Copy the built Angular app from the build stage to Nginx server directory
-COPY --from=build /app/dist/your-angular-app /usr/share/nginx/html
-
-# Expose port 80
+# Stage 2: Serve the application with Nginx
+FROM nginx:alpine
+COPY --from=build /app/dist/ /usr/share/nginx/html
+COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
-
-# Nginx is started automatically by the base image
+CMD ["nginx", "-g", "daemon off;"]

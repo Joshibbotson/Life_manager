@@ -15,7 +15,6 @@ import {
   selectCurrentUser,
 } from 'src/app/state/auth/auth.selectors'
 import { Subject, takeUntil } from 'rxjs'
-import { IReadUser } from '../../../../../api/dist/users'
 import { IAuthLoginReponse } from '../../../../../api/dist/auth/types.module'
 
 @Component({
@@ -30,7 +29,6 @@ export class LoginComponent implements OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService,
     private router: Router,
     private links: LinksService,
     private store: Store,
@@ -50,27 +48,15 @@ export class LoginComponent implements OnDestroy {
   }
   //it would be nice if the router.navigate took us back to whatever page we were on...
   login(): void {
-    console.log('called')
     if (this.loginForm.valid) {
       const email = this.loginForm.get('email')?.value
       const password = this.loginForm.get('password')?.value
 
-      // Dispatch the login action
       this.store.dispatch(AuthActions.loginUser({ email, password }))
-
-      // Subscribe to the Auth State to handle the response
-      const userSubscription = this.store
-        .select(selectCurrentUser)
-        .subscribe((user) => {
-          console.log(user)
-
-          // Optionally, handle null user case (not logged in or failed)
-        })
       this.store
         .select(selectCurrentUser)
         .pipe(takeUntil(this.destroy$))
         .subscribe((user: IAuthLoginReponse | null) => {
-          console.log('i select user: ', user)
           if (user) {
             this.router.navigate(['/'])
           }

@@ -110,7 +110,7 @@ export const todosReducer = createReducer(
 export const todoReducer = createReducer(
   initialTodoState,
   on(loadTodoByIdSuccess, (state, { todo, error, status }) => ({
-    selectedTodo: todo[0],
+    selectedTodo: todo,
     error: error,
     status: status,
   })),

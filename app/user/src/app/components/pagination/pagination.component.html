@@ -1,32 +1,32 @@
 <!-- replace buttons with common-btn -->
 
-<div class="flex border-slate-300 border rounded-lg w-fit">
-  <button
-    [disabled]="(skip$ | async) === 0"
-    class="flex justify-center items-center border-r-2 rounded-l-lg bg-white p-2 disabled:text-gray-400 disabled:bg-white hover:bg-slate-500 hover:text-white"
-    (click)="previousPage()"
-  >
-    < Previous
-  </button>
-  @if (take$ | async; as take) {
-    @for (page of pageCountArr$ | async; track $index) {
+<div class="flex items-center justify-between">
+  <div class="flex border-slate-300 border rounded-lg w-fit">
+    <button
+      [disabled]="(skip$ | async) === 0"
+      class="flex justify-center items-center border-r-2 rounded-l-lg bg-white p-2 disabled:text-gray-400 disabled:bg-white hover:bg-slate-500 hover:text-white"
+      (click)="previousPage()"
+    >
+      < Previous
+    </button>
+    @if (take$ | async; as take) {
+      @for (page of pageCountArr$ | async; track $index) {
+        <button
+          class="flex justify-center items-center rounded bg-white w-10 p-2 hover:bg-slate-500 hover:text-white"
+          [ngClass]="{ 'border border-black': page * take === (skip$ | async) }"
+          (click)="updatePage(page)"
+        >
+          {{ page + 1 }}
+        </button>
+      }
       <button
-        class="flex justify-center items-center rounded bg-white w-10 p-2 hover:bg-slate-500 hover:text-white"
-        [ngClass]="{ 'border border-black': page * take === (skip$ | async) }"
-        (click)="updatePage(page)"
+        [disabled]="isNextButtonDisabled$ | async"
+        class="flex justify-center items-center border-l-2 rounded-r-lg bg-white disabled:bg-white p-2 disabled:text-gray-400 hover:bg-slate-500 hover:text-white"
+        (click)="nextPage()"
       >
-        {{ page + 1 }}
+        Next >
       </button>
     }
-    <button
-      [disabled]="isNextButtonDisabled$ | async"
-      class="flex justify-center items-center border-l-2 rounded-r-lg bg-white disabled:bg-white p-2 disabled:text-gray-400 hover:bg-slate-500 hover:text-white"
-      (click)="nextPage()"
-    >
-      Next >
-    </button>
-  }
+  </div>
+  <div>Total: {{ count$ | async }}</div>
 </div>
-
-<div>Skip: {{ skip$ | async }}</div>
-<div>Items Per Page (take): {{ take$ | async }}</div>

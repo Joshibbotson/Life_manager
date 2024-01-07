@@ -8,15 +8,20 @@ import {
 import { Router, RouterModule } from '@angular/router'
 import { Store } from '@ngrx/store'
 import { Ilinks, LinksService } from 'src/app/services/links/links.service'
-import { Subject } from 'rxjs'
+import { Subject, takeUntil } from 'rxjs'
 import { AuthService } from 'src/app/services/auth/auth.service'
-import { NgIf } from '@angular/common'
+import * as AuthActions from '../../state/auth/auth.actions'
+import {
+  selectCurrentUser,
+  selectAuthError,
+} from 'src/app/state/auth/auth.selectors'
+import { IAuthLoginReponse } from '../../../../../api/dist/auth/types.module'
 
 @Component({
   standalone: true,
   selector: 'app-register',
   templateUrl: './register.component.html',
-  imports: [ReactiveFormsModule, NgIf, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule],
 })
 export class RegisterComponent {
   public homeLinks: Ilinks[] = [{ url: '/todos', name: 'Todos' }]
@@ -37,7 +42,7 @@ export class RegisterComponent {
     private formBuilder: FormBuilder,
   ) {}
 
-  ngOnInit() {}
+  ngOnInit(store: Store) {}
 
   ngOnDestroy() {
     this.destroy$.next()
@@ -51,26 +56,43 @@ export class RegisterComponent {
       password: this.registerForm.value.password,
       locale: Intl.DateTimeFormat().resolvedOptions().timeZone,
     }
-    console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
 
-    this.authService
-      .registerNewUser(
-        userInfo.name,
-        userInfo.email,
-        userInfo.password,
-        userInfo.locale,
-      )
-      .subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.router.navigate(['/'])
-          } else {
-            // Handle login failure, show error message?
-          }
-        },
-        error: (err) => {
-          console.error('HTTP error:', err)
-        },
+    this.store.dispatch(AuthActions.registerUser(userInfo))
+    this.store
+      .select(selectCurrentUser)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user: IAuthLoginReponse | null) => {
+        if (user) {
+          this.router.navigate(['/'])
+        }
       })
+
+    const errorSubscription = this.store
+      .select(selectAuthError)
+      .subscribe((error) => {
+        if (error) {
+          console.error('Login error:', error)
+          // Handle login error, show error message?
+        }
+      })
+    //   this.authService
+    //     .registerNewUser(
+    //       userInfo.name,
+    //       userInfo.email,
+    //       userInfo.password,
+    //       userInfo.locale,
+    //     )
+    //     .subscribe({
+    //       next: (response) => {
+    //         if (response.success) {
+    //           this.router.navigate(['/'])
+    //         } else {
+    //           // Handle login failure, show error message?
+    //         }
+    //       },
+    //       error: (err) => {
+    //         console.error('HTTP error:', err)
+    //       },
+    //     })
   }
 }

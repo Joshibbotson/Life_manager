@@ -1,10 +1,10 @@
 import { createAction, props } from '@ngrx/store'
-import { IReadUser } from '../../../../../api/dist/users'
 import { IAuthLoginReponse } from '../../../../../api/dist/auth/types.module'
+import { IUser } from '../../../../../api/dist/users'
 
 export const rehydrateUser = createAction(
   '[Auth] Rehydrate User',
-  props<{ loginResponse: IAuthLoginReponse }>(),
+  props<{ user: IUser; token: string }>(),
 )
 
 export const loginUser = createAction(
@@ -19,6 +19,22 @@ export const loginUserSuccess = createAction(
 
 export const loginUserFailure = createAction(
   '[Auth] Login User Failure',
+  props<{ error: any }>(),
+)
+
+// Should this have IAuthRegisterResponse?
+export const registerUser = createAction(
+  '[Auth] Register User',
+  props<{ name: string; email: string; password: string; locale: string }>(),
+)
+
+export const registerUserSuccess = createAction(
+  '[Auth] Register User Success',
+  props<{ loginResponse: IAuthLoginReponse }>(),
+)
+
+export const registerUserFailure = createAction(
+  '[Auth] Register User Failure',
   props<{ error: any }>(),
 )
 

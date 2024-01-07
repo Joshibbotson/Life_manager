@@ -69,6 +69,11 @@ export class TodosModel {
             createdById: queryOpts.filter.createdById,
           })
         }
+        if (queryOpts.filter.assignedToId) {
+          query = query.orWhere('todo.assignedTo = :assignedToId', {
+            assignedToId: queryOpts.filter.assignedToId,
+          })
+        }
       }
       if (queryOpts.skip !== undefined) {
         query = query.skip(queryOpts.skip)
@@ -103,7 +108,10 @@ export class TodosModel {
       if (!todo) {
         throw new Error('Todo not found')
       }
-      return todo
+      return {
+        data: todo,
+        error: null,
+      }
     } catch (error) {
       throw error
     }

@@ -92,7 +92,10 @@ export class TodosComponent implements OnInit, OnDestroy {
               skip: todos.skip,
               take: todos.take,
               filter: this.loggedInUser?.id
-                ? { createdById: this.loggedInUser?.id }
+                ? {
+                    createdById: this.loggedInUser?.id,
+                    assignedToId: this.loggedInUser?.id,
+                  }
                 : undefined,
               sort: {},
               term: undefined,

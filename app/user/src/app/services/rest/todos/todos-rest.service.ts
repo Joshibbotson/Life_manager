@@ -8,6 +8,7 @@ import {
   ITodo,
   ITodoCreateResponse,
   ITodoDeleteResponse,
+  ITodoReadOneByIdResponse,
   ITodoReadRequest,
   ITodoReadResponse,
   ITodoUpdateResponse,
@@ -65,10 +66,10 @@ export class TodosRestService {
       .pipe(map((response: any) => response))
   }
 
-  public readById(id: number): Observable<ITodoReadResponse> {
+  public readById(id: number): Observable<ITodoReadOneByIdResponse> {
     console.log('read by Id: ', id)
     return this.http
-      .get<ITodo>(`${this.url}/todos/read/${id}`)
+      .get<IReadTodo>(`${this.url}/todos/read/${id}`)
       .pipe(map((response: any) => response))
   }
 

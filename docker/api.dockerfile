@@ -5,16 +5,13 @@ FROM node:10.7.0
 WORKDIR /app
 
 # Copy package.json and package-lock.json to install dependencies
-COPY ./server/package*.json ./
+COPY ./api/package*.json ./
 
 # Install application dependencies
 RUN npm install
 
 # Copy the rest of the application source code
-COPY ./server/ .
-
-# Expose the port on which your Node.js app runs
-EXPOSE 8080
+COPY ./api/ .
 
 # Command to start the Node.js application
-CMD ["npm", "server"]
+CMD ["npm", "build"]

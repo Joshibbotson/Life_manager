@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import {
   IMetaProperties,
   IMetaQueryParams,
+  IMetaReadOneResponse,
   IMetaReadReponse,
   IMetaReadRequest,
 } from '../common/types.module'
@@ -30,10 +31,13 @@ export interface ITodoCreateResponse extends IReadTodo {}
 
 export interface IFilter {
   createdById: number
+  assignedToId: number
 }
 export interface ISort {}
 export interface ITodoReadRequest extends IMetaReadRequest<IFilter, ISort> {}
 export interface ITodoReadResponse extends IMetaReadReponse<IReadTodo> {}
+export interface ITodoReadOneByIdResponse
+  extends IMetaReadOneResponse<IReadTodo> {}
 
 export interface ITodoUpdateRequest extends Partial<IReadTodo> {}
 export interface ITodoUpdateResponse extends IReadTodo {}
