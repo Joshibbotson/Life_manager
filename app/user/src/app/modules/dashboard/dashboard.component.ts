@@ -18,15 +18,16 @@ import { WindowSizeService } from 'src/app/services/window-service/window-size.s
 import { Observable } from 'rxjs'
 import { Store } from '@ngrx/store'
 import * as AuthActions from '../../state/auth/auth.actions'
+import * as SidebarActions from '../../state/sidebar/sidebar.actions'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
-  public isSidebarOpen: WritableSignal<boolean | undefined> = signal<
-    boolean | undefined
-  >(undefined)
+  public isSidebarOpen: WritableSignal<boolean> = signal(false)
+
   readonly faHome = faHome
 
   readonly faChevronCircleLeft = faChevronCircleLeft
@@ -40,9 +41,9 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private links: LinksService,
-    private auth: AuthService,
     private windowSizeService: WindowSizeService,
     private store: Store,
+    private router: Router,
   ) {
     this.sideBarLinks$ = this.links.getLinks()
 
@@ -57,13 +58,24 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  shouldShowSidebar(): boolean {
+    const excludedRoutes = ['/login', '/register', '/reset']
+    return !excludedRoutes.includes(this.router.url)
+  }
   ngOnInit(): void {
-    // this.sideBarLinks$ = this.links.getLinks()
+    this.sideBarLinks$ = this.links.getLinks()
   }
 
-  ngOnChanges(simpleChanges: SimpleChanges): void {}
   toggleSidebar() {
     this.isSidebarOpen.set(!this.isSidebarOpen())
+  }
+
+  openSidebar() {
+    this.store.dispatch(SidebarActions.openSidebar())
+  }
+
+  closeSidebar() {
+    this.store.dispatch(SidebarActions.closeSidebar())
   }
 
   logout() {
@@ -72,9 +84,9 @@ export class DashboardComponent implements OnInit {
 
   getSideBarStyle() {
     if (this.windowWidth > 767 && this.isSidebarOpen()) {
-      return 'w-64'
+      return 'w-64  h-screen'
     } else if (this.windowWidth > 767 && !this.isSidebarOpen()) {
-      return 'w-24'
+      return 'w-24  h-screen'
     } else if (this.windowWidth < 767 && this.isSidebarOpen()) {
       return 'sm:min-h-screen w-full'
     } else if (this.windowHeight < 767 && !this.isSidebarOpen()) {
@@ -87,13 +99,7 @@ export class DashboardComponent implements OnInit {
     if (this.windowWidth > 767) {
       return 'min-h-screen'
     }
-    //  else if (this.windowWidth > 767 && !this.isSidebarOpen()) {
-    //   return 'w-24'
-    // } else if (this.windowWidth < 767 && this.isSidebarOpen()) {
-    //   return 'sm:min-h-screen w-full'
-    // } else if (this.windowHeight < 767 && !this.isSidebarOpen()) {
-    //   return 'h-12 w-full'
-    // }
+
     return 'min-h-90'
   }
 }

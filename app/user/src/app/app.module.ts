@@ -21,6 +21,7 @@ import { AuthEffects } from './state/auth/auth.effects'
 import { environment } from 'src/environments/environment'
 import { reducers } from './state/index'
 import { clearStateMetaReducer } from './state/meta.reducer'
+import { sidebarReducer } from './state/sidebar/sidebar.reducer'
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,6 +38,7 @@ import { clearStateMetaReducer } from './state/meta.reducer'
     ReactiveFormsModule,
     HttpClientModule,
     StoreModule.forRoot({
+      sidebar: sidebarReducer,
       todos: todosReducer,
       selectedTodo: todoReducer,
       auth: authReducer,

@@ -1,5 +1,15 @@
-<main class="flex items-center justify-center h-full">
-  <section class="bg-white shadow-lg p-6 rounded-lg sm:w-3/4 md:w-1/3 lg:w-1/3">
+<main
+  class="relative flex items-center justify-center min-h-screen min-w-full container"
+>
+  <div
+    class="absolute top-0 left-0 w-full h-full bg-contain bg-no-repeat bg-center bg-size -z-10"
+    style="
+      background-image: url('../../../assets/login.webp');
+      background-size: 80%;
+    "
+  ></div>
+
+  <section class="bg-white shadow-lg p-6 rounded-lg lg:w-1/3 md:w-2/3 sm:w-3/4">
     <form
       [formGroup]="loginForm"
       (ngSubmit)="login()"

@@ -7,7 +7,6 @@ import {
 } from '@angular/forms'
 import { Router, RouterModule } from '@angular/router'
 import { Store } from '@ngrx/store'
-import { AuthService } from 'src/app/services/auth/auth.service'
 import { LinksService } from 'src/app/services/links/links.service'
 import * as AuthActions from '../../state/auth/auth.actions'
 import {

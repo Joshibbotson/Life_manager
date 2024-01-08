@@ -7,18 +7,22 @@ import { IReadTodo, ITodo } from '../../../../../../../api/dist/todos'
 import { Store } from '@ngrx/store'
 import { selectedTodo } from 'src/app/state/todos/todos.selectors'
 import { loadTodoById } from 'src/app/state/todos/todos.actions'
-import { filter, takeUntil } from 'rxjs/operators'
+import { filter, map, takeUntil } from 'rxjs/operators'
 import { CommonModule, NgIf } from '@angular/common'
+import { faCheck, faX } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 @Component({
   standalone: true,
   selector: 'app-todo',
   templateUrl: './todo.component.html',
-  imports: [NgIf, CommonModule],
+  imports: [CommonModule, FontAwesomeModule],
 })
 export class TodoComponent implements OnDestroy {
-  public readonly todo$: Observable<IReadTodo | null> =
-    this.store.select(selectedTodo)
+  readonly faCheck = faCheck
+  readonly faCross = faX
+
+  public todo$: Observable<IReadTodo | null> = this.store.select(selectedTodo)
   public homeLinks: Ilinks[] = [{ url: '/todos', name: 'Todos' }]
   public loading = true
   private readonly destroy$: Subject<void> = new Subject<void>()
@@ -44,14 +48,12 @@ export class TodoComponent implements OnDestroy {
     const todoId = Number(this.activatedRoute.snapshot.params['id'])
     this.store.dispatch(loadTodoById({ id: todoId }))
 
-    this.todo$
-      .pipe(
-        filter((todo) => !!todo), // Filter out null or undefined values
-        takeUntil(this.destroy$),
-      )
-      .subscribe(() => {
+    this.todo$ = this.store.select(selectedTodo).pipe(takeUntil(this.destroy$))
+    this.todo$.subscribe((todo) => {
+      if (todo) {
         this.loading = false
-      })
+      }
+    })
   }
 
   async deleteTodo(id: number) {

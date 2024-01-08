@@ -1,4 +1,4 @@
-<div class="overflow-auto h-full grow">
+<div class="overflow-auto mt-4 px-2">
   <app-pagination />
 
   <!-- Make something a bit prettier than this. -->
@@ -9,7 +9,7 @@
       <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
           <div class="overflow-hidden">
-            <table class="min-w-full text-left text-sm font-light">
+            <table class="min-w-full table text-left text-sm font-light">
               <thead class="border-b font-medium dark:border-neutral-500">
                 <tr>
                   <th scope="col" class="px-6 py-4"></th>
@@ -21,7 +21,7 @@
                   <th scope="col" class="px-6 py-4"></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="overflow-auto">
                 @for (todo of todos$ | async; track todo.id) {
                   <tr
                     class="z-10 transition duration-300 ease-in-out hover:text-white hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600 cursor-pointer"

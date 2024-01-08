@@ -2,59 +2,82 @@
 @if (loading) {
   <div>loading . . .</div>
 } @else {
-  <main class="container h-full flex items-center justify-center">
-    <div class="flex flex-col max-h-full">
-      <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-          <div class="overflow-hidden">
-            <table
-              class="min-w-full text-left text-sm font-light border-2 border-black overflow-auto"
-            >
-              <thead class="border-b font-medium dark:border-neutral-500">
-                <tr>
-                  <th scope="col" class="px-6 py-4">Name</th>
-                  <th scope="col" class="px-6 py-4">Description</th>
-                  <th scope="col" class="px-6 py-4">Assigned to</th>
-                  <th scope="col" class="px-6 py-4">Created by</th>
-                  <th scope="col" class="px-6 py-4">Completed</th>
-                </tr>
-              </thead>
-              <tbody>
-                <ng-container *ngIf="todo$ | async as todo">
-                  <tr
-                    class="z-10 border-b transition duration-300 ease-in-out hover:text-white hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600"
-                  >
-                    <td class="whitespace-nowrap px-6 py-4">
-                      {{ todo.title }}
-                    </td>
-                    <td class="whitespace-nowrap px-6 py-4">
-                      {{ todo.description }}
-                    </td>
-                    <td class="whitespace-nowrap px-6 py-4">
-                      {{ todo.assignedTo.name }}
-                    </td>
-                    <td class="whitespace-nowrap px-6 py-4">
-                      {{ todo.createdBy.name }}
-                    </td>
-                    <td class="whitespace-nowrap px-6 py-4">
-                      {{ todo.completed ? 'Yes' : 'No' }}
-                    </td>
-                    <td class="whitespace-nowrap px-6 py-4">
-                      {{ todo.dueDate }}
-                    </td>
-                  </tr>
-                  <button
-                    (click)="deleteTodo(todo.id)"
-                    class="border-2 bg-slate-900 text-white p-1 hover:bg-white hover:text-slate-900 active:scale-95 transition-all w-full"
-                  >
-                    delete todo
-                  </button>
-                </ng-container>
-              </tbody>
-            </table>
+  @if (todo$ | async; as todo) {
+    <main
+      class="container h-full flex items-center justify-center overflow-auto"
+      [ngClass]="todo.completed ? 'bg-green-100' : 'bg-red-100'"
+    >
+      <section
+        class="bg-white shadow-lg p-6 rounded-lg lg:w-1/3 md:w-2/3 sm:w-3/4"
+      >
+        <div class="flex items-center border-b-2 border-b-black py-3">
+          <h1 class="text-lg font-semibold mr-2">Title:</h1>
+          <div class="overflow-y-auto max-h-24">
+            <p>{{ todo.title }}</p>
           </div>
         </div>
-      </div>
-    </div>
-  </main>
+        <div class="flex items-center border-b-2 border-b-black py-3">
+          <h1 class="text-lg font-semibold mr-2">Description</h1>
+
+          <div class="overflow-y-auto max-h-24">
+            <p>{{ todo.description }}</p>
+          </div>
+        </div>
+        <div class="flex items-center border-b-2 border-b-black py-3">
+          <h1 class="text-lg font-semibold mr-2">Assigned To:</h1>
+          <div>
+            <p>{{ todo.assignedTo.name }}</p>
+          </div>
+        </div>
+        <div class="flex items-center border-b-2 border-b-black py-3">
+          <h1 class="text-lg font-semibold mr-2">Created By:</h1>
+
+          <div>
+            <p>{{ todo.createdBy.name }}</p>
+          </div>
+        </div>
+        <div class="flex items-center border-b-2 border-b-black py-3">
+          <h1 class="text-lg font-semibold mr-2">Created Date:</h1>
+          <div>
+            <p>{{ todo.createdDate }}</p>
+          </div>
+        </div>
+        <div class="flex items-center border-b-2 border-b-black py-3">
+          <h1 class="text-lg font-semibold mr-2">Updated Date:</h1>
+
+          <div>
+            <p>{{ todo.updatedDate }}</p>
+          </div>
+        </div>
+        <div class="flex items-center border-b-2 border-b-black py-3">
+          <h1 class="text-lg font-semibold mr-2">Completed?</h1>
+
+          <div>
+            @if (todo.completed) {
+              <fa-icon
+                [icon]="faCheck"
+                size="lg"
+                class="text-green-600"
+              ></fa-icon>
+            } @else {
+              -
+            }
+          </div>
+        </div>
+
+        <button
+          (click)="deleteTodo(todo.id)"
+          class="border-2 bg-slate-900 text-white p-1 hover:bg-red-700 active:scale-95 transition-all w-full"
+        >
+          delete todo
+        </button>
+        <button
+          (click)="deleteTodo(todo.id)"
+          class="border-2 bg-green-700 text-white p-1 hover:bg-green-600 active:scale-95 transition-all w-full"
+        >
+          complete todo
+        </button>
+      </section>
+    </main>
+  }
 }

@@ -26,8 +26,6 @@ import { IReadUser } from '../../../../../../../api/dist/users'
     CommonCheckboxComponent,
     CommonInputComponent,
     ReactiveFormsModule,
-    NgIf,
-    NgFor,
     CommonModule,
     UserSelectDropdownComponent,
     FontAwesomeModule,
