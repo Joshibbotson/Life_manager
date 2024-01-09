@@ -28,5 +28,12 @@
       </button>
     }
   </div>
-  <div>Total: {{ count$ | async }}</div>
+  <div class="flex items-center justify-center">
+    <h4 class="mr-1">Total:</h4>
+    <div
+      class="flex items-center justify-center rounded-md bg-green-700 text-white w-8 h-8"
+    >
+      {{ count$ | async }}
+    </div>
+  </div>
 </div>
