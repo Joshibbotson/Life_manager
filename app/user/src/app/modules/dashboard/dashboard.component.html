@@ -2,7 +2,7 @@
   <div class="flex flex-col md:flex-row h-full container min-w-full">
     <!-- Sidebar -->
     <div
-      class="bg-gray-800 text-white md:flex flex-col border-2 border-red-500"
+      class="bg-gray-800 text-white md:flex flex-col"
       [ngClass]="getSideBarStyle()"
       id="sidebar"
     >
@@ -53,7 +53,7 @@
     </div>
     <!-- Main Content -->
 
-    <div class="w-full border-2 border-pink-600">
+    <div class="w-full">
       <router-outlet></router-outlet>
     </div>
   </div>

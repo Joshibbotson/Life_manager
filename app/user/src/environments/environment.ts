@@ -2,6 +2,8 @@
 // of --configuration = production
 
 export const environment = {
-  production: false,
-  apiBaseUrl: 'http://localhost:8080',
+  // production: false,
+  // apiBaseUrl: 'http://localhost:8080',
+  production: true,
+  apiBaseUrl: 'http://167.71.78.46:8080',
 }
