@@ -54,20 +54,17 @@ export class AuthService {
   }
 
   public logout() {
-    console.log('this logout')
     localStorage.removeItem('loginToken')
     localStorage.removeItem('user')
     this.router.navigate(['/login'])
   }
 
   public validateToken(token: string) {
-    console.log(token)
     const requestBody = { token: token }
     return this.http
       .post<{ valid: boolean }>(`${this.url}/user/validateToken`, requestBody)
       .pipe(
         map((response) => {
-          console.log(response.valid)
           return response.valid
         }),
       )

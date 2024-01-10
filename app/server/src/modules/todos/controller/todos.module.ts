@@ -25,7 +25,6 @@ export class TodosController {
     try {
       const { skip, take, filter, sort, term } = request.query
       const { id } = request.params
-      console.log(filter)
       let filters: IFilter
       let sorts: ISort
       if (typeof filter === 'string') {
@@ -55,9 +54,14 @@ export class TodosController {
     }
   }
 
-  public async updateRequest(request: any, response: any) {
-    const updateOrError = await this.todosModel.update(request, response)
-    return updateOrError
+  public async updateRequest(request: Request) {
+    try {
+      const { id } = request.body
+      const updateOrError = await this.todosModel.updateTodoById(id)
+      return updateOrError
+    } catch (error) {
+      throw error
+    }
   }
 
   public async deleteRequest(request: Request) {

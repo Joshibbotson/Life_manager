@@ -15,10 +15,6 @@ export class TodosModel {
     this.validate = validate
   }
 
-  public async update(request: any, response: any) {
-    return this.updateTodoById(request, response)
-  }
-
   public async createTodo(todoCreateRequest: any) {
     try {
       const todoEntity = new Todos()
@@ -134,17 +130,26 @@ export class TodosModel {
   }
 
   // Rudimentary, requires overall.
-  private async updateTodoById(req, res) {
+  public async updateTodoById(id: number) {
     try {
-      const todo = await AppDataSource.getRepository(Todos).findOneBy({
-        id: req.body.id,
+      const todoRepository = AppDataSource.manager.getRepository(Todos)
+      const todo = await todoRepository.findOne({
+        where: {
+          id: id,
+        },
+        relations: ['createdBy', 'assignedTo'],
       })
       todo.completed = !todo.completed
-      await AppDataSource.getRepository(Todos).save(todo)
-      return todo
+      console.log('update req:', todo)
+      if (!todo) {
+        throw new Error('Todo not found')
+      }
+      return {
+        data: todo,
+        error: null,
+      }
     } catch (error) {
-      console.error('Error fetching todos', error)
-      res.status(500).send('Internal Server Error')
+      throw error
     }
   }
 }

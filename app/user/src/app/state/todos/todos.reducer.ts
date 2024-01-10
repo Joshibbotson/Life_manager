@@ -1,10 +1,5 @@
 import { createReducer, on } from '@ngrx/store'
-import {
-  IReadTodo,
-  ITodo,
-  ITodoReadRequest,
-  ITodoReadResponse,
-} from '../../../../../api/dist/todos/index'
+import { IReadTodo } from '../../../../../api/dist/todos/index'
 import {
   loadTodosSuccess,
   createTodoSuccess,
@@ -14,7 +9,6 @@ import {
   loadTodoByIdFailure,
   reloadTodos,
   completeTodoSuccess,
-  resetTodosState,
 } from './todos.actions'
 
 export type TodoStatus = 'pending' | 'loading' | 'success' | 'failure'
@@ -69,9 +63,9 @@ export const todosReducer = createReducer(
   })),
 
   on(createTodoSuccess, (state, { todo }) => {
-    console.log('createTodoSuccess', todo)
     return {
       ...state,
+      count: state.count + 1,
       todos: [...state.todos, todo],
     }
   }),
@@ -82,6 +76,7 @@ export const todosReducer = createReducer(
     if (todoIndex !== -1) {
       return {
         ...state,
+        count: state.count - 1,
         todos: [...state.todos.filter((oldTodo) => oldTodo.id !== todo.id)],
       }
     }
@@ -119,5 +114,27 @@ export const todoReducer = createReducer(
     selectedTodo: null,
     error,
     status: status,
+  })),
+  on(completeTodoSuccess, (state, { todo }) => ({
+    ...state,
+    selectedTodo: todo,
+  })),
+
+  on(completeTodoSuccess, (state, { todo }) => {
+    if (state.selectedTodo && state.selectedTodo.id === todo.id) {
+      const updatedTodo = { ...state.selectedTodo, completed: todo.completed }
+
+      return {
+        ...state,
+        selectedTodo: updatedTodo,
+      }
+    }
+
+    return state
+  }),
+
+  on(deleteTodoSuccess, (state, { todo }) => ({
+    ...state,
+    selectedTodo: null,
   })),
 )

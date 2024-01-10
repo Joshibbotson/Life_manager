@@ -100,7 +100,6 @@ export class UserSelectDropdownComponent implements OnDestroy {
     this.selectedUserIdsArr.filter((user) => {
       return user.id !== id
     })
-    console.log(this.selectedUserIdsArr)
   }
 
   onListMouseDown() {

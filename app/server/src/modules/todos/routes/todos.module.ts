@@ -57,10 +57,8 @@ export class TodosRoutes {
     server.get(
       '/todos/read/:id',
       async (req: Request, res: Response, next: NextFunction) => {
-        console.log('Read by id: ', req.params)
         try {
           const read = await this.todosController.readRequest(req)
-          console.log('returned todo by id pre json: ', read)
           res.status(200).json(read)
         } catch (error) {
           res.status(500).json(TodoErrors.readTodoError + error)
@@ -71,18 +69,14 @@ export class TodosRoutes {
 
   // needs overhaul
   protected updateHandler(server: any) {
-    console.log('update called')
     return server.put(
       '/todos/update/:id',
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const updateRequest = await this.todosController.updateRequest(
-            req,
-            res,
-          )
+          console.log('updatetime')
+          const updateRequest = await this.todosController.updateRequest(req)
           res.status(200).json(updateRequest)
         } catch (error) {
-          console.log(error)
           res.status(500).json(TodoErrors.updateTodoError + error)
         }
       },

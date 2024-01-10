@@ -2,8 +2,10 @@
   <div class="flex flex-col md:flex-row h-full container min-w-full">
     <!-- Sidebar -->
     <div
-      class="bg-gray-800 text-white md:flex flex-col"
-      [ngClass]="getSideBarStyle()"
+      class="bg-gray-800 text-white md:flex sm:flex-col"
+      [ngClass]="
+        isSidebarOpen() ? 'sm:min-h-screen md:w-56' : 'sm:min-h-24 md:w-30'
+      "
       id="sidebar"
     >
       <div class="flex items-center justify-between">
@@ -15,7 +17,7 @@
           ></fa-icon>
         </a>
         <button class="py-2 px-3 text-center text-lg" (click)="toggleSidebar()">
-          @if (windowWidth > 767) {
+          @if (windowWidth >= 767) {
             <fa-icon
               [icon]="
                 isSidebarOpen() ? faChevronCircleLeft : faChevronCircleRight

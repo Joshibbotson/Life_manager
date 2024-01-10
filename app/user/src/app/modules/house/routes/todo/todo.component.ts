@@ -6,7 +6,11 @@ import { TodosRestService } from 'src/app/services/rest/todos/todos-rest.service
 import { IReadTodo, ITodo } from '../../../../../../../api/dist/todos'
 import { Store } from '@ngrx/store'
 import { selectedTodo } from 'src/app/state/todos/todos.selectors'
-import { loadTodoById } from 'src/app/state/todos/todos.actions'
+import {
+  completeTodo,
+  deleteTodo,
+  loadTodoById,
+} from 'src/app/state/todos/todos.actions'
 import { filter, map, takeUntil } from 'rxjs/operators'
 import { CommonModule, NgIf } from '@angular/common'
 import { faCheck, faX } from '@fortawesome/free-solid-svg-icons'
@@ -28,7 +32,6 @@ export class TodoComponent implements OnDestroy {
   private readonly destroy$: Subject<void> = new Subject<void>()
 
   constructor(
-    private rest: TodosRestService,
     private activatedRoute: ActivatedRoute,
     private links: LinksService,
     private router: Router,
@@ -39,7 +42,7 @@ export class TodoComponent implements OnDestroy {
     this.todo$.subscribe((x) => console.log('todo:', x))
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.destroy$.next()
     this.destroy$.complete()
   }
@@ -56,14 +59,12 @@ export class TodoComponent implements OnDestroy {
     })
   }
 
-  async deleteTodo(id: number) {
-    try {
-      ;(await this.rest.delete(id)).subscribe((x) => {
-        console.log(x)
-        this.router.navigate(['/todos'])
-      })
-    } catch (error) {
-      console.log(error)
-    }
+  public deleteTodo(id: number) {
+    this.store.dispatch(deleteTodo({ id: id }))
+    this.router.navigate(['/todos'])
+  }
+
+  public completeTodo(id: number): void {
+    this.store.dispatch(completeTodo({ id: id }))
   }
 }
