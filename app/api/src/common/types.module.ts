@@ -1,10 +1,8 @@
-import { DateTime } from 'luxon'
-
 export interface IMetaProperties {
   id: number
-  deletedDate: DateTime
-  createdDate: DateTime
-  updatedDate: DateTime
+  deletedDate: Date
+  createdDate: Date
+  updatedDate: Date
   version: number
 }
 

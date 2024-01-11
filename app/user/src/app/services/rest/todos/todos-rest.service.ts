@@ -5,11 +5,9 @@ import {
   IFilter,
   IReadTodo,
   ISort,
-  ITodo,
   ITodoCreateResponse,
   ITodoDeleteResponse,
   ITodoReadOneByIdResponse,
-  ITodoReadRequest,
   ITodoReadResponse,
   ITodoUpdateResponse,
 } from '../../../../../../api/dist/todos'
@@ -33,8 +31,8 @@ export class TodosRestService {
     )
   }
 
-  public update(id: any): Observable<ITodoUpdateResponse> {
-    const payload = { id }
+  public update(id: number, version: number): Observable<ITodoUpdateResponse> {
+    const payload = { id, version }
     return this.http.put(`${this.url}/todos/update/${id}`, payload).pipe(
       map((response: any) => {
         return response
@@ -49,7 +47,6 @@ export class TodosRestService {
     sort?: Partial<ISort>,
     term?: string,
   ): Observable<ITodoReadResponse> {
-    console.log(filter)
     const filterParam = filter
       ? `&filter=${encodeURIComponent(JSON.stringify(filter))}`
       : ''
@@ -57,8 +54,6 @@ export class TodosRestService {
       ? `&sort=${encodeURIComponent(JSON.stringify(sort))}`
       : ''
     const termParam = term ? `&term=${encodeURIComponent(term)}` : ''
-
-    console.log(filterParam)
     return this.http
       .get<ITodoReadResponse>(
         `${this.url}/todos/read?skip=${skip}&take=${take}${filterParam}${sortParam}${termParam}`,
@@ -67,15 +62,15 @@ export class TodosRestService {
   }
 
   public readById(id: number): Observable<ITodoReadOneByIdResponse> {
-    console.log('read by Id: ', id)
     return this.http
       .get<IReadTodo>(`${this.url}/todos/read/${id}`)
       .pipe(map((response: any) => response))
   }
 
   public delete(id: number): Observable<ITodoDeleteResponse> {
-    const payload = { id } // we need to change the ID to json by placing it in an object.
-    //this allow's angular's HTTP library to serialize the id.
+    const payload = { id }
+    // we need to change the ID to json by placing it in an object.
+    // this allow's angular's HTTP library to serialize the id.
     return this.http.put(`${this.url}/todos/delete/${id}`, payload).pipe(
       map((response: any) => {
         return response

@@ -4,13 +4,13 @@ import { Request } from 'express'
 import { ISort } from '../../../../../api/dist/users'
 export class TodosController {
   public static readonly moduleName: string = 'TodosController'
-
   private readonly todosModel: TodosModel
 
   constructor(todosModel: TodosModel) {
     this.todosModel = todosModel
   }
 
+  /** Create Request */
   public async createRequest(request: any) {
     try {
       const todoCreateRequest = request.body
@@ -21,6 +21,7 @@ export class TodosController {
     }
   }
 
+  /** Read Request */
   public async readRequest(request: Request) {
     try {
       const { skip, take, filter, sort, term } = request.query
@@ -54,16 +55,18 @@ export class TodosController {
     }
   }
 
+  /** Update Request */
   public async updateRequest(request: Request) {
     try {
-      const { id } = request.body
-      const updateOrError = await this.todosModel.updateTodoById(id)
+      const { id, version } = request.body
+      const updateOrError = await this.todosModel.updateTodoById(id, version)
       return updateOrError
     } catch (error) {
       throw error
     }
   }
 
+  /** Delete Request */
   public async deleteRequest(request: Request) {
     try {
       const deleteOrError = await this.todosModel.deleteTodoById(

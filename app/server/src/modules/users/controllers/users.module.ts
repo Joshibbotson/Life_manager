@@ -10,6 +10,7 @@ export class UsersController {
     this.usersModel = usersModel
   }
 
+  /** Create Request */
   public async createRequest(request: any) {
     try {
       const post = await this.usersModel.createUser(request.body)
@@ -19,6 +20,7 @@ export class UsersController {
     }
   }
 
+  /** Read Request */
   public async readRequest(request: Request) {
     try {
       const skip = request.query.skip
@@ -44,7 +46,8 @@ export class UsersController {
     }
   }
 
-  // should have permissions setup here
+  // should have permissions setup here & needs setting up properly overall.
+  /** Update Request */
   public async updateRequest(request: any) {
     try {
       // const updateOrError = await this.usersModel.updatedUserById(request.body.id)
@@ -55,6 +58,7 @@ export class UsersController {
   }
 
   // should have permissions setup here
+  /** Delete Request */
   public async deleteRequest(request: any) {
     try {
       const deleteOrError = await this.usersModel.deleteUserById(
@@ -66,10 +70,10 @@ export class UsersController {
     }
   }
 
+  /** Auth Request */
   public async authRequest(request: any) {
     try {
       const { email, password } = request.body
-
       const authOrError = await this.usersModel.authenticateLogin(
         email,
         password,
@@ -80,6 +84,7 @@ export class UsersController {
     }
   }
 
+  /** Validate Token Request */
   public async validateTokenRequest(request: any) {
     try {
       const { token } = request.body

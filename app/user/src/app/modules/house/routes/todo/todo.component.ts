@@ -15,6 +15,7 @@ import { filter, map, takeUntil } from 'rxjs/operators'
 import { CommonModule, NgIf } from '@angular/common'
 import { faCheck, faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { DateTime } from 'luxon'
 
 @Component({
   standalone: true,
@@ -64,7 +65,14 @@ export class TodoComponent implements OnDestroy {
     this.router.navigate(['/todos'])
   }
 
-  public completeTodo(id: number): void {
-    this.store.dispatch(completeTodo({ id: id }))
+  public completeTodo(id: number, version: number): void {
+    this.store.dispatch(completeTodo({ id: id, version: version }))
+  }
+
+  public formatDate(date: any) {
+    if (!date) {
+      return '-'
+    }
+    return DateTime.fromJSDate(new Date(date)).toFormat('dd-MM-yyyy')
   }
 }

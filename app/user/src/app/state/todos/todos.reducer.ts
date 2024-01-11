@@ -86,7 +86,7 @@ export const todosReducer = createReducer(
   on(completeTodoSuccess, (state, { todo }) => {
     const updatedTodos = state.todos.map((oldTodo) => {
       if (oldTodo.id === todo.id) {
-        return { ...oldTodo, completed: todo.completed }
+        return { ...oldTodo, completed: todo.completed, version: todo.version }
       }
       return oldTodo
     })
@@ -115,14 +115,14 @@ export const todoReducer = createReducer(
     error,
     status: status,
   })),
-  on(completeTodoSuccess, (state, { todo }) => ({
-    ...state,
-    selectedTodo: todo,
-  })),
 
   on(completeTodoSuccess, (state, { todo }) => {
     if (state.selectedTodo && state.selectedTodo.id === todo.id) {
-      const updatedTodo = { ...state.selectedTodo, completed: todo.completed }
+      const updatedTodo = {
+        ...state.selectedTodo,
+        completed: todo.completed,
+        version: todo.version,
+      }
 
       return {
         ...state,

@@ -24,6 +24,7 @@ export class TodosRoutes {
   private readonly updateRoute = this.updateHandler(server)
   private readonly deleteRoute = this.deleteHandler(server)
 
+  /** Create route */
   protected createHandler(server: any) {
     return server.post(
       '/todos/create',
@@ -53,7 +54,6 @@ export class TodosRoutes {
         }
       },
     )
-
     server.get(
       '/todos/read/:id',
       async (req: Request, res: Response, next: NextFunction) => {
@@ -67,13 +67,13 @@ export class TodosRoutes {
     )
   }
 
-  // needs overhaul
+  // needs overhaul, only change a todo's completion status currently.
+  /** Update route */
   protected updateHandler(server: any) {
     return server.put(
       '/todos/update/:id',
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          console.log('updatetime')
           const updateRequest = await this.todosController.updateRequest(req)
           res.status(200).json(updateRequest)
         } catch (error) {
@@ -83,13 +83,13 @@ export class TodosRoutes {
     )
   }
 
+  /** Delete route */
   protected deleteHandler(server: any) {
     return server.put(
       '/todos/delete/:id',
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           const deleteRequest = await this.todosController.deleteRequest(req)
-          console.log(deleteRequest)
           res.status(200).json(deleteRequest)
         } catch (error) {
           res.status(500).json(TodoErrors.deleteTodoError + error)

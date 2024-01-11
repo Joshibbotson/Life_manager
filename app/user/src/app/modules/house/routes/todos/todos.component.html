@@ -30,12 +30,12 @@
               @if (!todo.completed) {
                 <button
                   class="items-center border border-black rounded-full w-7 h-7 disabled:text-gray-400 disabled:bg-white hover:bg-slate-500 hover:border-gray-100"
-                  (click)="completeTodo(todo.id)"
+                  (click)="completeTodo(todo.id, todo.version)"
                 ></button>
               } @else if (todo.completed) {
                 <button
                   class="items-center border border-green-200 rounded-full w-7 h-7 disabled:text-gray-400 disabled:bg-white bg-green-400 hover:border-gray-100"
-                  (click)="completeTodo(todo.id)"
+                  (click)="completeTodo(todo.id, todo.version)"
                 >
                   <fa-icon
                     [icon]="faCheck"
@@ -71,7 +71,7 @@
               (click)="navigate(todo.id)"
               [ngClass]="{ 'line-through text-gray-400': todo.completed }"
             >
-              {{ todo.dueDate }}
+              {{ formatDate(todo.dueDate) }}
             </td>
 
             <td

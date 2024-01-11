@@ -71,4 +71,12 @@ export class LoginComponent implements OnDestroy {
         })
     }
   }
+
+  testLogin(): void {
+    this.loginForm.setValue({
+      email: 'test@hotmail.com',
+      password: 'testerPassword12345!',
+    })
+    this.login()
+  }
 }

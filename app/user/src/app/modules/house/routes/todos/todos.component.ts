@@ -16,6 +16,7 @@ import { faCheck, faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { selectCurrentUser } from 'src/app/state/auth/auth.selectors'
 import { IReadUser } from '../../../../../../../api/dist/users'
+import { DateTime } from 'luxon'
 
 @Component({
   standalone: true,
@@ -152,7 +153,15 @@ export class TodosComponent implements OnInit, OnDestroy {
     this.store.dispatch(TodosActions.deleteTodo({ id }))
   }
 
-  public completeTodo(id: number) {
-    this.store.dispatch(TodosActions.completeTodo({ id }))
+  public completeTodo(id: number, version: number) {
+    console.log('called complete')
+    this.store.dispatch(TodosActions.completeTodo({ id, version }))
+  }
+
+  public formatDate(date: any) {
+    if (!date) {
+      return '-'
+    }
+    return DateTime.fromJSDate(new Date(date)).toFormat('dd-MM-yyyy')
   }
 }

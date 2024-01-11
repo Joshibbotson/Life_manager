@@ -1,9 +1,7 @@
-import { DateTime } from 'luxon'
 import { CreateTodoSchema } from '../../../../../api/dist/todos/actions'
 import { Validate } from '../../../../../api/dist/validation/validation'
 import { AppDataSource } from '../../../data-source'
 import { Todos } from '../../../entities/todos'
-import { Users } from '../../../entities/users'
 import { ITodoQueryOptions } from '../../../../../api/dist/todos/types'
 import { SelectQueryBuilder } from 'typeorm'
 
@@ -18,14 +16,12 @@ export class TodosModel {
   public async createTodo(todoCreateRequest: any) {
     try {
       const todoEntity = new Todos()
-      console.log('todoCreateRequest: ', todoCreateRequest)
       todoEntity.title = todoCreateRequest.title
       todoEntity.description = todoCreateRequest.description
       todoEntity.assignedTo = todoCreateRequest.assignedTo[0]
       todoEntity.createdBy = todoCreateRequest.createdBy
       todoEntity.completed = todoCreateRequest.completed
       todoEntity.dueDate = new Date(todoCreateRequest.dueDate)
-      console.log('formattedtodo: ', todoEntity)
       const readOrError = await this.validate.validateSchema(
         todoEntity,
         CreateTodoSchema,
@@ -92,7 +88,6 @@ export class TodosModel {
   }
 
   public async getTodoById(id: number) {
-    console.log('got todo by id')
     try {
       const todoRepository = AppDataSource.manager.getRepository(Todos)
       const todo = await todoRepository.findOne({
@@ -129,8 +124,9 @@ export class TodosModel {
     }
   }
 
-  // Rudimentary, requires overall.
-  public async updateTodoById(id: number) {
+  /* Rudimentary, requires over haul as only updates completed, ideally we want to be able
+  to update the entire todo */
+  public async updateTodoById(id: number, version: number) {
     try {
       const todoRepository = AppDataSource.manager.getRepository(Todos)
       const todo = await todoRepository.findOne({
@@ -139,15 +135,17 @@ export class TodosModel {
         },
         relations: ['createdBy', 'assignedTo'],
       })
-      todo.completed = !todo.completed
-      console.log('update req:', todo)
       if (!todo) {
         throw new Error('Todo not found')
       }
-      return {
-        data: todo,
-        error: null,
+
+      if (todo.version !== version) {
+        throw new Error('The todo item has been modified by someone else')
       }
+
+      todo.completed = !todo.completed
+      await todoRepository.save(todo)
+      return todo
     } catch (error) {
       throw error
     }

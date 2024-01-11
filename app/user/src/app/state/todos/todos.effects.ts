@@ -103,7 +103,7 @@ export class TodosEffects {
     this.actions$.pipe(
       ofType(completeTodo),
       mergeMap((action) =>
-        this.todosService.update(action.id).pipe(
+        this.todosService.update(action.id, action.version).pipe(
           map((todo) => completeTodoSuccess({ todo })),
           catchError((error) => of(error)),
         ),

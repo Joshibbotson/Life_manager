@@ -67,7 +67,7 @@ export const createTodoSuccess = createAction(
 
 export const completeTodo = createAction(
   '[Todos] complete Todo',
-  props<{ id: number }>(),
+  props<{ id: number; version: number }>(),
 )
 export const completeTodoSuccess = createAction(
   '[Todos] complete Todo Success',

@@ -55,6 +55,7 @@ export class UsersModel {
     }
   }
 
+  /** Get all users that aren't deleted with pagination. */
   public async getUsers(skip: number, take: number) {
     try {
       const todoRepository = AppDataSource.manager.getRepository(Users)
@@ -78,6 +79,7 @@ export class UsersModel {
     }
   }
 
+  /** Get used via associated ID */
   public async getUserById(id: number) {
     try {
       const userRepository = AppDataSource.manager.getRepository(Users)
@@ -95,6 +97,7 @@ export class UsersModel {
     }
   }
 
+  /** Search users via name */
   public async searchUsers(searchTerm: string, take: number) {
     if (!searchTerm) {
       throw new Error('Search term is required')
@@ -134,6 +137,7 @@ export class UsersModel {
     }
   }
 
+  // TODO: Implement.
   // private async updateUserById(req, res) {
   //   try {
   //     const todo = await AppDataSource.getRepository(Users).findOneBy({
@@ -148,7 +152,7 @@ export class UsersModel {
   //   }
   // }
 
-  // refactor this...?
+  /** Handle auth login */
   public async authenticateLogin(email: string, password: string) {
     console.log(email, password)
     try {
@@ -186,6 +190,7 @@ export class UsersModel {
     }
   }
 
+  /** Handle web token validation */
   public async validateTokenRequest(token: string) {
     try {
       const decoded = await jwt.verify(token, process.env.SECRET_WEBTKNKEY)
@@ -198,6 +203,7 @@ export class UsersModel {
     }
   }
 
+  /** Generate a fresh token */
   private generateLoginToken(email: string): string {
     return jwt.sign({ email }, process.env.SECRET_WEBTKNKEY, {
       expiresIn: '24h',
