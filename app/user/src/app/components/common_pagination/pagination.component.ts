@@ -5,7 +5,7 @@ import { Observable, combineLatest, map } from 'rxjs'
 import { first, take, tap } from 'rxjs/operators'
 import { selectTodos } from 'src/app/state/todos/todos.selectors'
 import { Subject } from 'rxjs'
-import { CommonModule, NgFor } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import { selectCurrentUser } from 'src/app/state/auth/auth.selectors'
 import { IReadUser } from '../../../../../api/dist/users'
 
@@ -81,7 +81,6 @@ export class PaginationComponent implements OnInit, OnDestroy {
             take: todos.take,
             filter: {
               createdById: this.loggedInUser?.id,
-              assignedToId: this.loggedInUser?.id,
             },
             sort: undefined,
             term: '',
@@ -98,7 +97,6 @@ export class PaginationComponent implements OnInit, OnDestroy {
           take: take,
           filter: {
             createdById: this.loggedInUser?.id,
-            assignedToId: this.loggedInUser?.id,
           },
         }),
       )
@@ -116,7 +114,6 @@ export class PaginationComponent implements OnInit, OnDestroy {
             take: take,
             filter: {
               createdById: this.loggedInUser?.id,
-              assignedToId: this.loggedInUser?.id,
             },
             sort: undefined,
             term: '',
@@ -134,7 +131,6 @@ export class PaginationComponent implements OnInit, OnDestroy {
             take: take,
             filter: {
               createdById: this.loggedInUser?.id,
-              assignedToId: this.loggedInUser?.id,
             },
             sort: undefined,
             term: '',

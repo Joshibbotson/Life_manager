@@ -26,10 +26,6 @@ export class Todos extends CommonEntity {
   @JoinColumn()
   createdBy: number
 
-  @ManyToOne(() => Users)
-  @JoinColumn()
-  assignedTo: number
-
   @Column()
   completed: boolean
 

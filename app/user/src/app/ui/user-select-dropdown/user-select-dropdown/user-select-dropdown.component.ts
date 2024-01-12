@@ -56,7 +56,7 @@ export class UserSelectDropdownComponent implements OnDestroy {
         map((users) => {
           return Array.isArray(users.data)
             ? users.data.map(
-                (user: { name: any; id: any }) =>
+                (user: { name: string; id: number }) =>
                   ({ name: user.name, id: user.id }) as iUserRef,
               )
             : []

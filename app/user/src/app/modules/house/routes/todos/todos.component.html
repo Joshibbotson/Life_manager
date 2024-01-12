@@ -13,9 +13,9 @@
           <th scope="col" class="px-6 py-4"></th>
           <th scope="col" class="px-6 py-4">Title</th>
           <th scope="col" class="px-6 py-4">Description</th>
-          <th scope="col" class="px-6 py-4">Assigned To</th>
+          <!-- <th scope="col" class="px-6 py-4">Assigned To</th> -->
           <th scope="col" class="px-6 py-4">Due Date</th>
-          <th scope="col" class="px-6 py-4">Completed</th>
+          <!-- <th scope="col" class="px-6 py-4">Completed</th> -->
           <th scope="col" class="px-6 py-4"></th>
         </tr>
       </thead>
@@ -59,13 +59,13 @@
             >
               {{ todo.description }}
             </td>
-            <td
+            <!-- <td
               class="whitespace-nowrap px-6 py-4"
               (click)="navigate(todo.id)"
               [ngClass]="{ 'line-through text-gray-400': todo.completed }"
             >
               {{ todo.assignedTo.name }}
-            </td>
+            </td> -->
             <td
               class="whitespace-nowrap px-6 py-4"
               (click)="navigate(todo.id)"
@@ -74,7 +74,7 @@
               {{ formatDate(todo.dueDate) }}
             </td>
 
-            <td
+            <!-- <td
               class="whitespace-nowrap px-6 py-4"
               (click)="navigate(todo.id)"
               [ngClass]="{ 'line-through text-gray-400': todo.completed }"
@@ -88,7 +88,7 @@
               } @else {
                 -
               }
-            </td>
+            </td> -->
             <td class="whitespace-nowrap px-6 py-4">
               <button
                 class="text-black p-2 hover:text-white rounded-b-md"
@@ -116,8 +116,8 @@
       </div>
     } @else {
       <div class="w-full bg-white rounded-md" [formGroup]="todoFormGroup">
-        <tr class="flex items-center">
-          <td class="whitespace-nowrap px-6 py-4 w-100 w-1/7">
+        <tr class="flex flex-col md:flex-row lg:flex-row md:items-center">
+          <td class="whitespace-nowrap px-6 py-0 md:py-4 w-100 w-1/7">
             <common-input
               formControlName="title"
               ngDefaultControl
@@ -125,7 +125,7 @@
               label="Title"
             />
           </td>
-          <td class="whitespace-nowrap px-6 py-4 w-100">
+          <td class="whitespace-nowrap px-6 py-0 md:py-4 w-100">
             <common-input
               formControlName="description"
               ngDefaultControl
@@ -133,13 +133,13 @@
               label="Description"
             />
           </td>
-          <td class="whitespace-nowrap px-6 py-4 w-100">
+          <!-- <td class="whitespace-nowrap px-6 py-4 w-100">
             <user-select-dropdown
               label="Assigned to"
               [control]="assignedToControlGroup"
             />
-          </td>
-          <td class="whitespace-nowrap px-6 py-4 w-100">
+          </td> -->
+          <td class="whitespace-nowrap px-6 py-0 md:py-4 w-100">
             <common-input
               type="date"
               formControlName="dueDate"

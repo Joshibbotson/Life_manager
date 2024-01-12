@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint-user": "eslint app/user",
-    "lint-api": "eslint app/api",
-    "lint-server": "eslint app/server",
+    "lint-user": "eslint app/user/src",
+    "lint-api": "eslint app/api/src",
+    "lint-server": "eslint app/server/src",
     "lint": "npm-run-all --parallel lint-user lint-api lint-server",
     "format": "prettier --write \"**/*.{js,ts,json,css}\""
   },

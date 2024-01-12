@@ -6,8 +6,8 @@ export const initialState: boolean = false
 
 const _sidebarReducer = createReducer(
   initialState,
-  on(SidebarActions.openSidebar, (state) => true),
-  on(SidebarActions.closeSidebar, (state) => false),
+  on(SidebarActions.openSidebar, () => true),
+  on(SidebarActions.closeSidebar, () => false),
 )
 
 export function sidebarReducer(state: boolean | undefined, action: Action) {

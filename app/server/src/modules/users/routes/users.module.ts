@@ -149,9 +149,19 @@ export class UsersRoutes {
             res.status(200).json({ valid: true, message: 'Token is valid' })
           }
         } catch (error) {
-          res
-            .status(500)
-            .json({ error: UserErrors.validateTknError + error.message })
+          if (error.expiredAt) {
+            res
+              .status(201)
+              .json({
+                valid: false,
+                message: 'Invalid token',
+                expiredAt: error.expiredAt,
+              })
+          } else {
+            res
+              .status(500)
+              .json({ error: UserErrors.validateTknError + error.message })
+          }
         }
       },
     )

@@ -193,12 +193,10 @@ export class UsersModel {
   /** Handle web token validation */
   public async validateTokenRequest(token: string) {
     try {
+      console.log('decoded token: ', token)
       const decoded = await jwt.verify(token, process.env.SECRET_WEBTKNKEY)
       return decoded
     } catch (error) {
-      if (error.expiredAt) {
-        throw String(`Token Expired at: ${error.expiredAt}`)
-      }
       throw error
     }
   }

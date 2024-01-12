@@ -7,7 +7,7 @@ import { IReadTodo, ITodo } from '../../../../../../../api/dist/todos'
 import * as TodosActions from '../../../../state/todos/todos.actions'
 import { Observable, Subject, first, map, take, tap } from 'rxjs'
 import { selectTodos } from 'src/app/state/todos/todos.selectors'
-import { PaginationComponent } from 'src/app/components/pagination/pagination.component'
+import { PaginationComponent } from 'src/app/components/common_pagination/pagination.component'
 import { CommonCheckboxComponent } from 'src/app/ui/common-checkbox/common-checkbox.component'
 import { CommonInputComponent } from 'src/app/ui/common-input/common-input.component'
 import { CommonModule, NgFor, NgIf } from '@angular/common'
@@ -42,7 +42,6 @@ export class TodosComponent implements OnInit, OnDestroy {
   readonly titleControlGroup: FormControl = new FormControl('')
   readonly descriptionControlGroup: FormControl = new FormControl('')
   readonly createdByControlGroup: FormControl = new FormControl('')
-  readonly assignedToControlGroup: FormControl = new FormControl('')
   readonly dueDateControlGroup: FormControl = new FormControl('')
   readonly completedControlGroup: FormControl<boolean | null> = new FormControl(
     false,
@@ -51,7 +50,6 @@ export class TodosComponent implements OnInit, OnDestroy {
     title: this.titleControlGroup,
     description: this.descriptionControlGroup,
     createdBy: this.createdByControlGroup,
-    assignedTo: this.assignedToControlGroup,
     completed: this.completedControlGroup,
     dueDate: this.dueDateControlGroup,
   })
@@ -93,7 +91,6 @@ export class TodosComponent implements OnInit, OnDestroy {
               filter: this.loggedInUser?.id
                 ? {
                     createdById: this.loggedInUser?.id,
-                    assignedToId: this.loggedInUser?.id,
                   }
                 : undefined,
               sort: {},

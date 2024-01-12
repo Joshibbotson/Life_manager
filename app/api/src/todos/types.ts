@@ -12,7 +12,6 @@ export interface ITodo extends IMetaProperties {
   title: string
   description: string
   createdBy: number
-  assignedTo: number
   dueDate: Date | null
   completed: string
 }
@@ -21,7 +20,6 @@ export interface IReadTodo extends IMetaProperties {
   title: string
   description: string
   createdBy: IReadUser
-  assignedTo: IReadUser
   dueDate: DateTime | null
   completed: string
 }
@@ -31,7 +29,6 @@ export interface ITodoCreateResponse extends IReadTodo {}
 
 export interface IFilter {
   createdById: number
-  assignedToId: number
 }
 export interface ISort {}
 export interface ITodoReadRequest extends IMetaReadRequest<IFilter, ISort> {}

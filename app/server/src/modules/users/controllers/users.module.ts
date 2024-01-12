@@ -87,6 +87,7 @@ export class UsersController {
   /** Validate Token Request */
   public async validateTokenRequest(request: any) {
     try {
+      console.log('controller token')
       const { token } = request.body
       const authOrError = await this.usersModel.validateTokenRequest(token)
       return authOrError

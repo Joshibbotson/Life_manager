@@ -12,7 +12,6 @@ import {
   loadTodoByIdSuccess,
   deleteTodo,
   deleteTodoSuccess,
-  reloadTodos,
   completeTodo,
   completeTodoSuccess,
 } from './todos.actions'

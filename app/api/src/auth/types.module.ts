@@ -18,4 +18,5 @@ export interface IValidateTknRequest {
 export interface IValidateTknResponse {
   valid: boolean
   message: string
+  expiredAt?: string
 }

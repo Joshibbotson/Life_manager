@@ -1,6 +1,5 @@
 import { NgIf } from '@angular/common'
 import { Component, EventEmitter, Input, Output } from '@angular/core'
-import { FormControl, FormGroup } from '@angular/forms'
 
 @Component({
   selector: 'common-input',
@@ -17,7 +16,7 @@ export class CommonInputComponent {
   @Input() placeholder: string = ''
   @Input() required: boolean = false
 
-  @Output() inputValue = new EventEmitter<any>()
+  @Output() inputValue = new EventEmitter<Event>()
 
   public onInputChange(value: Event) {
     this.inputValue.emit(value)

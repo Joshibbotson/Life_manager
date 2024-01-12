@@ -12,9 +12,6 @@ export class CreateTodoSchema {
   @IsNumber()
   createdBy: number
 
-  @IsNumber()
-  assignedTo: number
-
   @IsDate()
   dueDate: Date | null
 
@@ -31,9 +28,6 @@ export class ReadTodoSchema {
 
   @IsNumber()
   createdBy: IUserReadRequest
-
-  @IsNumber()
-  assignedTo: IUserReadRequest
 
   @IsDate()
   dueDate: DateTime | null

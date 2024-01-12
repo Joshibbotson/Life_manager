@@ -12,7 +12,6 @@ export class Todos1694330560997 implements MigrationInterface {
             "title" varchar(100) NOT NULL,
             "description" text NOT NULL,
             "createdBy" int NOT NULL,
-            "assignedTo" int NOT NULL,
             "completed" boolean NOT NULL,
             "dueDate" TIMESTAMP WITH TIME ZONE,
 

@@ -104,13 +104,13 @@ export const todosReducer = createReducer(
 
 export const todoReducer = createReducer(
   initialTodoState,
-  on(loadTodoByIdSuccess, (state, { todo, error, status }) => ({
+  on(loadTodoByIdSuccess, (_, { todo, error, status }) => ({
     selectedTodo: todo,
     error: error,
     status: status,
   })),
 
-  on(loadTodoByIdFailure, (state, { error, status }) => ({
+  on(loadTodoByIdFailure, (_, { error, status }) => ({
     selectedTodo: null,
     error,
     status: status,
@@ -133,7 +133,7 @@ export const todoReducer = createReducer(
     return state
   }),
 
-  on(deleteTodoSuccess, (state, { todo }) => ({
+  on(deleteTodoSuccess, (state) => ({
     ...state,
     selectedTodo: null,
   })),

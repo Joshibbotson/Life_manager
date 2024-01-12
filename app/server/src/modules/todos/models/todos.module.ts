@@ -18,7 +18,6 @@ export class TodosModel {
       const todoEntity = new Todos()
       todoEntity.title = todoCreateRequest.title
       todoEntity.description = todoCreateRequest.description
-      todoEntity.assignedTo = todoCreateRequest.assignedTo[0]
       todoEntity.createdBy = todoCreateRequest.createdBy
       todoEntity.completed = todoCreateRequest.completed
       todoEntity.dueDate = new Date(todoCreateRequest.dueDate)
@@ -34,7 +33,7 @@ export class TodosModel {
         const savedTodo = await todosRepository.save(todoEntity)
         const todo = await AppDataSource.getRepository(Todos).findOne({
           where: { id: savedTodo.id },
-          relations: ['createdBy', 'assignedTo'],
+          relations: ['createdBy'],
         })
         return todo
       }
@@ -50,20 +49,13 @@ export class TodosModel {
       let query: SelectQueryBuilder<Todos> =
         todoRepository.createQueryBuilder('todo')
 
-      query = query
-        .leftJoinAndSelect('todo.createdBy', 'createdBy')
-        .leftJoinAndSelect('todo.assignedTo', 'assignedTo')
+      query = query.leftJoinAndSelect('todo.createdBy', 'createdBy')
 
       query = query.where('todo.deletedDate IS NULL')
       if (queryOpts.filter !== undefined) {
         if (queryOpts.filter.createdById) {
           query = query.andWhere('todo.createdBy = :createdById', {
             createdById: queryOpts.filter.createdById,
-          })
-        }
-        if (queryOpts.filter.assignedToId) {
-          query = query.orWhere('todo.assignedTo = :assignedToId', {
-            assignedToId: queryOpts.filter.assignedToId,
           })
         }
       }
@@ -94,7 +86,7 @@ export class TodosModel {
         where: {
           id: id,
         },
-        relations: ['createdBy', 'assignedTo'],
+        relations: ['createdBy'],
       })
       if (!todo) {
         throw new Error('Todo not found')
@@ -133,7 +125,7 @@ export class TodosModel {
         where: {
           id: id,
         },
-        relations: ['createdBy', 'assignedTo'],
+        relations: ['createdBy'],
       })
       if (!todo) {
         throw new Error('Todo not found')
