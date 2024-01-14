@@ -2,12 +2,17 @@ import { TodosModel } from '../models/todos.module'
 import { IFilter, ITodoQueryOptions } from '../../../../../api/dist/todos/types'
 import { Request } from 'express'
 import { ISort } from '../../../../../api/dist/users'
+import { Validate } from '../../../../../api/dist/validation/validation'
 export class TodosController {
   public static readonly moduleName: string = 'TodosController'
   private readonly todosModel: TodosModel
+  public readonly validate: Validate
 
-  constructor(todosModel: TodosModel) {
+
+  constructor(todosModel: TodosModel, validate: Validate) {
     this.todosModel = todosModel
+    this.validate = validate
+
   }
 
   /** Create Request */

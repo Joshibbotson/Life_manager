@@ -21,13 +21,9 @@ export class AuthGuardService {
       if (loginToken) {
         this.authService.validateToken(loginToken).subscribe((tkn) => {
           if (tkn) {
-            console.log('true token exists')
             resolve(true)
           } else {
-            console.log('false token none existant')
-
             this.authService.logout()
-
             resolve(false)
           }
         })

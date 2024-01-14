@@ -5,18 +5,19 @@ import { Store } from '@ngrx/store'
 import { Ilinks, LinksService } from 'src/app/services/links/links.service'
 import { IReadTodo, ITodo } from '../../../../../../../api/dist/todos'
 import * as TodosActions from '../../../../state/todos/todos.actions'
-import { Observable, Subject, first, map, take, tap } from 'rxjs'
+import { Observable, Subject, Subscription, first, map, take, tap } from 'rxjs'
 import { selectTodos } from 'src/app/state/todos/todos.selectors'
 import { PaginationComponent } from 'src/app/components/common_pagination/pagination.component'
 import { CommonCheckboxComponent } from 'src/app/ui/common-checkbox/common-checkbox.component'
 import { CommonInputComponent } from 'src/app/ui/common-input/common-input.component'
-import { CommonModule, NgFor, NgIf } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import { UserSelectDropdownComponent } from '../../../../ui/user-select-dropdown/user-select-dropdown/user-select-dropdown.component'
 import { faCheck, faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { selectCurrentUser } from 'src/app/state/auth/auth.selectors'
 import { IReadUser } from '../../../../../../../api/dist/users'
 import { DateTime } from 'luxon'
+import { WindowSizeService } from 'src/app/services/window-service/window-size.service'
 
 @Component({
   standalone: true,
@@ -35,6 +36,9 @@ import { DateTime } from 'luxon'
 export class TodosComponent implements OnInit, OnDestroy {
   readonly faCheck = faCheck
   readonly faCross = faX
+  public windowWidth: number = window.innerWidth
+  public windowHeight: number = window.innerHeight
+  private windowSizeSubscription!: Subscription
 
   public loading = true
   public homeLinks: Ilinks[] = [{ url: '/todos', name: 'Todos' }]
@@ -62,9 +66,16 @@ export class TodosComponent implements OnInit, OnDestroy {
     private links: LinksService,
     private router: Router,
     private store: Store,
+    private windowSizeService: WindowSizeService,
   ) {}
 
   ngOnInit() {
+    this.windowSizeSubscription = this.windowSizeService.windowSize.subscribe(
+      (size) => {
+        this.windowWidth = size.width
+        this.windowHeight = size.height
+      },
+    )
     this.links.updateLinks(this.homeLinks)
     this.updatedCurrentUser()
     this.loadTodos()
@@ -76,6 +87,10 @@ export class TodosComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next()
     this.destroy$.complete()
+
+    if (this.windowSizeSubscription) {
+      this.windowSizeSubscription.unsubscribe()
+    }
   }
 
   public loadTodos() {

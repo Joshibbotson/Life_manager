@@ -1,6 +1,6 @@
 <form class="container flex flex-col">
   @if (label) {
-    <label for="commonInput">{{ label }}</label>
+    <label for="commonInput" class="font-bold">{{ label }}</label>
   }
   <input
     name="commonInput"
@@ -10,7 +10,7 @@
     [readonly]="readOnly"
     [placeholder]="placeholder"
     [required]="required"
-    class="border-solid border-2 rounded w-full"
+    class="w-full rounded border-2 border-solid"
     (change)="onInputChange($event)"
   />
 </form>

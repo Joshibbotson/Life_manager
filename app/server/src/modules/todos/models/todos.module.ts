@@ -4,6 +4,7 @@ import { AppDataSource } from '../../../data-source'
 import { Todos } from '../../../entities/todos'
 import { ITodoQueryOptions } from '../../../../../api/dist/todos/types'
 import { SelectQueryBuilder } from 'typeorm'
+import { DateTime } from 'luxon'
 
 export class TodosModel {
   public static readonly moduleName: string = 'TodosModel'
@@ -13,6 +14,7 @@ export class TodosModel {
     this.validate = validate
   }
 
+  // FIXJOB : Add output validation.
   public async createTodo(todoCreateRequest: any) {
     try {
       const todoEntity = new Todos()

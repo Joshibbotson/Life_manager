@@ -46,7 +46,6 @@ export class DashboardComponent implements OnInit {
         this.windowHeight = size.height
       },
     )
-    console.log(this.windowWidth)
   }
 
   public ngOnInit(): void {

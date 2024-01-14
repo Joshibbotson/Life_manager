@@ -7,6 +7,10 @@ module.exports = {
       minHeight: {
         90: '90svh',
       },
+      maxWidth: {
+        xxs: '5rem',
+        xxxs: '1rem',
+      },
     },
   },
   plugins: [],

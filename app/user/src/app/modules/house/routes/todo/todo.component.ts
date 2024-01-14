@@ -2,17 +2,16 @@ import { Component, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Observable, Subject } from 'rxjs'
 import { Ilinks, LinksService } from 'src/app/services/links/links.service'
-import { TodosRestService } from 'src/app/services/rest/todos/todos-rest.service'
-import { IReadTodo, ITodo } from '../../../../../../../api/dist/todos'
 import { Store } from '@ngrx/store'
+import { IReadTodo } from '../../../../../../../api/dist/todos'
 import { selectedTodo } from 'src/app/state/todos/todos.selectors'
 import {
   completeTodo,
   deleteTodo,
   loadTodoById,
 } from 'src/app/state/todos/todos.actions'
-import { filter, map, takeUntil } from 'rxjs/operators'
-import { CommonModule, NgIf } from '@angular/common'
+import { takeUntil } from 'rxjs/operators'
+import { CommonModule } from '@angular/common'
 import { faCheck, faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { DateTime } from 'luxon'
@@ -40,7 +39,6 @@ export class TodoComponent implements OnDestroy {
   ) {
     this.links.updateLinks(this.homeLinks)
     this.loadTodo()
-    this.todo$.subscribe((x) => console.log('todo:', x))
   }
 
   public ngOnDestroy(): void {

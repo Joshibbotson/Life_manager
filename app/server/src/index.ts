@@ -18,7 +18,7 @@ server.use(
 )
 
 const todosModel = new TodosModel(new Validate())
-const todosController = new TodosController(todosModel)
+const todosController = new TodosController(todosModel, new Validate())
 const todosRoutes = new TodosRoutes(todosController)
 
 const usersModel = new UsersModel(new Validate())
