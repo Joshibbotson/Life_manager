@@ -13,9 +13,9 @@ export const server = express()
 server.use(express.json())
 server.use(
   cors({
-    origin: '*',
-  }),
-)
+    origin: ['http://localhost:4200', 'http://167.71.78.46:4200'],
+  })
+);
 
 const todosModel = new TodosModel(new Validate())
 const todosController = new TodosController(todosModel, new Validate())

@@ -26,6 +26,7 @@ export class TodoComponent implements OnDestroy {
   readonly faCheck = faCheck
   readonly faCross = faX
 
+  public editing: boolean = false
   public todo$: Observable<IReadTodo | null> = this.store.select(selectedTodo)
   public homeLinks: Ilinks[] = [{ url: '/todos', name: 'Todos' }]
   public loading = true
@@ -65,6 +66,10 @@ export class TodoComponent implements OnDestroy {
 
   public completeTodo(id: number, version: number): void {
     this.store.dispatch(completeTodo({ id: id, version: version }))
+  }
+
+  public toggleEditing() {
+    this.editing = !this.editing
   }
 
   public formatDate(date: any) {
