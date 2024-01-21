@@ -9,10 +9,15 @@
     "server": "nodemon --exec ts-node src/index.ts",
     "dist-server": "tsc",
     "typeorm": "typeorm-ts-node-commonjs",
-    "migration": "ts-node ./node-scripts/custom-migration.ts"
+    "migration": "ts-node ./node-scripts/custom-migration.ts",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.11",
     "@types/node": "^16.11.10",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4",
     "ts-node": "10.7.0",
     "typescript": "4.5.2"
   },
@@ -22,6 +27,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.4.0",
     "reflect-metadata": "^0.1.13",

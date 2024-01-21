@@ -1,4 +1,6 @@
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   JoinColumn,
@@ -26,10 +28,26 @@ export class Todos extends CommonEntity {
   @JoinColumn()
   createdBy: number
 
+  @Column({ type: 'timestamp', nullable: true })
+  completedDate: Date | null;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  updateCompletedDate() {
+    if (this.completed) {
+      this.completedDate = new Date();
+    } else {
+      this.completedDate = null;
+    }
+  }
+
   @Column()
   completed: boolean
 
+  // TODO implement projects / way of organising todos
+  // @Column()
+  // project
+
   @Column('timestamp with time zone', { nullable: true })
   dueDate: Date | null
-  todo: DateTime<true>
 }

@@ -25,7 +25,7 @@ import { IAuthLoginReponse } from '../../../../../api/dist/auth/types.module'
 export class LoginComponent implements OnDestroy {
   public readonly loginForm: FormGroup
   private destroy$ = new Subject<void>()
-
+  public errorMessage: string = ''
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -65,7 +65,8 @@ export class LoginComponent implements OnDestroy {
         .select(selectAuthError)
         .subscribe((error) => {
           if (error) {
-            console.error('Login error:', error)
+            console.log('Login error:', error)
+
             // Handle login error, show error message?
           }
         })

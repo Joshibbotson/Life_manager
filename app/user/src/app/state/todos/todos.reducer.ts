@@ -9,6 +9,8 @@ import {
   loadTodoByIdFailure,
   reloadTodos,
   completeTodoSuccess,
+  updateTodo,
+  updateTodoSuccess,
 } from './todos.actions'
 
 export type TodoStatus = 'pending' | 'loading' | 'success' | 'failure'
@@ -83,6 +85,20 @@ export const todosReducer = createReducer(
     return state
   }),
 
+  on(updateTodoSuccess, (state, { todo }) => {
+    const updatedTodos = state.todos.map((oldTodo) => {
+      if (oldTodo.id === todo.id) {
+        return { ...todo }
+      }
+      return oldTodo
+    })
+
+    return {
+      ...state,
+      todos: updatedTodos,
+    }
+  }),
+
   on(completeTodoSuccess, (state, { todo }) => {
     const updatedTodos = state.todos.map((oldTodo) => {
       if (oldTodo.id === todo.id) {
@@ -115,6 +131,17 @@ export const todoReducer = createReducer(
     error,
     status: status,
   })),
+
+  on(updateTodoSuccess, (state, { todo }) => {
+    if (state.selectedTodo && state.selectedTodo.id === todo.id) {
+      return {
+        ...state,
+        selectedTodo: todo,
+      }
+    }
+
+    return state
+  }),
 
   on(completeTodoSuccess, (state, { todo }) => {
     if (state.selectedTodo && state.selectedTodo.id === todo.id) {

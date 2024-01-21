@@ -1,11 +1,11 @@
-import { NgIf } from '@angular/common'
 import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { FormControl, ReactiveFormsModule } from '@angular/forms'
 
 @Component({
   selector: 'common-input',
   templateUrl: './common-input.component.html',
   standalone: true,
-  imports: [NgIf],
+  imports: [ReactiveFormsModule],
 })
 export class CommonInputComponent {
   @Input() label: string = ''
@@ -15,6 +15,8 @@ export class CommonInputComponent {
   @Input() readOnly: boolean = false
   @Input() placeholder: string = ''
   @Input() required: boolean = false
+  @Input() value: string | number | undefined
+  @Input() control!: FormControl
 
   @Output() inputValue = new EventEmitter<Event>()
 

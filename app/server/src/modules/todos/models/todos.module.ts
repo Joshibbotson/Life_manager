@@ -2,9 +2,8 @@ import { CreateTodoSchema } from '../../../../../api/dist/todos/actions'
 import { Validate } from '../../../../../api/dist/validation/validation'
 import { AppDataSource } from '../../../data-source'
 import { Todos } from '../../../entities/todos'
-import { ITodoQueryOptions } from '../../../../../api/dist/todos/types'
+import { ITodoQueryOptions, ITodoUpdateRequest } from '../../../../../api/dist/todos/types'
 import { SelectQueryBuilder } from 'typeorm'
-import { DateTime } from 'luxon'
 
 export class TodosModel {
   public static readonly moduleName: string = 'TodosModel'
@@ -120,28 +119,30 @@ export class TodosModel {
 
   /* Rudimentary, requires over haul as only updates completed, ideally we want to be able
   to update the entire todo */
-  public async updateTodoById(id: number, version: number) {
+  public async updateTodoById(updatedTodo: ITodoUpdateRequest) {
     try {
-      const todoRepository = AppDataSource.manager.getRepository(Todos)
+      const todoRepository = AppDataSource.manager.getRepository(Todos);
       const todo = await todoRepository.findOne({
         where: {
-          id: id,
+          id: updatedTodo.id,
         },
         relations: ['createdBy'],
-      })
+      });
+  
       if (!todo) {
-        throw new Error('Todo not found')
+        throw new Error('Todo not found');
       }
-
-      if (todo.version !== version) {
-        throw new Error('The todo item has been modified by someone else')
+  
+      if (todo.version !== updatedTodo.version) {
+        throw new Error('The todo item has been modified by someone else');
       }
-
-      todo.completed = !todo.completed
-      await todoRepository.save(todo)
-      return todo
+        Object.assign(todo, updatedTodo);
+      
+      await todoRepository.save(todo);
+      return todo;
     } catch (error) {
-      throw error
+      throw error;
     }
   }
+  
 }

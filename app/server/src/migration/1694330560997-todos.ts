@@ -13,10 +13,10 @@ export class Todos1694330560997 implements MigrationInterface {
             "description" text NOT NULL,
             "createdBy" int NOT NULL,
             "completed" boolean NOT NULL,
-            "dueDate" TIMESTAMP WITH TIME ZONE,
+            "completionDate" TIMESTAMP WITH TIME ZONE DEFAULT null,
+            "dueDate" TIMESTAMP WITH TIME ZONE DEFAULT null,
 
             PRIMARY KEY ("id"),
-            CONSTRAINT "FK_DA9599E6A6BF3C8E68CBE51DDC2" FOREIGN KEY ("userId") REFERENCES "users" ("id")
         )
         `)
   }

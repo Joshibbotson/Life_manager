@@ -9,6 +9,8 @@ export interface IAuthLoginReponse {
   success: boolean
   token: string
   user: IReadUser
+  status: number
+  message: string
 }
 
 export interface IValidateTknRequest {

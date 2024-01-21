@@ -20,6 +20,8 @@ export const authReducer = createReducer(
       success: true,
       token: token,
       user: user,
+      status: 200,
+      message: 'Rehydrated user',
     },
   })),
   on(AuthActions.loginUserSuccess, (state, { loginResponse }) => ({

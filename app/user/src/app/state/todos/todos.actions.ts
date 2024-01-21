@@ -4,6 +4,7 @@ import {
   IReadTodo,
   ISort,
   ITodo,
+  ITodoUpdateRequest,
 } from '../../../../../api/dist/todos/index'
 import { TodoStatus } from './todos.reducer'
 
@@ -63,6 +64,21 @@ export const createTodo = createAction(
 export const createTodoSuccess = createAction(
   '[Todos] Create Todo Success',
   props<{ todo: IReadTodo }>(),
+)
+
+export const updateTodo = createAction(
+  '[Todos] Update Todo',
+  props<{ updatedTodo: ITodoUpdateRequest }>(),
+)
+
+export const updateTodoSuccess = createAction(
+  '[Todos] Update Todo Success',
+  props<{ todo: IReadTodo }>(),
+)
+
+export const updateTodoFailure = createAction(
+  '[Todos] Update Todo Failure',
+  props<{ error: string; status: TodoStatus }>(),
 )
 
 export const completeTodo = createAction(

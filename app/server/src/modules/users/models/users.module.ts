@@ -1,3 +1,4 @@
+import { IAuthLoginReponse } from '../../../../../api/dist/auth/types.module'
 import { IReadUser } from '../../../../../api/dist/users'
 import { CreateUsersSchema } from '../../../../../api/dist/users/actions'
 import { Validate } from '../../../../../api/dist/validation/validation'
@@ -14,7 +15,7 @@ export class UsersModel {
   }
 
   /** Create user */
-  public async createUser(req: any) {
+  public async createUser(req: any): Promise<IAuthLoginReponse | Partial<IAuthLoginReponse>> {
     try {
       const checkExistingUser = await AppDataSource.getRepository(
         Users,
@@ -23,8 +24,9 @@ export class UsersModel {
       if (checkExistingUser) {
         return {
           success: false,
-          message: 'Email already exists',
           status: 409,
+          message: 'Email already exists'
+
         }
       }
       const salt = bcrypt.genSaltSync(10)
@@ -153,7 +155,7 @@ export class UsersModel {
   // }
 
   /** Handle auth login */
-  public async authenticateLogin(email: string, password: string) {
+  public async authenticateLogin(email: string, password: string): Promise<IAuthLoginReponse>  {
     console.log(email, password)
     try {
       const result = await AppDataSource.getRepository(Users)
@@ -180,6 +182,8 @@ export class UsersModel {
           success: true,
           token: loginTkn,
           user: removedPasswordUser as IReadUser,
+          status: 200,
+          message: 'Authentication successful'
         }
       }
     } catch (error) {

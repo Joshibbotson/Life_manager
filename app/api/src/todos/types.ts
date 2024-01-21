@@ -13,7 +13,7 @@ export interface ITodo extends IMetaProperties {
   description: string
   createdBy: number
   dueDate: Date | null
-  completed: string
+  completed: boolean
 }
 
 export interface IReadTodo extends IMetaProperties {
@@ -21,7 +21,7 @@ export interface IReadTodo extends IMetaProperties {
   description: string
   createdBy: IReadUser
   dueDate: DateTime | null
-  completed: string
+  completed: boolean
 }
 
 export interface ITodoCreateRequest extends ITodo {}
@@ -36,7 +36,10 @@ export interface ITodoReadResponse extends IMetaReadReponse<IReadTodo> {}
 export interface ITodoReadOneByIdResponse
   extends IMetaReadOneResponse<IReadTodo> {}
 
-export interface ITodoUpdateRequest extends Partial<IReadTodo> {}
+export interface ITodoUpdateRequest extends Partial<IReadTodo> {
+  id: number;
+  version: number
+}
 export interface ITodoUpdateResponse extends IReadTodo {}
 
 export interface ITodoDeleteRequest {

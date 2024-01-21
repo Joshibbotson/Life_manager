@@ -9,6 +9,7 @@ import {
   ITodoDeleteResponse,
   ITodoReadOneByIdResponse,
   ITodoReadResponse,
+  ITodoUpdateRequest,
   ITodoUpdateResponse,
 } from '../../../../../../api/dist/todos'
 import { environment } from 'src/environments/environment'
@@ -31,9 +32,20 @@ export class TodosRestService {
     )
   }
 
-  public update(id: number, version: number): Observable<ITodoUpdateResponse> {
-    const payload = { id, version }
-    return this.http.put(`${this.url}/todos/update/${id}`, payload).pipe(
+  // public update(id: number, version: number): Observable<ITodoUpdateResponse> {
+  //   const payload = { id, version }
+  //   return this.http.put(`${this.url}/todos/update/${id}`, payload).pipe(
+  //     map((response: any) => {
+  //       return response
+  //     }),
+  //   )
+  // }
+
+  //note that createdBy should really be transformed to a singular Id.
+  public update(todo: ITodoUpdateRequest): Observable<ITodoUpdateResponse> {
+    const payload = todo
+    console.log(todo)
+    return this.http.put(`${this.url}/todos/update/${todo.id}`, payload).pipe(
       map((response: any) => {
         return response
       }),

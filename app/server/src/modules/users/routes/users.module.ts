@@ -115,7 +115,7 @@ export class UsersRoutes {
     )
   }
 
-  // authentication request, should return login token + user.name
+  /** authentication request, should return login token + user.name */ 
   protected authHandler(server: any) {
     server.post(
       '/user/login',
@@ -133,14 +133,12 @@ export class UsersRoutes {
     )
   }
 
-  // validate token request, should return valid boolean
-  protected validateTokenHandler(server: any) {
+  /**  validate token request, should return valid boolean */
+  protected validateTokenHandler(server: any): void {
     server.post(
       '/user/validateToken',
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          console.log('validateTknReq:', req.body)
-
           const validateTknReq =
             await this.usersController.validateTokenRequest(req)
           if (typeof validateTknReq === 'string') {

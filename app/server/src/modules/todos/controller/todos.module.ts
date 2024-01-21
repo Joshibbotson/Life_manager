@@ -63,8 +63,10 @@ export class TodosController {
   /** Update Request */
   public async updateRequest(request: Request) {
     try {
-      const { id, version } = request.body
-      const updateOrError = await this.todosModel.updateTodoById(id, version)
+
+      const todoRequest = request.body
+      console.log(todoRequest.version)
+      const updateOrError = await this.todosModel.updateTodoById(todoRequest)
       return updateOrError
     } catch (error) {
       throw error

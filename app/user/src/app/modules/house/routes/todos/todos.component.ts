@@ -165,9 +165,13 @@ export class TodosComponent implements OnInit, OnDestroy {
     this.store.dispatch(TodosActions.deleteTodo({ id }))
   }
 
-  public completeTodo(id: number, version: number) {
+  public completeTodo(todo: IReadTodo) {
     console.log('called complete')
-    this.store.dispatch(TodosActions.completeTodo({ id, version }))
+    const updatedTodo = {
+      ...todo,
+      completed: !todo.completed,
+    }
+    this.store.dispatch(TodosActions.updateTodo({ updatedTodo: updatedTodo }))
   }
 
   public formatDate(date: any) {

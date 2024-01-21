@@ -14,6 +14,8 @@ import {
   deleteTodoSuccess,
   completeTodo,
   completeTodoSuccess,
+  updateTodo,
+  updateTodoSuccess,
 } from './todos.actions'
 
 @Injectable()
@@ -98,15 +100,30 @@ export class TodosEffects {
     ),
   )
 
-  readonly completeTodoById$ = createEffect(() =>
+  // this requires some actual work, we need to redo update route
+  // as it's poorly implemented to just work for updating
+  // completed.
+  readonly updateTodoById$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(completeTodo),
+      ofType(updateTodo),
       mergeMap((action) =>
-        this.todosService.update(action.id, action.version).pipe(
-          map((todo) => completeTodoSuccess({ todo })),
+        this.todosService.update(action.updatedTodo).pipe(
+          map((todo) => updateTodoSuccess({ todo })),
           catchError((error) => of(error)),
         ),
       ),
     ),
   )
+
+  // readonly completeTodoById$ = createEffect(() =>
+  //   this.actions$.pipe(
+  //     ofType(completeTodo),
+  //     mergeMap((action) =>
+  //       this.todosService.update(action.id, action.version).pipe(
+  //         map((todo) => completeTodoSuccess({ todo })),
+  //         catchError((error) => of(error)),
+  //       ),
+  //     ),
+  //   ),
+  // )
 }
