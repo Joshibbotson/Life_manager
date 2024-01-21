@@ -2,7 +2,11 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { BehaviorSubject, Observable, map, tap } from 'rxjs'
-import { environment } from 'src/environments/environment'
+import { environment } from '../../../environments/environment'
+import {
+  IAuthLoginReponse,
+  IValidateTknResponse,
+} from '../../../../../api/dist/auth/types.module'
 
 @Injectable({
   providedIn: 'root',
@@ -16,16 +20,14 @@ export class AuthService {
     private http: HttpClient,
   ) {}
 
-  // Should dispatch to user state here and user state should be something like {currUser: {}}
   registerNewUser(
     name: string,
     email: string,
     password: string,
     locale: string,
-  ): Observable<any> {
+  ): Observable<IAuthLoginReponse> {
     return this.http
-      .post<any>(`${this.url}/user/newuser`, {
-        //not <any> here describes what is returned, update this.
+      .post<IAuthLoginReponse>(`${this.url}/user/newuser`, {
         name: name,
         email: email,
         password: password,
@@ -41,20 +43,21 @@ export class AuthService {
       )
   }
 
-  public login(email: string, password: string): Observable<any> {
+  public login(email: string, password: string): Observable<IAuthLoginReponse> {
     const loginData = { email, password }
-    return this.http.post<any>(`${this.url}/user/login`, loginData).pipe(
-      tap((response) => {
-        console.log(response)
-        if (response.success) {
-          localStorage.setItem('loginToken', response.token)
-          localStorage.setItem('user', JSON.stringify(response.user))
-        }
-      }),
-    )
+    return this.http
+      .post<IAuthLoginReponse>(`${this.url}/user/login`, loginData)
+      .pipe(
+        tap((response) => {
+          if (response.success) {
+            localStorage.setItem('loginToken', response.token)
+            localStorage.setItem('user', JSON.stringify(response.user))
+          }
+        }),
+      )
   }
 
-  public logout() {
+  public logout(): void {
     localStorage.removeItem('loginToken')
     localStorage.removeItem('user')
     this.router.navigate(['/login'])
@@ -63,7 +66,7 @@ export class AuthService {
   public validateToken(token: string) {
     const requestBody = { token: token }
     return this.http
-      .post<{ valid: boolean }>(`${this.url}/user/validateToken`, requestBody)
+      .post<IValidateTknResponse>(`${this.url}/user/validateToken`, requestBody)
       .pipe(
         map((response) => {
           return response.valid

@@ -46,7 +46,7 @@ export class TodosComponent implements OnInit, OnDestroy {
   readonly titleControlGroup: FormControl = new FormControl('')
   readonly descriptionControlGroup: FormControl = new FormControl('')
   readonly createdByControlGroup: FormControl = new FormControl('')
-  readonly dueDateControlGroup: FormControl = new FormControl('')
+  readonly dueDateControlGroup: FormControl = new FormControl(null)
   readonly completedControlGroup: FormControl<boolean | null> = new FormControl(
     false,
   )
@@ -159,14 +159,11 @@ export class TodosComponent implements OnInit, OnDestroy {
     this.toggleShowForm()
   }
 
-  public editTodo(id: number) {}
-
   public deleteTodo(id: number) {
     this.store.dispatch(TodosActions.deleteTodo({ id }))
   }
 
   public completeTodo(todo: IReadTodo) {
-    console.log('called complete')
     const updatedTodo = {
       ...todo,
       completed: !todo.completed,

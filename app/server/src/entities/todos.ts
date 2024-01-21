@@ -9,7 +9,6 @@ import {
 } from 'typeorm'
 import { Users } from './users'
 import { CommonEntity } from './common/common-entity'
-import { DateTime } from 'luxon'
 
 @Entity()
 export class Todos extends CommonEntity {

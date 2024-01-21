@@ -21,7 +21,7 @@ export class TodosModel {
       todoEntity.description = todoCreateRequest.description
       todoEntity.createdBy = todoCreateRequest.createdBy
       todoEntity.completed = todoCreateRequest.completed
-      todoEntity.dueDate = new Date(todoCreateRequest.dueDate)
+      todoEntity.dueDate = todoCreateRequest.dueDate !== null ? new Date(todoCreateRequest.dueDate) : null
       const readOrError = await this.validate.validateSchema(
         todoEntity,
         CreateTodoSchema,

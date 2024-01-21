@@ -1,6 +1,6 @@
 export interface IMetaProperties {
   id: number
-  deletedDate: Date
+  deletedDate: Date | null
   createdDate: Date
   updatedDate: Date
   version: number

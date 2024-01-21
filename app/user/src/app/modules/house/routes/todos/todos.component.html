@@ -109,6 +109,7 @@
         >
           <div class="w-full whitespace-nowrap px-6 py-0 sm:w-1/4 md:py-4">
             <common-input
+              [control]="titleControlGroup"
               formControlName="title"
               ngDefaultControl
               type="string"
@@ -117,6 +118,7 @@
           </div>
           <div class="w-full whitespace-nowrap px-6 py-0 sm:w-2/4 md:py-4">
             <common-input
+              [control]="descriptionControlGroup"
               formControlName="description"
               ngDefaultControl
               type="string"
@@ -125,6 +127,7 @@
           </div>
           <div class="w-full whitespace-nowrap px-6 pb-2 sm:w-1/4 md:py-4">
             <common-input
+              [control]="dueDateControlGroup"
               type="date"
               formControlName="dueDate"
               ngDefaultControl

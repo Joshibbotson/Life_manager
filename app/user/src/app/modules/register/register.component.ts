@@ -16,23 +16,31 @@ import {
   selectAuthError,
 } from 'src/app/state/auth/auth.selectors'
 import { IAuthLoginReponse } from '../../../../../api/dist/auth/types.module'
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha'
+import * as environment from '../../../environments/environment'
 
 @Component({
   standalone: true,
   selector: 'app-register',
   templateUrl: './register.component.html',
-  imports: [ReactiveFormsModule, RouterModule],
+  imports: [
+    ReactiveFormsModule,
+    RouterModule,
+    RecaptchaModule,
+    RecaptchaFormsModule,
+  ],
 })
 export class RegisterComponent {
   public homeLinks: Ilinks[] = [{ url: '/todos', name: 'Todos' }]
+  public destroy$: Subject<void> = new Subject()
+  public captchaResponse: string | null = null
+  public emailInUse$ = this.authService.emailInUse$
+  public reCaptchaKey = environment.environment.reCapatchaKey
   registerForm: FormGroup = this.formBuilder.group({
     name: ['', Validators.required],
     email: ['', Validators.email],
     password: ['', [Validators.required, Validators.minLength(8)]],
   })
-  emailInUse$ = this.authService.emailInUse$
-
-  public destroy$: Subject<void> = new Subject()
 
   constructor(
     private links: LinksService,
@@ -75,24 +83,9 @@ export class RegisterComponent {
           // Handle login error, show error message?
         }
       })
-    //   this.authService
-    //     .registerNewUser(
-    //       userInfo.name,
-    //       userInfo.email,
-    //       userInfo.password,
-    //       userInfo.locale,
-    //     )
-    //     .subscribe({
-    //       next: (response) => {
-    //         if (response.success) {
-    //           this.router.navigate(['/'])
-    //         } else {
-    //           // Handle login failure, show error message?
-    //         }
-    //       },
-    //       error: (err) => {
-    //         console.error('HTTP error:', err)
-    //       },
-    //     })
+  }
+
+  public resolvedCaptcha(response: string | null) {
+    this.captchaResponse = response
   }
 }

@@ -21,6 +21,9 @@
         formControlName="email"
         class="w-full rounded-md border border-gray-300 p-2"
       />
+      @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+        <p class="text-red-600">Email is required.</p>
+      }
 
       <label for="password" class="text-sm font-medium text-gray-700"
         >Password</label

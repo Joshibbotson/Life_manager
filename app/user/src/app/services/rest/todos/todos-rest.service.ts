@@ -5,6 +5,7 @@ import {
   IFilter,
   IReadTodo,
   ISort,
+  ITodoCreateRequest,
   ITodoCreateResponse,
   ITodoDeleteResponse,
   ITodoReadOneByIdResponse,
@@ -22,7 +23,7 @@ export class TodosRestService {
 
   constructor(private http: HttpClient) {}
 
-  public create(request: any): Observable<ITodoCreateResponse> {
+  public create(request: ITodoCreateRequest): Observable<ITodoCreateResponse> {
     console.log('client side create req:', request)
     return this.http.post(`${this.url}/todos/create`, request).pipe(
       map((response: any) => {
@@ -31,15 +32,6 @@ export class TodosRestService {
       }),
     )
   }
-
-  // public update(id: number, version: number): Observable<ITodoUpdateResponse> {
-  //   const payload = { id, version }
-  //   return this.http.put(`${this.url}/todos/update/${id}`, payload).pipe(
-  //     map((response: any) => {
-  //       return response
-  //     }),
-  //   )
-  // }
 
   //note that createdBy should really be transformed to a singular Id.
   public update(todo: ITodoUpdateRequest): Observable<ITodoUpdateResponse> {

@@ -1,4 +1,4 @@
-import { IsString, IsBoolean, IsDate, IsNumber } from 'class-validator'
+import { IsString, IsBoolean, IsDate, IsNumber, IsOptional } from 'class-validator'
 import { IUserReadRequest } from '../users'
 import { DateTime } from 'luxon'
 
@@ -12,6 +12,7 @@ export class CreateTodoSchema {
   @IsNumber()
   createdBy: number
 
+  @IsOptional()
   @IsDate()
   dueDate: Date | null
 
