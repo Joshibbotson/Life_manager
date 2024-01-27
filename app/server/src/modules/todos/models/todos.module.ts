@@ -1,9 +1,10 @@
 import { CreateTodoSchema } from '../../../../../api/dist/todos/actions'
 import { Validate } from '../../../../../api/dist/validation/validation'
 import { AppDataSource } from '../../../data-source'
-import { Todos } from '../../../entities/todos'
-import { ITodoQueryOptions, ITodoUpdateRequest } from '../../../../../api/dist/todos/types'
+import { Todos } from '../../../entities/todos.entity'
+import {   ITodoQueryOptions, ITodoUpdateRequest } from '../../../../../api/dist/todos/types'
 import { SelectQueryBuilder } from 'typeorm'
+import { DateTime } from 'luxon'
 
 export class TodosModel {
   public static readonly moduleName: string = 'TodosModel'
@@ -142,6 +143,19 @@ export class TodosModel {
       return todo;
     } catch (error) {
       throw error;
+    }
+  }
+
+  public async deleteCompletedTodos(){
+    try{
+      const oneWeekInPast = DateTime.utc().minus({day: 7}).toJSDate()
+      const todoRepository =  AppDataSource.manager
+      await todoRepository.query(`DELETE FROM todos WHERE "completedDate" <= $1`, [oneWeekInPast])
+
+      console.log("Finished deleting completed todos older than one day");
+
+    } catch(error) {
+      throw error
     }
   }
   

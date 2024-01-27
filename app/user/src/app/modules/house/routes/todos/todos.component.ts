@@ -42,6 +42,7 @@ export class TodosComponent implements OnInit, OnDestroy {
 
   public loading = true
   public homeLinks: Ilinks[] = [{ url: '/todos', name: 'Todos' }]
+
   editOpen: number | null = null
   readonly titleControlGroup: FormControl = new FormControl('')
   readonly descriptionControlGroup: FormControl = new FormControl('')
@@ -67,7 +68,9 @@ export class TodosComponent implements OnInit, OnDestroy {
     private router: Router,
     private store: Store,
     private windowSizeService: WindowSizeService,
-  ) {}
+  ) {
+    this.links.updateLinks(this.homeLinks)
+  }
 
   ngOnInit() {
     this.windowSizeSubscription = this.windowSizeService.windowSize.subscribe(
@@ -76,7 +79,7 @@ export class TodosComponent implements OnInit, OnDestroy {
         this.windowHeight = size.height
       },
     )
-    this.links.updateLinks(this.homeLinks)
+
     this.updatedCurrentUser()
     this.loadTodos()
     this.todos$ = this.store
@@ -148,14 +151,25 @@ export class TodosComponent implements OnInit, OnDestroy {
     this.router.navigate([`todos/${id}`])
   }
 
-  async handleSubmit() {
+  private resetFormControl() {
+    this.todoFormGroup.reset({
+      title: '',
+      description: '',
+      createdBy: this.createdByControlGroup,
+      completed: this.completedControlGroup,
+      dueDate: null,
+    })
+  }
+
+  public async handleSubmit() {
     this.todoFormGroup.patchValue({
-      completed: this.todoFormGroup.value.completed === 'true' ? true : false,
+      completed: false,
       createdBy: this.loggedInUser?.id,
     })
     this.store.dispatch(
       TodosActions.createTodo({ todo: this.todoFormGroup.value }),
     )
+    this.resetFormControl()
     this.toggleShowForm()
   }
 

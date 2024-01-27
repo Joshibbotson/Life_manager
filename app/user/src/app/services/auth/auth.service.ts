@@ -49,6 +49,7 @@ export class AuthService {
       .post<IAuthLoginReponse>(`${this.url}/user/login`, loginData)
       .pipe(
         tap((response) => {
+          console.log(response)
           if (response.success) {
             localStorage.setItem('loginToken', response.token)
             localStorage.setItem('user', JSON.stringify(response.user))

@@ -1,9 +1,8 @@
-// sidebar.selectors.ts
-import { createSelector } from '@ngrx/store'
+import { createFeatureSelector, createSelector } from '@ngrx/store'
 
-export const selectSidebarState = (state: any) => state.sidebar
+export const selectSideBarState = createFeatureSelector<boolean>('sidebar')
 
 export const isSidebarOpen = createSelector(
-  selectSidebarState,
-  (sidebar) => sidebar,
+  selectSideBarState,
+  (state: boolean) => state,
 )

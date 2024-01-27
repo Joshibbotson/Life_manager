@@ -67,7 +67,6 @@ export class TodosRoutes {
     )
   }
 
-  // needs overhaul, only change a todo's completion status currently.
   /** Update route */
   protected updateHandler(server: any) {
     return server.put(

@@ -1,11 +1,15 @@
 import 'reflect-metadata'
 import { DataSource, DataSourceOptions } from 'typeorm'
-import { Users } from './entities/users'
-import { Todos } from './entities/todos'
+import { Users } from './entities/users.entity'
+import { Todos } from './entities/todos.entity'
 import { config } from 'dotenv'
 import { Todos1694330560997 } from './migration/1694330560997-todos'
 import { Users1701508320209 } from './migration/1701508320209-users'
+import { fileURLToPath } from 'url'
+import path from 'path'
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 config({ path: __dirname + '/../../../.env' })
 
 const productionConfig: DataSourceOptions = {

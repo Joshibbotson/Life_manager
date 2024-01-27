@@ -7,12 +7,17 @@
       class="flex h-full w-full items-center justify-center overflow-auto bg-gray-200"
     >
       <section
-        class="max-w-xs rounded-lg border bg-white p-6 shadow-lg sm:w-3/4 md:w-2/3 lg:w-1/3 lg:max-w-full"
+        class="sm:max-w-3/4 md:max-w-2/3 w-xs m-auto max-w-xs rounded-lg border bg-white p-6 shadow-lg lg:w-1/3 lg:max-w-full"
       >
         <div class="flex items-center border-b-2 border-b-black py-3">
-          <h1 class="mr-2 text-lg font-semibold">Title:</h1>
+          <h1
+            class="mr-2 text-lg font-semibold"
+            (click)="toggleEditing('title')"
+          >
+            Title:
+          </h1>
           @if (!editingStates.title) {
-            <div class="max-h-24 overflow-y-auto">
+            <div class="max-h-24 cursor-pointer overflow-y-auto">
               <p (click)="toggleEditing('title')">{{ todo.title }}</p>
             </div>
           } @else if (editingStates.title) {
@@ -28,10 +33,15 @@
           }
         </div>
         <div class="flex items-center border-b-2 border-b-black py-3">
-          <h1 class="mr-2 text-lg font-semibold">Description:</h1>
+          <h1
+            class="mr-2 text-lg font-semibold"
+            (click)="toggleEditing('description')"
+          >
+            Description:
+          </h1>
 
           @if (!editingStates.description) {
-            <div class="max-h-24 overflow-y-auto">
+            <div class="max-h-24 cursor-pointer overflow-y-auto">
               <p (click)="toggleEditing('description')">
                 {{ todo.description }}
               </p>
@@ -42,16 +52,21 @@
                 [control]="descriptionControlGroup"
                 formControlName="description"
                 ngDefaultControl
-                type="text"
+                type="textarea"
                 [value]="todo.description"
               />
             </div>
           }
         </div>
         <div class="flex items-center border-b-2 border-b-black py-3">
-          <h1 class="mr-2 text-lg font-semibold">Due Date:</h1>
+          <h1
+            class="mr-2 text-lg font-semibold"
+            (click)="toggleEditing('dueDate')"
+          >
+            Due Date:
+          </h1>
           @if (!editingStates.dueDate) {
-            <div>
+            <div class="cursor-pointer">
               <p (click)="toggleEditing('dueDate')">
                 {{ formatDate(todo.dueDate) }}
               </p>
@@ -68,28 +83,7 @@
             </div>
           }
         </div>
-
         <div class="flex items-center border-b-2 border-b-black py-3">
-          <h1 class="mr-2 text-lg font-semibold">Created By:</h1>
-
-          <div>
-            <p>{{ todo.createdBy.name }}</p>
-          </div>
-        </div>
-        <div class="flex items-center border-b-2 border-b-black py-3">
-          <h1 class="mr-2 text-lg font-semibold">Created Date:</h1>
-          <div>
-            <p>{{ formatDate(todo.createdDate) }}</p>
-          </div>
-        </div>
-        <div class="flex items-center border-b-2 border-b-black py-3">
-          <h1 class="mr-2 text-lg font-semibold">Updated Date:</h1>
-
-          <div>
-            <p>{{ formatDate(todo.updatedDate) }}</p>
-          </div>
-        </div>
-        <div class="flex items-center py-3">
           <h1 class="mr-2 text-lg font-semibold">Completed:</h1>
 
           <div>
@@ -108,6 +102,30 @@
             }
           </div>
         </div>
+        <div class="flex items-center border-b-2 border-b-black py-3">
+          <h1 class="text-md mr-2 font-semibold text-gray-500">Created By:</h1>
+          <div>
+            <p class="text-gray-500">{{ todo.createdBy.name }}</p>
+          </div>
+        </div>
+        <div class="flex items-center border-b-2 border-b-black py-3">
+          <h1 class="text-md mr-2 font-semibold text-gray-500">
+            Created Date:
+          </h1>
+          <div>
+            <p class="text-gray-500">{{ formatDate(todo.createdDate) }}</p>
+          </div>
+        </div>
+        <div class="flex items-center py-3">
+          <h1 class="text-md mr-2 font-semibold text-gray-500">
+            Updated Date:
+          </h1>
+
+          <div>
+            <p class="text-gray-500">{{ formatDate(todo.updatedDate) }}</p>
+          </div>
+        </div>
+
         @if (!checkForEditing()) {
           <button
             (click)="deleteTodo(todo.id)"
@@ -119,7 +137,7 @@
             (click)="completeTodo(todo)"
             class="w-full border-2 bg-green-700 p-1 text-white transition-all hover:bg-green-600 active:scale-95"
           >
-            complete todo
+            {{ todo.completed ? 'uncomplete todo' : 'complete todo' }}
           </button>
         } @else if (checkForEditing()) {
           <button

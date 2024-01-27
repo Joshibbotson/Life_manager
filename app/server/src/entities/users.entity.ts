@@ -7,20 +7,29 @@ export class Users extends CommonEntity {
   id: number
 
   @Column({
+    type: 'varchar',
     length: 100,
   })
   name: string
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 200,
+    nullable: false
+  })
   email: string
 
-  @Column({ select: false })
+  @Column({ type: 'varchar',
+  length: 200, select: false })
   hashedPassword: string
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 200,
+  })
   locale: string
 
-  @Column()
+  @Column({type:'boolean'})
   admin: boolean
 
   @Column('text', {
@@ -29,6 +38,6 @@ export class Users extends CommonEntity {
   })
   permissions: string[]
 
-  @Column()
+  @Column({type:'boolean'})
   active: boolean
 }

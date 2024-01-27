@@ -7,7 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
-import { Users } from './users'
+import { Users } from './users.entity'
 import { CommonEntity } from './common/common-entity'
 
 @Entity()
@@ -16,6 +16,7 @@ export class Todos extends CommonEntity {
   id: number
 
   @Column({
+    type: 'varchar',
     length: 100,
   })
   title: string
@@ -25,7 +26,7 @@ export class Todos extends CommonEntity {
 
   @ManyToOne(() => Users)
   @JoinColumn()
-  createdBy: number
+  createdBy: Users
 
   @Column({ type: 'timestamp', nullable: true })
   completedDate: Date | null;
@@ -40,7 +41,7 @@ export class Todos extends CommonEntity {
     }
   }
 
-  @Column()
+  @Column({type: 'boolean'})
   completed: boolean
 
   // TODO implement projects / way of organising todos

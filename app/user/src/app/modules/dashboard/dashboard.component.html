@@ -1,33 +1,41 @@
 @if (shouldShowSidebar()) {
-  <div class="flex flex-col md:flex-row h-full container min-w-full">
+  <div class="container flex h-full min-w-full flex-col md:flex-row">
     <!-- Sidebar -->
     <div
-      class="bg-gray-800 text-white md:flex sm:flex-col"
+      class="bg-gray-800 text-white sm:flex-col md:flex"
       [ngClass]="
-        isSidebarOpen() ? 'sm:min-h-screen md:w-56' : 'sm:min-h-24 md:w-30'
+        (isSideBarOpen$ | async)
+          ? 'sm:min-h-screen md:w-56'
+          : 'md:w-30 sm:min-h-24'
       "
       id="sidebar"
     >
       <div class="flex items-center justify-between">
-        <a href="/" class="py-2 px-3 text-center">
+        <a routerLink="/" class="px-3 py-2 text-center">
           <fa-icon
             [icon]="faHome"
             size="2x"
             class="hover:text-slate-200"
           ></fa-icon>
         </a>
-        <button class="py-2 px-3 text-center text-lg" (click)="toggleSidebar()">
+        <button class="px-3 py-2 text-center text-lg" (click)="toggleSidebar()">
           @if (windowWidth >= 767) {
             <fa-icon
               [icon]="
-                isSidebarOpen() ? faChevronCircleLeft : faChevronCircleRight
+                (isSideBarOpen$ | async)
+                  ? faChevronCircleLeft
+                  : faChevronCircleRight
               "
               size="2x"
               class="hover:text-slate-200"
             ></fa-icon>
           } @else {
             <fa-icon
-              [icon]="isSidebarOpen() ? faChevronCircleUp : faChevronCircleDown"
+              [icon]="
+                (isSideBarOpen$ | async)
+                  ? faChevronCircleUp
+                  : faChevronCircleDown
+              "
               size="2x"
               class="hover:text-slate-200"
             ></fa-icon>
@@ -35,16 +43,21 @@
         </button>
       </div>
 
-      @if (isSidebarOpen()) {
-        <div class="flex flex-col grow items-center justify-between">
-          <ul class="mt-6 mb-6">
+      @if (isSideBarOpen$ | async) {
+        <div class="flex grow flex-col items-center justify-between">
+          <ul class="mb-6 mt-6">
             @for (link of sideBarLinks$ | async; track link.name) {
-              <a href="{{ link.url }}">{{ link.name }}</a>
+              <a
+                class="hover:underline"
+                routerLink="{{ link.url }}"
+                routerLinkActive="underline"
+                >{{ link.name }}</a
+              >
             }
           </ul>
           <div>
             <button
-              class="border border-white rounded-md p-2 mb-6 hover:bg-white hover:text-red-500"
+              class="mb-6 rounded-md border border-white p-2 hover:bg-white hover:text-red-500"
               (click)="logout()"
             >
               Logout
@@ -55,7 +68,7 @@
     </div>
     <!-- Main Content -->
 
-    <div class="w-full h-screen">
+    <div class="h-screen w-full">
       <router-outlet></router-outlet>
     </div>
   </div>

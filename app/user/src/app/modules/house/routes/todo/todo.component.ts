@@ -119,10 +119,6 @@ export class TodoComponent implements OnDestroy {
     return Object.values(this.editingStates).some((s) => s === true)
   }
 
-  // resetFormControl() {
-  //   this.todoFormGroup.reset()
-  // }
-
   public resetEditState() {
     this.editingStates = {
       title: false,
@@ -133,7 +129,6 @@ export class TodoComponent implements OnDestroy {
 
   public resetValue() {
     this.resetEditState()
-    // this.resetFormControl()
   }
 
   public formatDate(date: any) {

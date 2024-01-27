@@ -1,15 +1,11 @@
-// sidebar.reducer.ts
-import { Action, createReducer, on } from '@ngrx/store'
+import { createReducer, on } from '@ngrx/store'
 import * as SidebarActions from './sidebar.actions'
 
-export const initialState: boolean = false
+export const intialSideBarState: boolean = true
 
-const _sidebarReducer = createReducer(
-  initialState,
-  on(SidebarActions.openSidebar, () => true),
-  on(SidebarActions.closeSidebar, () => false),
+export const sidebarReducer = createReducer(
+  intialSideBarState,
+  on(SidebarActions.toggleSidebar, (state) => {
+    return !state
+  }),
 )
-
-export function sidebarReducer(state: boolean | undefined, action: Action) {
-  return _sidebarReducer(state, action)
-}

@@ -3,7 +3,7 @@ import { IReadUser } from '../../../../../api/dist/users'
 import { CreateUsersSchema } from '../../../../../api/dist/users/actions'
 import { Validate } from '../../../../../api/dist/validation/validation'
 import { AppDataSource } from '../../../data-source'
-import { Users } from '../../../entities/users'
+import { Users } from '../../../entities/users.entity'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 export class UsersModel {
@@ -163,6 +163,7 @@ export class UsersModel {
         .addSelect('user.hashedPassword')
         .where('user.email = :email', { email })
         .getOne()
+        console.log(result)
       if (!result) {
         throw {
           success: false,

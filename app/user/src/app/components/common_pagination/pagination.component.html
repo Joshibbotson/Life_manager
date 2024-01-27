@@ -1,18 +1,19 @@
 <!-- replace buttons with common-btn -->
 
 <div class="flex items-center justify-between">
-  <div class="flex border-slate-300 border rounded-lg w-fit">
+  <div class="flex w-fit rounded-lg border border-slate-300">
     <button
       [disabled]="(skip$ | async) === 0"
-      class="flex justify-center items-center border-r-2 rounded-l-lg bg-white p-2 disabled:text-gray-400 disabled:bg-white hover:bg-slate-500 hover:text-white"
+      class="flex items-center justify-center rounded-l-lg border-r-2 bg-white p-2 hover:bg-slate-500 hover:text-white disabled:bg-white disabled:text-gray-400"
       (click)="previousPage()"
     >
-      < Previous
+      <fa-icon [icon]="faChevronCircleLeft" size="1x" class="mr-1"></fa-icon>
+      Previous
     </button>
     @if (take$ | async; as take) {
       @for (page of pageCountArr$ | async; track $index) {
         <button
-          class="flex justify-center items-center rounded bg-white w-10 p-2 hover:bg-slate-500 hover:text-white"
+          class="flex w-10 items-center justify-center rounded bg-white p-2 hover:bg-slate-500 hover:text-white"
           [ngClass]="{ 'border border-black': page * take === (skip$ | async) }"
           (click)="updatePage(page)"
         >
@@ -21,19 +22,22 @@
       }
       <button
         [disabled]="isNextButtonDisabled$ | async"
-        class="flex justify-center items-center border-l-2 rounded-r-lg bg-white disabled:bg-white p-2 disabled:text-gray-400 hover:bg-slate-500 hover:text-white"
+        class="flex items-center justify-center rounded-r-lg border-l-2 bg-white p-2 hover:bg-slate-500 hover:text-white disabled:bg-white disabled:text-gray-400"
         (click)="nextPage()"
       >
-        Next >
+        Next
+        <fa-icon [icon]="faChevronCircleRight" size="1x" class="ml-1"></fa-icon>
       </button>
     }
   </div>
   <div class="flex items-center justify-center">
-    <h4 class="mr-1">Total:</h4>
-    <div
-      class="flex items-center justify-center rounded-md bg-green-700 text-white w-8 h-8"
-    >
-      {{ count$ | async }}
-    </div>
+    <h4 class="mr-1">Showing:</h4>
+    @if (combinedData$ | async; as data) {
+      <div>
+        {{ data.skip }} -
+        {{ data.skipPlusTake > data.count ? data.count : data.skipPlusTake }} of
+        {{ data.count }}
+      </div>
+    }
   </div>
 </div>

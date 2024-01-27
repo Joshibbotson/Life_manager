@@ -8,17 +8,35 @@ import { Subject } from 'rxjs'
 import { CommonModule } from '@angular/common'
 import { selectCurrentUser } from 'src/app/state/auth/auth.selectors'
 import { IReadUser } from '../../../../../api/dist/users'
+import {
+  faChevronCircleLeft,
+  faChevronCircleRight,
+  faChevronLeft,
+  faChevronRight,
+} from '@fortawesome/free-solid-svg-icons'
+import { FaIconComponent } from '@fortawesome/angular-fontawesome'
 
 // need to input or figure out best way to put handle what selector/actions to use so this is reusable.
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FaIconComponent],
 })
 export class PaginationComponent implements OnInit, OnDestroy {
+  readonly faChevronCircleLeft = faChevronLeft
+  readonly faChevronCircleRight = faChevronRight
   readonly paginationData$ = this.store.select(selectTodos)
   public loggedInUser!: IReadUser | undefined
+  public combinedData$!: Observable<{
+    skip: number
+    skipPlusTake: number
+    count: number
+  }>
+
+  readonly skipPlusTake$: Observable<number> = this.paginationData$.pipe(
+    map((x) => x.skip + x.take),
+  )
   readonly skip$: Observable<number> = this.paginationData$.pipe(
     map((x) => x.skip),
   )
@@ -28,6 +46,7 @@ export class PaginationComponent implements OnInit, OnDestroy {
   readonly count$: Observable<number> = this.paginationData$.pipe(
     map((x) => x.count),
   )
+
   readonly pageCountArr$: Observable<number[]> = this.paginationData$.pipe(
     map((data) =>
       Array.from(
@@ -51,6 +70,13 @@ export class PaginationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.updatedCurrentUser()
+    this.combinedData$ = combineLatest([
+      this.skip$,
+      this.skipPlusTake$,
+      this.count$,
+    ]).pipe(
+      map(([skip, skipPlusTake, count]) => ({ skip, skipPlusTake, count })),
+    )
   }
 
   ngOnDestroy() {

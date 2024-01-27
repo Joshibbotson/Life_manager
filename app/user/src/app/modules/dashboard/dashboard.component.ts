@@ -9,19 +9,19 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import { WindowSizeService } from 'src/app/services/window-service/window-size.service'
-import { Observable, Subscription } from 'rxjs'
+import { Observable, Subscription, map } from 'rxjs'
 import { Store } from '@ngrx/store'
 import * as AuthActions from '../../state/auth/auth.actions'
-
+import { toggleSidebar } from '../../state/sidebar/sidebar.actions'
 import { Router } from '@angular/router'
+import { isSidebarOpen } from 'src/app/state/sidebar/sidebar.selectors'
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
-  public isSidebarOpen: WritableSignal<boolean> = signal(false)
-
+  public isSideBarOpen$!: Observable<boolean>
   readonly faHome = faHome
 
   readonly faChevronCircleLeft = faChevronCircleLeft
@@ -39,17 +39,18 @@ export class DashboardComponent implements OnInit {
     private windowSizeService: WindowSizeService,
     private store: Store,
     private router: Router,
-  ) {
+  ) {}
+
+  public ngOnInit(): void {
+    this.sideBarLinks$ = this.links.getLinks()
     this.windowSizeSubscription = this.windowSizeService.windowSize.subscribe(
       (size) => {
         this.windowWidth = size.width
         this.windowHeight = size.height
       },
     )
-  }
-
-  public ngOnInit(): void {
-    this.sideBarLinks$ = this.links.getLinks()
+    this.isSideBarOpen$ = this.store.select(isSidebarOpen)
+    this.isSideBarOpen$.subscribe()
   }
 
   public ngOnDestroy(): void {
@@ -64,7 +65,7 @@ export class DashboardComponent implements OnInit {
   }
 
   public toggleSidebar() {
-    this.isSidebarOpen.set(!this.isSidebarOpen())
+    this.store.dispatch(toggleSidebar())
   }
 
   public logout() {

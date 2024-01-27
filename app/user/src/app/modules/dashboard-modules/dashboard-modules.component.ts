@@ -1,4 +1,5 @@
 import { Component } from '@angular/core'
+import { Ilinks, LinksService } from 'src/app/services/links/links.service'
 
 interface Ilink {
   linkName: string
@@ -10,7 +11,16 @@ interface Ilink {
   templateUrl: './dashboard-modules.component.html',
 })
 export class DashboardModulesComponent {
-  public readonly todosLink: Ilink = { linkName: 'Todos', routerLink: 'todos' }
+  public homeLinks: Ilinks[] = []
+  constructor(private linksService: LinksService) {
+    this.linksService.updateLinks(this.homeLinks)
+  }
+  ngOnInit() {}
+
+  public readonly todosLink: Ilink = {
+    linkName: 'Todo List',
+    routerLink: 'todos',
+  }
   public readonly choresLink: Ilink = {
     linkName: 'Chores',
     routerLink: 'chores',
