@@ -9,7 +9,6 @@ import {
   loadTodoByIdFailure,
   reloadTodos,
   completeTodoSuccess,
-  updateTodo,
   updateTodoSuccess,
 } from './todos.actions'
 
@@ -65,6 +64,12 @@ export const todosReducer = createReducer(
   })),
 
   on(createTodoSuccess, (state, { todo }) => {
+    if (state.todos.length === 10) {
+      return {
+        ...state,
+        count: state.count + 1,
+      }
+    }
     return {
       ...state,
       count: state.count + 1,
