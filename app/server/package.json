@@ -4,7 +4,7 @@
   "description": "Awesome project developed with TypeORM.",
   "type": "module",
   "scripts": {
-    "postinstall": "tsc",
+
     "start": "node dist/src/index.js",
     "server": "nodemon --exec npx tsx src/index.ts",
     "dist-server": "tsc",
