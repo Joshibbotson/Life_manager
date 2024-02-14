@@ -35,7 +35,7 @@ export class TodosModel {
         const savedTodo = await todosRepository.save(todoEntity)
         const todo = await AppDataSource.getRepository(Todos).findOne({
           where: { id: savedTodo.id },
-          relations: ['createdBy'],
+          relations: ['createdBy', 'directory'],
         })
         return todo
       }
@@ -52,6 +52,7 @@ export class TodosModel {
         todoRepository.createQueryBuilder('todo')
 
       query = query.leftJoinAndSelect('todo.createdBy', 'createdBy')
+      query = query.leftJoinAndSelect('todo.directory', 'directory')
 
       query = query.where('todo.deletedDate IS NULL')
       if (queryOpts.filter !== undefined) {
@@ -67,9 +68,8 @@ export class TodosModel {
       if (queryOpts.take !== undefined) {
         query = query.take(queryOpts.take)
       }
-
       const [todos, count] = await query.getManyAndCount()
-
+      
       return {
         skip: queryOpts.skip,
         take: queryOpts.take,
@@ -153,7 +153,6 @@ export class TodosModel {
       await todoRepository.query(`DELETE FROM todos WHERE "completedDate" <= $1`, [oneWeekInPast])
 
       console.log("Finished deleting completed todos older than one day");
-
     } catch(error) {
       throw error
     }

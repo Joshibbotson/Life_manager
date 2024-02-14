@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
-import { AuthService } from './auth.service'
+import { AuthService } from '../app/services/auth/auth.service'
 import { TestBed } from '@angular/core/testing'
-import { IReadUser } from '../../../../../api/dist/users'
+import { IReadUser } from '../../../api/dist/users'
 import { firstValueFrom, of } from 'rxjs'
 import { Router } from '@angular/router'
 

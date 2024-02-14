@@ -26,6 +26,7 @@ import { FormControl, FormGroup } from '@angular/forms'
   standalone: true,
   selector: 'app-todo',
   templateUrl: './todo.component.html',
+  styleUrls: ['../../../../../styles/shimmer.css'],
   imports: [CommonModule, FontAwesomeModule, CommonInputComponent],
 })
 export class TodoComponent implements OnDestroy {

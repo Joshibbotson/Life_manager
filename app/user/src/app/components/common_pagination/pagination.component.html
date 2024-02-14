@@ -1,7 +1,7 @@
 <!-- replace buttons with common-btn -->
 
 <div class="flex items-center justify-between">
-  <div class="flex w-fit rounded-lg border border-slate-300">
+  <div class="flex w-fit max-w-xs flex-wrap rounded-lg border border-slate-300">
     <button
       [disabled]="(skip$ | async) === 0"
       class="flex items-center justify-center rounded-l-lg border-r-2 bg-white p-2 hover:bg-slate-500 hover:text-white disabled:bg-white disabled:text-gray-400"
@@ -10,33 +10,39 @@
       <fa-icon [icon]="faChevronCircleLeft" size="1x" class="mr-1"></fa-icon>
       Previous
     </button>
+
     @if (take$ | async; as take) {
       @for (page of pageCountArr$ | async; track $index) {
+        <!-- scrap this for mobile, need to implement a select + options menu -->
+        <!-- condiitonal for mobile screen -->
         <button
           class="flex w-10 items-center justify-center rounded bg-white p-2 hover:bg-slate-500 hover:text-white"
-          [ngClass]="{ 'border border-black': page * take === (skip$ | async) }"
+          [ngClass]="{
+            'border border-black': page * take === (skip$ | async)
+          }"
           (click)="updatePage(page)"
         >
           {{ page + 1 }}
         </button>
+        <!-- condiitonal for mobile screen -->
       }
-      <button
-        [disabled]="isNextButtonDisabled$ | async"
-        class="flex items-center justify-center rounded-r-lg border-l-2 bg-white p-2 hover:bg-slate-500 hover:text-white disabled:bg-white disabled:text-gray-400"
-        (click)="nextPage()"
-      >
-        Next
-        <fa-icon [icon]="faChevronCircleRight" size="1x" class="ml-1"></fa-icon>
-      </button>
     }
+
+    <button
+      [disabled]="isNextButtonDisabled$ | async"
+      class="flex items-center justify-center rounded-r-lg border-l-2 bg-white p-2 hover:bg-slate-500 hover:text-white disabled:bg-white disabled:text-gray-400"
+      (click)="nextPage()"
+    >
+      Next
+      <fa-icon [icon]="faChevronCircleRight" size="1x" class="ml-1"></fa-icon>
+    </button>
   </div>
   <div class="flex items-center justify-center">
-    <h4 class="mr-1">Showing:</h4>
     @if (combinedData$ | async; as data) {
       <div>
         {{ data.skip }} -
         {{ data.skipPlusTake > data.count ? data.count : data.skipPlusTake }} of
-        {{ data.count }}
+        {{ data.count }} items
       </div>
     }
   </div>

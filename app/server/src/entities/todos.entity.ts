@@ -9,6 +9,7 @@ import {
 } from 'typeorm'
 import { Users } from './users.entity'
 import { CommonEntity } from './common/common-entity'
+import { Directory } from './directory.entity'
 
 @Entity()
 export class Todos extends CommonEntity {
@@ -44,9 +45,9 @@ export class Todos extends CommonEntity {
   @Column({type: 'boolean'})
   completed: boolean
 
-  // TODO implement projects / way of organising todos
-  // @Column()
-  // project
+  @ManyToOne(() => Directory, directory => directory.id, {nullable: true})
+  @JoinColumn() // Create a foreign key column for the directory
+  directory: Directory | null;
 
   @Column('timestamp with time zone', { nullable: true })
   dueDate: Date | null

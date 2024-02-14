@@ -1,4 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { Store } from '@ngrx/store'
@@ -23,6 +31,7 @@ import { WindowSizeService } from 'src/app/services/window-service/window-size.s
   standalone: true,
   selector: 'app-todos',
   templateUrl: './todos.component.html',
+  styleUrls: ['../../../../../styles/shimmer.css'],
   imports: [
     PaginationComponent,
     CommonCheckboxComponent,
@@ -36,6 +45,11 @@ import { WindowSizeService } from 'src/app/services/window-service/window-size.s
 export class TodosComponent implements OnInit, OnDestroy {
   readonly faCheck = faCheck
   readonly faCross = faX
+
+  @ViewChild('titleInput') titleInput!: ElementRef
+
+  public shimmerNumSet: number[] = new Array(10)
+
   public windowWidth: number = window.innerWidth
   public windowHeight: number = window.innerHeight
   private windowSizeSubscription!: Subscription
@@ -68,8 +82,26 @@ export class TodosComponent implements OnInit, OnDestroy {
     private router: Router,
     private store: Store,
     private windowSizeService: WindowSizeService,
+    private cdr: ChangeDetectorRef,
   ) {
     this.links.updateLinks(this.homeLinks)
+  }
+  @HostListener('document:keyup.enter', ['$event'])
+  onEnter() {
+    switch (this.showForm) {
+      case false:
+        this.showForm = true
+        break
+      case true:
+        this.handleSubmit()
+        this.showForm = false
+        break
+    }
+  }
+
+  @HostListener('document:keyup.escape', ['$event'])
+  onEscape() {
+    this.showForm = false
   }
 
   ngOnInit() {
@@ -85,6 +117,10 @@ export class TodosComponent implements OnInit, OnDestroy {
     this.todos$ = this.store
       .select(selectTodos)
       .pipe(map((todoData) => todoData.todos))
+  }
+
+  ngAfterViewInit() {
+    this.focusTitleInput()
   }
 
   ngOnDestroy() {
@@ -145,6 +181,8 @@ export class TodosComponent implements OnInit, OnDestroy {
 
   public toggleShowForm() {
     this.showForm = !this.showForm
+    this.cdr.detectChanges()
+    this.focusTitleInput()
   }
 
   public navigate(id: number) {
@@ -190,5 +228,11 @@ export class TodosComponent implements OnInit, OnDestroy {
       return '-'
     }
     return DateTime.fromJSDate(new Date(date)).toFormat('dd-MM-yyyy')
+  }
+
+  private focusTitleInput() {
+    if (this.showForm && this.titleInput && this.titleInput.nativeElement) {
+      this.titleInput.nativeElement.focus()
+    }
   }
 }

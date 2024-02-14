@@ -3,9 +3,26 @@
     <app-pagination />
   </div>
 
-  <!-- Make something a bit prettier than this. -->
   @if (loading) {
-    <div>loading . . .</div>
+    <div class="shimmer-table">
+      @for (n of shimmerNumSet; track n) {
+        <div class="shimmer-row m-3">
+          <!-- Adjust the number of cells and their width to match your table's layout -->
+          <div class="shimmer-cell" style="flex: 0 0 50px"></div>
+          <!-- For checkbox or status icon -->
+          <div class="shimmer-cell" style="flex-grow: 2"></div>
+          <!-- For title -->
+          @if (windowWidth >= 650) {
+            <div class="shimmer-cell" style="flex-grow: 3"></div>
+            <!-- For description, visible on wider screens -->
+          }
+          <div class="shimmer-cell"></div>
+          <!-- For due date -->
+          <div class="shimmer-cell" style="flex: 0 0 50px"></div>
+          <!-- For actions like edit/delete -->
+        </div>
+      }
+    </div>
   } @else {
     <table class="table min-w-full overflow-auto text-left text-sm font-light">
       <thead
@@ -95,6 +112,7 @@
         <button
           class="w-full cursor-pointer rounded-md border-2 border-solid border-sky-500 p-2 hover:bg-sky-700 hover:text-white"
           (click)="toggleShowForm()"
+          (keyup.enter)="toggleShowForm()"
         >
           + Create Todo
         </button>
@@ -109,6 +127,7 @@
         >
           <div class="w-full whitespace-nowrap px-6 py-0 sm:w-1/4 md:py-4">
             <common-input
+              #titleInput
               [control]="titleControlGroup"
               formControlName="title"
               ngDefaultControl

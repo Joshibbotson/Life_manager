@@ -70,6 +70,7 @@ export class RegisterComponent {
       .select(selectCurrentUser)
       .pipe(takeUntil(this.destroy$))
       .subscribe((user: IAuthLoginReponse | null) => {
+        console.log(user)
         if (user) {
           this.router.navigate(['/'])
         }

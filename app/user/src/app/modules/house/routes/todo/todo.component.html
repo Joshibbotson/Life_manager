@@ -1,6 +1,26 @@
-<!-- Make something a bit prettier than this. -->
 @if (loading) {
-  <div>loading . . .</div>
+  <main
+    class="flex h-full w-full items-center justify-center overflow-auto bg-gray-200"
+  >
+    <section
+      class="sm:max-w-3/4 md:max-w-2/3 w-xs m-auto h-96 max-w-xs rounded-lg border bg-white p-6 shadow-lg lg:w-1/3 lg:max-w-full"
+    >
+      <div class="shimmer-wrapper">
+        <!-- Simulate Title -->
+        <div class="shimmer-box"></div>
+        <!-- Simulate Description -->
+        <div class="shimmer-box"></div>
+        <!-- Simulate Due Date -->
+        <div class="shimmer-box"></div>
+        <!-- Simulate Completed Status -->
+        <div class="shimmer-box"></div>
+        <!-- Simulate Created By and Date -->
+        <div class="shimmer-box"></div>
+        <!-- Simulate Updated Date -->
+        <div class="shimmer-box"></div>
+      </div>
+    </section>
+  </main>
 } @else {
   @if (todo$ | async; as todo) {
     <main
@@ -11,7 +31,7 @@
       >
         <div class="flex items-center border-b-2 border-b-black py-3">
           <h1
-            class="mr-2 text-lg font-semibold"
+            class="mr-2 cursor-pointer text-lg font-semibold"
             (click)="toggleEditing('title')"
           >
             Title:
@@ -34,7 +54,7 @@
         </div>
         <div class="flex items-center border-b-2 border-b-black py-3">
           <h1
-            class="mr-2 text-lg font-semibold"
+            class="mr-2 cursor-pointer text-lg font-semibold"
             (click)="toggleEditing('description')"
           >
             Description:
@@ -60,7 +80,7 @@
         </div>
         <div class="flex items-center border-b-2 border-b-black py-3">
           <h1
-            class="mr-2 text-lg font-semibold"
+            class="mr-2 cursor-pointer text-lg font-semibold"
             (click)="toggleEditing('dueDate')"
           >
             Due Date:

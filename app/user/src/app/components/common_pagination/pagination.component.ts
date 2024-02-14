@@ -9,8 +9,6 @@ import { CommonModule } from '@angular/common'
 import { selectCurrentUser } from 'src/app/state/auth/auth.selectors'
 import { IReadUser } from '../../../../../api/dist/users'
 import {
-  faChevronCircleLeft,
-  faChevronCircleRight,
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons'
@@ -27,6 +25,7 @@ export class PaginationComponent implements OnInit, OnDestroy {
   readonly faChevronCircleLeft = faChevronLeft
   readonly faChevronCircleRight = faChevronRight
   readonly paginationData$ = this.store.select(selectTodos)
+  public showDropDown: boolean = false
   public loggedInUser!: IReadUser | undefined
   public combinedData$!: Observable<{
     skip: number
@@ -63,7 +62,7 @@ export class PaginationComponent implements OnInit, OnDestroy {
     this.skip$,
     this.take$,
     this.count$,
-  ]).pipe(map(([skip, take, count]) => skip + take > count))
+  ]).pipe(map(([skip, take, count]) => skip + take >= count))
   private destroy$: Subject<void> = new Subject<void>()
 
   constructor(private store: Store) {}
@@ -127,7 +126,6 @@ export class PaginationComponent implements OnInit, OnDestroy {
         }),
       )
     })
-    this.skip$.subscribe((x) => console.log(x))
   }
 
   public previousPage() {
@@ -165,10 +163,7 @@ export class PaginationComponent implements OnInit, OnDestroy {
       })
   }
 
-  public getSkipValue() {
-    console.log('called get skip ')
-    return this.skip$.subscribe((skip) => skip)
+  public toggleDropDown() {
+    this.showDropDown = !this.showDropDown
   }
-
-  public isNextDisabled() {}
 }
