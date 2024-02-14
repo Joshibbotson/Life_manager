@@ -1,3 +1,17 @@
+# Why Life Manager was created
+
+Life_manager was created after a discussion with my wife on setting up a rota for doing household chores. Initially I thought lets just use a whiteboard, but then after I missed bin day one too many times I realised there had to be a software solution for this. So here it is, Life_manager.
+
+# What Life Manager does
+
+A modular web app for handling household/life problems, such as the todo module. Which allows users to create a simple todo and assign todos to other users.
+
+# What Life Manager plans to do
+
+The plan for Life Manager is to provide a personal todo list, repeating chore calendar that follows 'iCalendar' format and allow users to open chat rooms with one another linking chores/todos within said chat.
+
+For more info please see the wiki!
+
 # Getting Started
 
 Clone the repository
