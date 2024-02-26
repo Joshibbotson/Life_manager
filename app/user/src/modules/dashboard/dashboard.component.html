@@ -1,0 +1,78 @@
+@if (shouldShowSidebar()) {
+  <div class="container flex h-full min-w-full flex-col md:flex-row">
+    <!-- Sidebar -->
+    <div
+      class="bg-gray-800 text-white sm:flex-col md:flex"
+      [ngClass]="
+        (isSideBarOpen$ | async)
+          ? 'sm:min-h-screen md:w-56'
+          : 'md:w-30 sm:min-h-24'
+      "
+      id="sidebar"
+    >
+      <div class="flex items-center justify-between">
+        <a routerLink="/" class="px-3 py-2 text-center">
+          <fa-icon
+            [icon]="faHome"
+            size="2x"
+            class="hover:text-slate-200"
+          ></fa-icon>
+        </a>
+        <button class="px-3 py-2 text-center text-lg" (click)="toggleSidebar()">
+          @if (windowWidth >= 767) {
+            <fa-icon
+              [icon]="
+                (isSideBarOpen$ | async)
+                  ? faChevronCircleLeft
+                  : faChevronCircleRight
+              "
+              size="2x"
+              class="hover:text-slate-200"
+            ></fa-icon>
+          } @else {
+            <fa-icon
+              [icon]="
+                (isSideBarOpen$ | async)
+                  ? faChevronCircleUp
+                  : faChevronCircleDown
+              "
+              size="2x"
+              class="hover:text-slate-200"
+            ></fa-icon>
+          }
+        </button>
+      </div>
+
+      @if (isSideBarOpen$ | async) {
+        <div class="flex grow flex-col items-center justify-between">
+          <ul class="mb-6 mt-6">
+            @for (link of sideBarLinks$ | async; track link.name) {
+              <a
+                class="hover:underline"
+                routerLink="{{ link.url }}"
+                routerLinkActive="underline"
+                >{{ link.name }}</a
+              >
+            }
+          </ul>
+          <div>
+            <button
+              class="mb-6 rounded-md border border-white p-2 hover:bg-white hover:text-red-500"
+              (click)="logout()"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+    <!-- Main Content -->
+
+    <div class="h-screen w-full">
+      <search-bar />
+      <router-outlet />
+    </div>
+  </div>
+} @else {
+  <router-outlet></router-outlet>
+}

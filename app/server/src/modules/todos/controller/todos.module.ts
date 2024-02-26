@@ -3,6 +3,8 @@ import { IFilter, ITodoQueryOptions } from '../../../../../api/dist/todos/types'
 import { Request } from 'express'
 import { ISort } from '../../../../../api/dist/users'
 import { Validate } from '../../../../../api/dist/validation/validation'
+import { AppDataSource } from '../../../data-source'
+import { Todos } from '../../../entities/todos.entity'
 export class TodosController {
   public static readonly moduleName: string = 'TodosController'
   private readonly todosModel: TodosModel
@@ -48,6 +50,11 @@ export class TodosController {
         term: term as string,
         id: parseInt(id as string, 10) as number,
       }
+      console.log("queryOpts:", queryOpts)
+      if(queryOpts.term){
+        const data = await this.todosModel.searchTodos(queryOpts.term, queryOpts.take)
+        return data
+      }
 
       if (queryOpts.id) {
         const data = await this.todosModel.getTodoById(queryOpts.id)
@@ -84,4 +91,5 @@ export class TodosController {
       throw error
     }
   }
-}
+
+  }

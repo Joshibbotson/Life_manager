@@ -14,15 +14,7 @@ export const server = express()
 
 server.use(
   cors({
-    origin: ['http://localhost:4200',
-     'http://167.71.78.46:4200',
-      'http://167.71.78.46:80',
-       'http://www.lifemanager.space:4200',
-        'http://www.lifemanager.space:80',
-         'http://www.lifemanager.space',
-         'http://lifemanager.space',
-
-        ],
+    origin: process.env.CORS
   })
 );
 const limiter = rateLimit({

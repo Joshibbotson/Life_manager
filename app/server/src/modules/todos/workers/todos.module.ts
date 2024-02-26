@@ -6,7 +6,6 @@ import { AppDataSource } from "../../../data-source";
 
 parentPort.on('message', async () => {
   try {
-    // Ensure the data source is initialized
     if (!AppDataSource.isInitialized) {
       await AppDataSource.initialize();
     }
@@ -15,7 +14,6 @@ parentPort.on('message', async () => {
     await todosModel.deleteCompletedTodos();
     parentPort.postMessage('CompletedTodosDeleted');
   } catch (error) {
-    console.log(error);
     parentPort.postMessage('ErrorDeletingCompletedTodos', error);
   }
 });

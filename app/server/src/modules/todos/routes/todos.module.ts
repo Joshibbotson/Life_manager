@@ -45,6 +45,7 @@ export class TodosRoutes {
     server.get(
       '/todos/read',
       async (req: Request, res: Response, next: NextFunction) => {
+        console.log("hit")
         try {
           const read = await this.todosController.readRequest(req)
           console.log('returned read pre json: ', read)

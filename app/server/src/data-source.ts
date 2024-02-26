@@ -9,6 +9,7 @@ import { fileURLToPath } from 'url'
 import path from 'path'
 import { Directory } from './entities/directory.entity'
 import { Directory1706559713447 } from './migration/1706559713447-directory'
+import { PostgresFts1706734398818 } from './migration/1706734398818-postgres-fts'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,7 +25,7 @@ const productionConfig: DataSourceOptions = {
   synchronize: false,
   logging: false,
   entities: [Users, Todos, Directory],
-  migrations: [Users1701508320209, Todos1694330560997, Directory1706559713447],
+  migrations: [Users1701508320209, Todos1694330560997, Directory1706559713447, PostgresFts1706734398818],
   subscribers: [],
 }
 
@@ -36,9 +37,9 @@ const developmentConfig: DataSourceOptions = {
   password: 'lifemanager',
   database: 'postgres',
   synchronize: true, // this is unsafe in production, as it could wipe clean production tables if an entity is changed.
-  logging: false,
+  logging: true,
   entities: [Users, Todos, Directory],
-  migrations: [Users1701508320209, Todos1694330560997, Directory1706559713447],
+  migrations: [Users1701508320209, Todos1694330560997, Directory1706559713447, PostgresFts1706734398818],
   subscribers: [],
 }
 

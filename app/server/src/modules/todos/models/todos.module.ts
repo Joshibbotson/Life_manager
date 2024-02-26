@@ -158,4 +158,25 @@ export class TodosModel {
     }
   }
   
+  public async searchTodos(searchTerm: string, take: number) {
+    console.log("searchTerm:", searchTerm)
+    if (!searchTerm) {
+      throw new Error('Search term is required')
+    }
+    try {
+      const todoRepository = AppDataSource.getRepository(Todos)
+   const results = await todoRepository
+    .createQueryBuilder("entity")
+    .where("search_vector @@ to_tsquery(:searchTerm)", { searchTerm: `english:${searchTerm}` })
+    .take(take)
+    .getMany();
+      console.log(results)
+      return {
+        success: true,
+        data: results,
+      }
+    } catch (error) {
+      throw error
+    }
+  }
 }

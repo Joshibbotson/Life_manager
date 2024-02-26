@@ -3,11 +3,11 @@ const { compilerOptions } = require('./tsconfig')
 
 module.exports = {
   preset: 'jest-preset-angular',
-  setupFilesAfterEnv: ['<rootDir>/src/tests/setupJest.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/__tests__/setupJest.ts'],
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
     '<rootDir>/dist/',
-    '<rootDir>/src/test.ts',
+    '<rootDir>/src/__tests__/setupJest.ts',
   ],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths || {}, {
     prefix: '<rootDir>/',

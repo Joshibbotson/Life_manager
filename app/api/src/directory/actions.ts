@@ -1,5 +1,6 @@
-import { IsString, IsBoolean, IsDate, IsNumber, IsOptional } from 'class-validator'
-import { DateTime } from 'luxon'
+import { IsString,  IsNumber, IsOptional } from 'class-validator'
+
+import { IDirectory } from './types'
 
 export class CreateDirectorySchema {
   @IsString()
